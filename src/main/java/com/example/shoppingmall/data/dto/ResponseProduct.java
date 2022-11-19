@@ -2,6 +2,7 @@ package com.example.shoppingmall.data.dto;
 
 import com.example.shoppingmall.data.entity.Product;
 import com.example.shoppingmall.data.entity.User;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
 
 @Getter
@@ -16,5 +17,6 @@ public class ResponseProduct {
 
     private int price;
 
-    private User user;
+    @JsonProperty("user_id")
+    private Long userId;
 }

@@ -15,9 +15,10 @@ public class ProductApiController {
     @Autowired
     private ProductService productService;
 
-    @GetMapping({"/", ""})
+    @GetMapping("/home")
     public ResponseEntity<List<ResponseProduct>> main(){
         List<ResponseProduct> products = productService.findAllproduct();
+        System.out.println("pro : " + products);
         return (products != null) ?
                 ResponseEntity.status(HttpStatus.OK).body(products) :
                 ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);

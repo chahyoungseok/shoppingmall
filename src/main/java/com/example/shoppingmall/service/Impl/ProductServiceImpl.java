@@ -29,7 +29,7 @@ public class ProductServiceImpl implements ProductService {
             ResponseProduct newDto = new ResponseProduct();
             newDto.setId(product.getId());
             newDto.setName(product.getName());
-            newDto.setUser(product.getUser());
+            newDto.setUserId(product.getUser().getId());
             newDto.setPrice(product.getPrice());
 
             responseProduct_list.add(newDto);
