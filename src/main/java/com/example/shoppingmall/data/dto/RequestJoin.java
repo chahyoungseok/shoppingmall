@@ -7,10 +7,10 @@ import lombok.*;
 @ToString
 @AllArgsConstructor
 @NoArgsConstructor
-public class JoinDTO {
-    private String username; // 닉네임
+public class RequestJoin {
+    private String username; // 실제이름
     private String password;
-    private String name; // 실제이름
+    private String nickname; // 닉네임
     private String telephone;
     private String e_mail;
 }

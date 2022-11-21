@@ -23,6 +23,10 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public List<ResponseProduct> findAllproduct() {
         List<Product> product_list = productDAO.findAllproduct();
+        if (product_list == null){
+            return null;
+        }
+
         List<ResponseProduct> responseProduct_list = new ArrayList<>();
 
         for(Product product : product_list){

@@ -4,6 +4,7 @@ import lombok.*;
 
 import javax.persistence.*;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 @Entity
@@ -20,7 +21,7 @@ public class User {
     private Long id;
 
     @Column(nullable = false)
-    private String name;
+    private String username;
 
     @Column(nullable = false)
     private String nickname;
@@ -40,5 +41,4 @@ public class User {
     @OneToMany(mappedBy = "user")
     @ToString.Exclude
     private List<Product> product_list = new ArrayList<>();
-
 }
