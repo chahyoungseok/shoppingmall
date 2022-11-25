@@ -5,5 +5,8 @@ import com.example.shoppingmall.data.entity.Product;
 import java.util.List;
 
 public interface ProductDAO {
-    public List<Product> findAllproduct();
+    Product CreateProduct(Product product);
+
+    List<Product> findAllProduct();
+
 }

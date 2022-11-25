@@ -2,6 +2,8 @@ package com.example.shoppingmall.service.Impl;
 
 import com.example.shoppingmall.dao.UserDAO;
 import com.example.shoppingmall.data.dto.RequestJoin;
+import com.example.shoppingmall.data.dto.RequestModify;
+import com.example.shoppingmall.data.dto.RequestUsername;
 import com.example.shoppingmall.data.dto.ResponseUser;
 import com.example.shoppingmall.data.entity.Authority;
 import com.example.shoppingmall.data.entity.User;
@@ -48,5 +50,58 @@ public class UserServiceImpl implements UserService {
         responseUser.setE_mail(created_user.getE_mail());
 
         return responseUser;
+    }
+
+    @Override
+    public ResponseUser findByUsername(RequestUsername requestUsername) {
+        // Dto -> Entity
+        User user = userDAO.findByUsername(requestUsername.getUsername());
+
+        // Entity -> Dto
+        ResponseUser responseUser = new ResponseUser();
+        responseUser.setId(user.getId());
+        responseUser.setUsername(user.getUsername());
+        responseUser.setNickname(user.getNickname());
+        responseUser.setTelephone(user.getTelephone());
+        responseUser.setAuthority(user.getAuthority());
+        responseUser.setE_mail(user.getE_mail());
+        return responseUser;
+    }
+
+    @Override
+    public ResponseUser updateUser(RequestModify requestModify) {
+
+        // Dto -> Entity
+        User user = userDAO.findByUsername(requestModify.getUsername());
+        System.out.println("user_service : "+user);
+        user.setUsername(requestModify.getUsername());
+        user.setNickname(requestModify.getNickname());
+        user.setPassword(bCryptPasswordEncoder.encode(requestModify.getPassword()));
+        user.setTelephone(requestModify.getTelephone());
+        user.setE_mail(requestModify.getE_mail());
+
+        User modified_user = userDAO.updateUser(user);
+        if (modified_user == null) {
+            return null;
+        }
+
+        // Entity -> Dto
+        ResponseUser responseUser = new ResponseUser();
+        responseUser.setId(modified_user.getId());
+        responseUser.setUsername(modified_user.getUsername());
+        responseUser.setNickname(modified_user.getNickname());
+        responseUser.setTelephone(modified_user.getTelephone());
+        responseUser.setAuthority(modified_user.getAuthority());
+        responseUser.setE_mail(modified_user.getE_mail());
+
+        return responseUser;
+    }
+
+    @Override
+    public void deleteUser(String username) {
+        System.out.println("user_service : "+username);
+        User user = userDAO.findByUsername(username);
+        System.out.println("user_service : "+user);
+        userDAO.deleteUser(user);
     }
 }

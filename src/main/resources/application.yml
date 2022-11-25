@@ -11,14 +11,13 @@ spring:
   datasource:
     initialization-mode: always
     driver-class-name: org.mariadb.jdbc.Driver
-    url: jdbc:mariadb://localhost:3306/shoppingmall?serverTimezone=Asia/Seoul
+    url: jdbc:mariadb://localhost:3307/shoppingmall?serverTimezone=Asia/Seoul
     username: root
     password: qwer1234
     data: classpath:data.sql
     mode: always
     console:
       enable: true
-
   jpa:
     defer-datasource-initialization: true
     hibernate:
@@ -29,7 +28,9 @@ spring:
     open-in-view: false
   sql:
     init:
-      mode: always # ?? ??? ?? classpath? sql?? ????? ??
-      continue-on-error: true # ?? ??? sql?? ??? ? ?? ???? ?? ??
-      data-locations: classpath:sql/data.sql # ?? ??? dml sql?? ??? ?? ? ?? ??
+      mode: always # 서버 시작시 항상 classpath의 sql문을 실행하도록 설정
+      continue-on-error: true # 서버 시작시 sql문을 실행할 때 오류 무시하고 계속 진행
+      data-locations: classpath:sql/data.sql # 서버 시작시 dml sql문을 실행할 위치 및 파일 지정
 
+
+# entity 클래스에 setter 최대한 제거
