@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 public class UserApiController {
     @Autowired
-    UserService userService;
+    private UserService userService;
 
     @PostMapping("/join")
     public ResponseEntity<ResponseUser> join(@RequestBody RequestJoin requestJoin){
@@ -25,6 +25,7 @@ public class UserApiController {
 
     @GetMapping("/findUser")
     public ResponseEntity<ResponseUser> findUser(RequestUsername requestUsername) {
+        System.out.println("controller : "+requestUsername);
         ResponseUser responseUser = userService.findByUsername(requestUsername);
         return (responseUser != null) ?
                 ResponseEntity.status(HttpStatus.OK).body(responseUser) :

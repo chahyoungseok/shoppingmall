@@ -15,11 +15,14 @@ import org.springframework.stereotype.Service;
 @Service
 public class UserServiceImpl implements UserService {
 
-    @Autowired
-    private BCryptPasswordEncoder bCryptPasswordEncoder;
+    private final BCryptPasswordEncoder bCryptPasswordEncoder;
+    private final UserDAO userDAO;
 
     @Autowired
-    private UserDAO userDAO;
+    public UserServiceImpl(BCryptPasswordEncoder bCryptPasswordEncoder, UserDAO userDAO) {
+        this.bCryptPasswordEncoder = bCryptPasswordEncoder;
+        this.userDAO = userDAO;
+    }
 
     @Override
     public ResponseUser create(RequestJoin requestJoin) {
@@ -81,9 +84,6 @@ public class UserServiceImpl implements UserService {
         user.setE_mail(requestModify.getE_mail());
 
         User modified_user = userDAO.updateUser(user);
-        if (modified_user == null) {
-            return null;
-        }
 
         // Entity -> Dto
         ResponseUser responseUser = new ResponseUser();
@@ -99,9 +99,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void deleteUser(String username) {
-        System.out.println("user_service : "+username);
         User user = userDAO.findByUsername(username);
-        System.out.println("user_service : "+user);
         userDAO.deleteUser(user);
     }
 }
