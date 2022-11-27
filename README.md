@@ -155,6 +155,44 @@ MyCustomDsl : AbstractHttpConfigurer 에 거쳐야할 Filter들을 담습니다.
 
 <br>
 
+#### Cors
 
+SOP(동일 출처 정핵)으로 인해 다른 출처의 리소스접근이 막힌 것을 풀어주는 "다른 출처간에 리소스를 공유할 수 있도록 해주는 정책"입니다.<br>
+  
+    @Configuration
+    public class CorsConfig {
 
+        @Bean
+        public CorsFilter corsFilter(){
+            UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+            CorsConfiguration config = new CorsConfiguration();
+            config.setAllowCredentials(true); // 내 서버가 응답을 할 때, json을 자바스크립트에서 처리할 수 있게 할지를 설정
+            config.addAllowedOrigin("*"); // 모든 ip에 응답을 허용하겠다.
+            config.addAllowedHeader("*"); // 모든 header에 응답을 허용하겠다.
+            config.addAllowedMethod("*"); // 모든 methode(get, post, put...)에 응답을 허용하겠다.
 
+            source.registerCorsConfiguration("/api/**", config);
+            return new CorsFilter(source);
+        }
+    }
+
+<br>
+
+#### JwtAuthenticationFilter.attemptAuthentication
+    사용자가 로그인을 하게되면 SecurityFilterChain에 등록시킨 JwtAuthenticationFilter.attemptAuthentication(request, response)이 동작합니다.
+    request로 온 username, password를 받아서 UsernamePasswordAuthenticationToken을 받고 정상인지 로그인을 시도합니다.
+    authenticationManager로 로그인 시도하면 PrincipalDetailsService가 호출합니다.
+    토큰을 이용해 PrincipalDetailsService의 loadUserByUsername() 함수를 실행시켜 DB에 있는 username과 password와 일치하는지 확인합니다.
+    PrincipalDetails를 세션에 담고 (권한관리를 하기위함) authentication 객체가 session 영역에 저장됩니다.
+
+<br>
+
+#### JwtAuthenticationFilter.successfulAuthentication
+    JWT 토큰을 만들어서 request를 보낸 사용자에게 jwt 토큰을 response 해줍니다.
+    해당 프로젝트에서는 HMAC512 방식을 사용합니다.
+
+<br>
+
+#### JwtAuthorizationFilter.doFilterInternal
+    인증이나 권한이 필요한 주소요청이 있을 때 해당 필터를 거칩니다.
+    사용자가 보낸 JWT토큰을 확인해 정상적인 JWT Token이라면 Filter를 더 타게합니다.
