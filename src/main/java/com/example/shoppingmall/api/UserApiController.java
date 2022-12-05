@@ -1,5 +1,6 @@
 package com.example.shoppingmall.api;
 
+import com.example.shoppingmall.aop.annotation.RunningTime;
 import com.example.shoppingmall.data.dto.RequestJoin;
 import com.example.shoppingmall.data.dto.RequestModify;
 import com.example.shoppingmall.data.dto.RequestUsername;
@@ -15,6 +16,7 @@ public class UserApiController {
     @Autowired
     private UserService userService;
 
+    @RunningTime
     @PostMapping("/join")
     public ResponseEntity<ResponseUser> join(@RequestBody RequestJoin requestJoin){
         ResponseUser responseUser = userService.create(requestJoin);
