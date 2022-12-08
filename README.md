@@ -16,6 +16,8 @@
     <li><a href="#소개">소개</a></li>
     <li><a href="#CRUD">CRUD</a></li>
     <li><a href="#인증과-인가">인증과 인가</a></li>
+    <li><a href="#AOP">AOP</a></li>
+    <li><a href="#Swagger">Swagger</a></li>
   </ol>
 </details>
 
@@ -194,3 +196,13 @@ SOP(동일 출처 정핵)으로 인해 다른 출처의 리소스접근이 막�
 #### JwtAuthorizationFilter.doFilterInternal
     인증이나 권한이 필요한 주소요청이 있을 때 해당 필터를 거칩니다.
     사용자가 보낸 JWT토큰을 확인해 정상적인 JWT Token이라면 Filter를 더 타게합니다.
+
+
+<br><br>
+
+## AOP
+
+
+<br><br>
+
+## Swagger
