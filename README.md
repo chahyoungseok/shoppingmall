@@ -203,13 +203,11 @@ SOP(동일 출처 정핵)으로 인해 다른 출처의 리소스접근이 막�
 ## AOP
     Aspect Oriented Programming의 약자로 특정 로직을 기준으로 핵심적인 관점, 부가적인 관점으로 나누어서 그 관점을 기준으로 모듈화하는 것입니다.
 
-<br>
 
 #### Logging
     com.example.shoppingmall..*.*(..)를 통해 모든 메서드에 로그를 찍게 만들었습니다.
     해당 로그가 동작하는 기점은 @Before로 메서드 시작전에 동작합니다.
 
-<br>
 
 #### RunningTime
     RunningTime 어노테이션 파일을 하나 만들었습니다.
