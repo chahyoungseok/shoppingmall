@@ -14,7 +14,6 @@
   <summary>Table of Contents</summary>
   <ol>
     <li><a href="#소개">소개</a></li>
-    <li><a href="#CRUD">CRUD</a></li>
     <li><a href="#인증과-인가">인증과 인가</a></li>
     <li><a href="#AOP">AOP</a></li>
     <li><a href="#Swagger">Swagger</a></li>
@@ -23,11 +22,6 @@
 
 ## 소개
 Shopping mall 프로젝트를 협업하며 구현한내용을 단계별로 작성합니다.
-
-<br><br>
-
-## CRUD
-안세준은 적으세요
 
 <br><br>
 
