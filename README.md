@@ -90,6 +90,10 @@ Shopping mall 프로젝트를 협업하며 구현한내용을 단계별로 작�
 
 <br>
 
+#### 
+
+<br>
+
 #### 의존성 부여
 다음과 같이 build.gradle에 의존성을 부여해줍니다. (JWT가 최신이 아니라면 MVM Repository에서 찾아주시면 됩니다!)
 
