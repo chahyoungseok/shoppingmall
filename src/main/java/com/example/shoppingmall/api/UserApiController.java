@@ -11,6 +11,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
+
 @RestController
 public class UserApiController {
     @Autowired
@@ -52,7 +54,9 @@ public class UserApiController {
 
     // Security Example
     @PostMapping("/user")
-    public String user(){
+    public String user(HttpServletRequest request){
+        Object object = request.getAttribute("username");
+        System.out.println(object.toString());
         return "example success";
     }
 
