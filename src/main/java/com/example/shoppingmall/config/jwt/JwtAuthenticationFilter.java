@@ -38,7 +38,6 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 
         // 1. username, password 받아서
         try {
-
             loginRequestDto = om.readValue(request.getInputStream(), RequestLogin.class);
         } catch (IOException e) {
             e.printStackTrace();

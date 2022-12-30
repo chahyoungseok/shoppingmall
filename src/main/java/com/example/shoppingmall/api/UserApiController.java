@@ -57,4 +57,13 @@ public class UserApiController {
     }
 
 
+    @PostMapping("/admin/upgradeAuth")
+    public ResponseEntity<ResponseUser> upgradeAuth(@RequestBody RequestUsername requestUsername){
+        // 한번에 많은 유저의 업그레이드를 할 수 있게 할것인가.
+        ResponseUser responseUser = userService.upgradeAuth(requestUsername.getUsername());
+
+        return (responseUser != null) ?
+                ResponseEntity.status(HttpStatus.OK).body(responseUser) :
+                ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+    }
 }
