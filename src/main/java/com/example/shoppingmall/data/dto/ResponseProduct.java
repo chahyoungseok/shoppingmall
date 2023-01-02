@@ -9,12 +9,13 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor
 public class ResponseProduct {
-    private Long id;
-
     private String name;
 
     private int price;
 
-    @JsonProperty("user_id")
-    private Long userId;
+    private String category;
+
+    private String description;
+
+    private String size;
 }

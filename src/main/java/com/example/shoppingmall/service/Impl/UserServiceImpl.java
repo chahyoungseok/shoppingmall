@@ -36,7 +36,8 @@ public class UserServiceImpl implements UserService {
         user.setTelephone(requestJoin.getTelephone());
         user.setAuthority(Authority.USER);
         user.setE_mail(requestJoin.getE_mail());
-        user.setProduct_list(null);
+        user.setCart_list(null);
+        user.setOrder_list(null);
 
         User created_user = userDAO.createUser(user);
         if (created_user == null) {

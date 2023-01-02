@@ -1,5 +1,5 @@
 package com.example.shoppingmall.data.dto;
-import com.fasterxml.jackson.annotation.JsonProperty;
+
 import lombok.*;
 
 @Getter
@@ -7,6 +7,6 @@ import lombok.*;
 @ToString
 @AllArgsConstructor
 @NoArgsConstructor
-public class RequestProductName {
-    private String name; // 제품명
+public class RequestProductCategory {
+    private String category;
 }

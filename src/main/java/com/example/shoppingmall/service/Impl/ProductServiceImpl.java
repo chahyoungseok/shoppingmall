@@ -30,20 +30,21 @@ public class ProductServiceImpl implements ProductService {
     public ResponseProduct CreateProduct(RequestProduct requestProduct){
         // Dto -> Entity
         Product product = new Product();
-        product.setId(requestProduct.getId());
         product.setName(requestProduct.getName());
         product.setPrice(requestProduct.getPrice());
-        product.setUser(userDAO.findById(requestProduct.getUserId()));
-        System.out.println("service : " + product);
+        product.setCategory(requestProduct.getCategory());
+        product.setDescription(requestProduct.getDescription());
+        product.setSize(requestProduct.getSize());
+        product.setUser(userDAO.findByUsername(requestProduct.getUsername()));
         Product createdProduct = productDAO.CreateProduct(product);
 
         // Entity -> Dto
         ResponseProduct responseProduct = new ResponseProduct();
-        responseProduct.setId(createdProduct.getId());
         responseProduct.setName(createdProduct.getName());
         responseProduct.setPrice(createdProduct.getPrice());
-        responseProduct.setUserId(createdProduct.getUser().getId());
-
+        responseProduct.setCategory(createdProduct.getCategory());
+        responseProduct.setDescription(createdProduct.getDescription());
+        responseProduct.setSize(createdProduct.getSize());
         return responseProduct;
     }
 
@@ -58,10 +59,11 @@ public class ProductServiceImpl implements ProductService {
 
         for(Product product : product_list){
             ResponseProduct newDto = new ResponseProduct();
-            newDto.setId(product.getId());
             newDto.setName(product.getName());
-            newDto.setUserId(product.getUser().getId());
             newDto.setPrice(product.getPrice());
+            newDto.setCategory(product.getCategory());
+            newDto.setDescription(product.getDescription());
+            newDto.setSize(product.getSize());
 
             responseProduct_list.add(newDto);
         }
@@ -72,16 +74,17 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public List<ResponseProduct> findByUserId(RequestProductUserId requestProductUserId) {
         // Dto -> Entity
-        List<Product> productList = productDAO.findByUserId(requestProductUserId.getUserId());
+        List<Product> productList = productDAO.findByUserId(userDAO.findByUsername(requestProductUserId.getUsername()).getId());
 
         // Entity -> Dto
         List<ResponseProduct> responseProductList = new ArrayList<>();
         for(Product product: productList){
             ResponseProduct newDto = new ResponseProduct();
-            newDto.setId(product.getId());
             newDto.setName(product.getName());
-            newDto.setUserId(product.getUser().getId());
             newDto.setPrice(product.getPrice());
+            newDto.setCategory(product.getCategory());
+            newDto.setDescription(product.getDescription());
+            newDto.setSize(product.getSize());
 
             responseProductList.add(newDto);
         }
@@ -97,10 +100,31 @@ public class ProductServiceImpl implements ProductService {
         List<ResponseProduct> responseProductList = new ArrayList<>();
         for(Product product: productList){
             ResponseProduct newDto = new ResponseProduct();
-            newDto.setId(product.getId());
             newDto.setName(product.getName());
-            newDto.setUserId(product.getUser().getId());
             newDto.setPrice(product.getPrice());
+            newDto.setCategory(product.getCategory());
+            newDto.setDescription(product.getDescription());
+            newDto.setSize(product.getSize());
+
+            responseProductList.add(newDto);
+        }
+        return responseProductList;
+    }
+
+    @Override
+    public List<ResponseProduct> findByCategory(RequestProductCategory requestProductCategory) {
+        // Dto -> Entity
+        List<Product> productList = productDAO.findByCategory(requestProductCategory.getCategory());
+
+        // Entity -> Dto
+        List<ResponseProduct> responseProductList = new ArrayList<>();
+        for(Product product: productList){
+            ResponseProduct newDto = new ResponseProduct();
+            newDto.setName(product.getName());
+            newDto.setPrice(product.getPrice());
+            newDto.setCategory(product.getCategory());
+            newDto.setDescription(product.getDescription());
+            newDto.setSize(product.getSize());
 
             responseProductList.add(newDto);
         }
@@ -113,15 +137,18 @@ public class ProductServiceImpl implements ProductService {
         Product product = productDAO.findById(requestProductModify.getId());
         product.setName(requestProductModify.getName());
         product.setPrice(requestProductModify.getPrice());
-
+        product.setCategory(requestProductModify.getCategory());
+        product.setDescription(requestProductModify.getDescription());
+        product.setSize(requestProductModify.getSize());
         Product modified_Product = productDAO.updateProduct(product);
 
         // Entity -> Dto
         ResponseProduct responseProduct = new ResponseProduct();
-        responseProduct.setId(modified_Product.getId());
         responseProduct.setName(modified_Product.getName());
         responseProduct.setPrice(modified_Product.getPrice());
-        responseProduct.setUserId(modified_Product.getUser().getId());
+        responseProduct.setCategory(modified_Product.getCategory());
+        responseProduct.setDescription(modified_Product.getDescription());
+        responseProduct.setSize(modified_Product.getSize());
         return responseProduct;
     }
 

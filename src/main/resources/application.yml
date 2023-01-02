@@ -33,4 +33,3 @@ spring:
       data-locations: classpath:sql/data.sql # 서버 시작시 dml sql문을 실행할 위치 및 파일 지정
 
 
-# entity 클래스에 setter 최대한 제거

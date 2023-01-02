@@ -8,6 +8,5 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor
 public class RequestProductUserId {
-    @JsonProperty("user_id")
-    private Long userId;
+    private String username; // UserID
 }

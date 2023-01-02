@@ -21,10 +21,10 @@ public class User {
     private Long id;
 
     @Column(nullable = false)
-    private String username;
+    private String username; // UserID, 실제 로그인하는 ID
 
     @Column(nullable = false)
-    private String nickname;
+    private String nickname; // Username, 실제 유저 이름
 
     @Column(nullable = false)
     private String password;
@@ -33,12 +33,20 @@ public class User {
     private String telephone;
 
     @Column(nullable = false)
-    private String authority;
+    private String e_mail;
 
     @Column(nullable = false)
-    private String e_mail;
+    private String authority;
 
     @OneToMany(mappedBy = "user")
     @ToString.Exclude
     private List<Product> product_list = new ArrayList<>();
+
+    @OneToMany(mappedBy = "user")
+    @ToString.Exclude
+    private List<Product> order_list = new ArrayList<>();
+
+    @OneToMany(mappedBy = "user")
+    @ToString.Exclude
+    private List<Product> cart_list = new ArrayList<>();
 }

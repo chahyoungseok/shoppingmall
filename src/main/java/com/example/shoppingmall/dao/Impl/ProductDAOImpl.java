@@ -14,7 +14,7 @@ import java.util.Optional;
 @Component
 public class ProductDAOImpl implements ProductDAO {
 
-    private ProductRepository productRepository;
+    private final ProductRepository productRepository;
 
     @Autowired
     public ProductDAOImpl(ProductRepository productRepository){
@@ -41,6 +41,11 @@ public class ProductDAOImpl implements ProductDAO {
     }
 
     @Override
+    public List<Product> findByCategory(String category) {
+        return productRepository.findByCategory(category);
+    }
+
+    @Override
     public Product findById(Long id) {
         Optional<Product> optional_product = productRepository.findById(id);
         Product product = new Product();
@@ -59,5 +64,6 @@ public class ProductDAOImpl implements ProductDAO {
     public void deleteProduct(Product product) {
         productRepository.delete(product);
     }
+
 
 }

@@ -8,12 +8,15 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor
 public class RequestProduct {
-    private Long id;
+    private String username; // UserID
 
-    private String name;
+    private String name; // 상품명
 
     private int price;
 
-    @JsonProperty("user_id")
-    private Long userId;
+    private String category;
+
+    private String description;
+
+    private String size;
 }
