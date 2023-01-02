@@ -16,4 +16,5 @@ public interface UserService {
 
     void deleteUser(String username);
 
+    ResponseUser upgradeAuth(String username);
 }

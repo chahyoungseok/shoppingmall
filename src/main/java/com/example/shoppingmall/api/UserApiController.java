@@ -11,6 +11,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
+
 @RestController
 public class UserApiController {
     @Autowired
@@ -52,9 +54,20 @@ public class UserApiController {
 
     // Security Example
     @PostMapping("/user")
-    public String user(){
+    public String user(HttpServletRequest request){
+        Object object = request.getAttribute("username");
+        System.out.println(object.toString());
         return "example success";
     }
 
 
+    @PostMapping("/admin/upgradeAuth")
+    public ResponseEntity<ResponseUser> upgradeAuth(@RequestBody RequestUsername requestUsername){
+        // 한번에 많은 유저의 업그레이드를 할 수 있게 할것인가.
+        ResponseUser responseUser = userService.upgradeAuth(requestUsername.getUsername());
+
+        return (responseUser != null) ?
+                ResponseEntity.status(HttpStatus.OK).body(responseUser) :
+                ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+    }
 }

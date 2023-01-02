@@ -103,4 +103,23 @@ public class UserServiceImpl implements UserService {
         User user = userDAO.findByUsername(username);
         userDAO.deleteUser(user);
     }
+
+    @Override
+    public ResponseUser upgradeAuth(String username) {
+        // Dto -> Entity
+        User user = userDAO.findByUsername(username);
+        user.setAuthority("ROLE_REGISTER");
+        User modified_user = userDAO.updateUser(user);
+
+        // Entity -> Dto
+        ResponseUser responseUser = new ResponseUser();
+        responseUser.setId(modified_user.getId());
+        responseUser.setUsername(modified_user.getUsername());
+        responseUser.setNickname(modified_user.getNickname());
+        responseUser.setTelephone(modified_user.getTelephone());
+        responseUser.setAuthority(modified_user.getAuthority());
+        responseUser.setE_mail(modified_user.getE_mail());
+
+        return responseUser;
+    }
 }
