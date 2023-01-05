@@ -3,6 +3,8 @@ package com.example.shoppingmall.data.entity;
 import lombok.*;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @ToString
@@ -33,8 +35,15 @@ public class Product {
     private String size;
 
     @ManyToOne
-    @JoinColumn(name = "user_id")
+    @JoinColumn(name = "user_id") // 다대일 매핑에서 일 쪽의 엔티티에서 참조하는 fk 이름을 적는다
     @ToString.Exclude
     private User user;
 
+    @OneToMany(mappedBy = "product") // 일대다 매핑에서 다 쪽의 어떤 필드를 참조하는지 적는다
+    @ToString.Exclude
+    private List<Cart> cartList = new ArrayList<>();
+
+    @OneToMany(mappedBy = "product")
+    @ToString.Exclude
+    private List<OrderProduct> orderProductList = new ArrayList<>();
 }
