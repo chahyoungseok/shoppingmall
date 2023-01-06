@@ -3,7 +3,7 @@ package com.example.shoppingmall.config.jwt;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.example.shoppingmall.config.auth.PrincipalDetails;
-import com.example.shoppingmall.data.dto.RequestLogin;
+import com.example.shoppingmall.data.dto.request.RequestLogin;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -42,6 +42,7 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         } catch (IOException e) {
             e.printStackTrace();
         }
+
         // 알아서 @Bean에 등록시킨 BCryptPasswordEncoder를 찾아서 암호화를 거침
         // 클라이언트로 부터 온 request를 이용해 토큰을 만들고
         UsernamePasswordAuthenticationToken authenticationToken =
@@ -56,7 +57,6 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         // 3. PrincipalDetails를 세션에 담고 (권한관리를 하기위함)
         // authentication 객체가 session 영역에 저장됨.
         PrincipalDetails principalDetails = (PrincipalDetails) authentication.getPrincipal();
-        System.out.println(principalDetails.getUser().getUsername());
 
         // 4. jwt 토큰을 만들어서 응답해준다.
         // 리턴의 이유는 권한관리를 security가 대신 해주기 때문에 편하려고 하는것.
@@ -78,7 +78,7 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
                 .withExpiresAt(new Date(System.currentTimeMillis() + JwtProperties.EXPIRATION_TIME))
                 .withClaim("id", principalDetails.getUser().getId())
                 .withClaim("username", principalDetails.getUser().getUsername())
-                .sign(Algorithm.HMAC512(JwtProperties.SECRET)); // cos는 내서버의 고유한 값
+                .sign(Algorithm.HMAC512(JwtProperties.SECRET)); // SECRET은 내서버의 고유한 값
 
         response.addHeader(JwtProperties.HEADER_STRING, JwtProperties.TOKEN_PREFIX + jwtToken);
     }

@@ -24,7 +24,7 @@ public class UserDAOImpl implements UserDAO {
         return userRepository.save(user);
     }
 
-    @Override  // UserRepository 에서 바로 사용하는 것 변경
+    @Override
     public User findByUsername(String username) {
         return userRepository.findByUsername(username);
     }

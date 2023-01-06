@@ -1,20 +1,24 @@
 package com.example.shoppingmall.service.Impl;
 
+import com.example.shoppingmall.config.jwt.JwtProperties;
 import com.example.shoppingmall.dao.UserDAO;
-import com.example.shoppingmall.data.dto.RequestJoin;
-import com.example.shoppingmall.data.dto.RequestModify;
-import com.example.shoppingmall.data.dto.RequestUsername;
-import com.example.shoppingmall.data.dto.ResponseUser;
+import com.example.shoppingmall.data.dto.request.RequestChangePWD;
+import com.example.shoppingmall.data.dto.request.RequestJoin;
+import com.example.shoppingmall.data.dto.request.RequestModify;
+import com.example.shoppingmall.data.dto.request.RequestUsername;
+import com.example.shoppingmall.data.dto.response.ResponseUser;
 import com.example.shoppingmall.data.entity.Authority;
 import com.example.shoppingmall.data.entity.User;
 import com.example.shoppingmall.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
 public class UserServiceImpl implements UserService {
-
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
     private final UserDAO userDAO;
 
@@ -26,6 +30,11 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public ResponseUser create(RequestJoin requestJoin) {
+        // username 중복 확인
+        User check_username = userDAO.findByUsername(requestJoin.getUsername());
+        if(check_username != null) {
+            return null;
+        }
 
         // RequestJoin -> User Entity
         User user = new User();
@@ -36,22 +45,20 @@ public class UserServiceImpl implements UserService {
         user.setTelephone(requestJoin.getTelephone());
         user.setAuthority(Authority.USER);
         user.setE_mail(requestJoin.getE_mail());
-        user.setCart_list(null);
-        user.setOrder_list(null);
+        user.setAddress(requestJoin.getAddress());
+        user.setCartList(null);
+        user.setOrderList(null);
 
         User created_user = userDAO.createUser(user);
-        if (created_user == null) {
-            return null;
-        }
+        if (created_user == null) {return null;}
 
         // User Entity -> ResponseUser
         ResponseUser responseUser = new ResponseUser();
-        responseUser.setId(created_user.getId());
         responseUser.setUsername(created_user.getUsername());
         responseUser.setNickname(created_user.getNickname());
         responseUser.setTelephone(created_user.getTelephone());
-        responseUser.setAuthority(created_user.getAuthority());
         responseUser.setE_mail(created_user.getE_mail());
+        responseUser.setAddress(created_user.getAddress());
 
         return responseUser;
     }
@@ -60,15 +67,15 @@ public class UserServiceImpl implements UserService {
     public ResponseUser findByUsername(RequestUsername requestUsername) {
         // Dto -> Entity
         User user = userDAO.findByUsername(requestUsername.getUsername());
+        if (user == null){return null;}
 
         // Entity -> Dto
         ResponseUser responseUser = new ResponseUser();
-        responseUser.setId(user.getId());
         responseUser.setUsername(user.getUsername());
         responseUser.setNickname(user.getNickname());
         responseUser.setTelephone(user.getTelephone());
-        responseUser.setAuthority(user.getAuthority());
         responseUser.setE_mail(user.getE_mail());
+        responseUser.setAddress(user.getAddress());
         return responseUser;
     }
 
@@ -77,47 +84,67 @@ public class UserServiceImpl implements UserService {
 
         // Dto -> Entity
         User user = userDAO.findByUsername(requestModify.getUsername());
-        System.out.println("user_service : "+user);
+        if(user == null) {return null;}
+
         user.setUsername(requestModify.getUsername());
         user.setNickname(requestModify.getNickname());
-        user.setPassword(bCryptPasswordEncoder.encode(requestModify.getPassword()));
         user.setTelephone(requestModify.getTelephone());
+        user.setAddress(requestModify.getAddress());
         user.setE_mail(requestModify.getE_mail());
 
         User modified_user = userDAO.updateUser(user);
 
         // Entity -> Dto
         ResponseUser responseUser = new ResponseUser();
-        responseUser.setId(modified_user.getId());
         responseUser.setUsername(modified_user.getUsername());
         responseUser.setNickname(modified_user.getNickname());
         responseUser.setTelephone(modified_user.getTelephone());
-        responseUser.setAuthority(modified_user.getAuthority());
+        responseUser.setAddress(modified_user.getAddress());
         responseUser.setE_mail(modified_user.getE_mail());
 
         return responseUser;
     }
 
     @Override
-    public void deleteUser(String username) {
+    public boolean deleteUser(String username) {
         User user = userDAO.findByUsername(username);
         userDAO.deleteUser(user);
+
+        User check_delete = userDAO.findByUsername(username);
+
+        if(check_delete == null) {return true;}
+        return false;
+    }
+
+    @Override
+    public boolean change_pwd(RequestChangePWD requestChangePWD){
+        User check_pwd = userDAO.findByUsername(requestChangePWD.getUsername());
+
+        if(check_pwd == null) {return false;}
+
+        if(bCryptPasswordEncoder.matches(requestChangePWD.getOrigin_password(), check_pwd.getPassword())){
+            check_pwd.setPassword(bCryptPasswordEncoder.encode(requestChangePWD.getNew_password()));
+            userDAO.updateUser(check_pwd);
+            return true;
+        }
+        return false;
     }
 
     @Override
     public ResponseUser upgradeAuth(String username) {
         // Dto -> Entity
         User user = userDAO.findByUsername(username);
+        if(user == null) {return null;}
+
         user.setAuthority("ROLE_REGISTER");
         User modified_user = userDAO.updateUser(user);
 
         // Entity -> Dto
         ResponseUser responseUser = new ResponseUser();
-        responseUser.setId(modified_user.getId());
         responseUser.setUsername(modified_user.getUsername());
         responseUser.setNickname(modified_user.getNickname());
         responseUser.setTelephone(modified_user.getTelephone());
-        responseUser.setAuthority(modified_user.getAuthority());
+        responseUser.setAddress(modified_user.getAddress());
         responseUser.setE_mail(modified_user.getE_mail());
 
         return responseUser;

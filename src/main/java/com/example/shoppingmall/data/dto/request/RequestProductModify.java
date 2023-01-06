@@ -1,4 +1,4 @@
-package com.example.shoppingmall.data.dto;
+package com.example.shoppingmall.data.dto.request;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
 
@@ -7,10 +7,10 @@ import lombok.*;
 @ToString
 @AllArgsConstructor
 @NoArgsConstructor
-public class RequestProduct {
-    private String username; // UserID
+public class RequestProductModify {
+    private Long id; // product ID (pk)
 
-    private String name; // 상품명
+    private String name;
 
     private int price;
 

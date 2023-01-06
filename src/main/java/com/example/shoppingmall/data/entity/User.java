@@ -35,6 +35,9 @@ public class User {
     private String e_mail;
 
     @Column(nullable = false)
+    private String address;
+
+    @Column(nullable = false)
     private String authority;
 
     @OneToMany(mappedBy = "user")

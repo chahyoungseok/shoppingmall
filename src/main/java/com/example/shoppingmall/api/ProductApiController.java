@@ -1,8 +1,10 @@
 package com.example.shoppingmall.api;
 
-import com.example.shoppingmall.aop.annotation.RunningTime;
-import com.example.shoppingmall.data.dto.*;
-import com.example.shoppingmall.data.entity.Product;
+import com.example.shoppingmall.data.dto.request.RequestProduct;
+import com.example.shoppingmall.data.dto.request.RequestProductModify;
+import com.example.shoppingmall.data.dto.request.RequestProductName;
+import com.example.shoppingmall.data.dto.request.RequestProductUserId;
+import com.example.shoppingmall.data.dto.response.ResponseProduct;
 import com.example.shoppingmall.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

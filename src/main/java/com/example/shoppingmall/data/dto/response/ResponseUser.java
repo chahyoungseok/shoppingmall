@@ -1,4 +1,4 @@
-package com.example.shoppingmall.data.dto;
+package com.example.shoppingmall.data.dto.response;
 
 
 import com.example.shoppingmall.data.entity.Product;
@@ -13,15 +13,13 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class ResponseUser {
-    private Long id;
-
     private String username;
 
     private String nickname;
 
     private String telephone;
 
-    private String authority;
-
     private String e_mail;
+
+    private String address;
 }

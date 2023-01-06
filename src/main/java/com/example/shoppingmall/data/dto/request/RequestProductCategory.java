@@ -1,4 +1,4 @@
-package com.example.shoppingmall.data.dto;
+package com.example.shoppingmall.data.dto.request;
 
 import lombok.*;
 

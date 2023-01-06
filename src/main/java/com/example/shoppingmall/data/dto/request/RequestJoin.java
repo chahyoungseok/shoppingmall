@@ -1,4 +1,4 @@
-package com.example.shoppingmall.data.dto;
+package com.example.shoppingmall.data.dto.request;
 
 import lombok.*;
 
@@ -13,4 +13,5 @@ public class RequestJoin {
     private String nickname; // 닉네임
     private String telephone;
     private String e_mail;
+    private String address;
 }

@@ -30,5 +30,4 @@ public class Cart {
     @JoinColumn(name = "product_id")
     @ToString.Exclude
     private Product product;
-
 }

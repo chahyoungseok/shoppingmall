@@ -1,7 +1,7 @@
 package com.example.shoppingmall.service;
 
-import com.example.shoppingmall.data.dto.*;
-import com.example.shoppingmall.data.entity.Product;
+import com.example.shoppingmall.data.dto.request.*;
+import com.example.shoppingmall.data.dto.response.ResponseProduct;
 
 import java.util.List;
 

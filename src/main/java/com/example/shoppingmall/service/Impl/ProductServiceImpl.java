@@ -2,17 +2,15 @@ package com.example.shoppingmall.service.Impl;
 
 import com.example.shoppingmall.dao.ProductDAO;
 import com.example.shoppingmall.dao.UserDAO;
-import com.example.shoppingmall.data.dto.*;
+import com.example.shoppingmall.data.dto.request.*;
+import com.example.shoppingmall.data.dto.response.ResponseProduct;
 import com.example.shoppingmall.data.entity.Product;
-import com.example.shoppingmall.data.entity.User;
 import com.example.shoppingmall.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class ProductServiceImpl implements ProductService {

@@ -1,4 +1,4 @@
-package com.example.shoppingmall.data.dto;
+package com.example.shoppingmall.data.dto.request;
 
 import lombok.*;
 
@@ -9,8 +9,8 @@ import lombok.*;
 @NoArgsConstructor
 public class RequestModify {
     private String username; // 실제이름
-    private String password;
     private String nickname; // 닉네임
     private String telephone;
     private String e_mail;
+    private String address;
 }
