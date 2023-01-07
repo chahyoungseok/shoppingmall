@@ -57,6 +57,48 @@ class UserApiControllerTest {
                         .andDo(print());
     }
 
+    // 비밀번호 7자이므로 회원가입 실패
+    @DisplayName("회원 가입 실패")
+    @Transactional
+    @Test
+    void join_fail_password() throws Exception{
+        String content = objectMapper.writeValueAsString(new RequestJoin(
+                "HyoungSeok",
+                "qwer123",
+                "hs_good",
+                "010-1234-5678",
+                "hs@naver.com",
+                "sangmyung university"));
+
+        mockMvc.perform(post("/join")
+                        .content(content)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isBadRequest())
+                .andDo(print());
+    }
+
+    // 이메일이 형식에 맞지않으므로 실패
+    @DisplayName("회원 가입 실패")
+    @Transactional
+    @Test
+    void join_fail_email() throws Exception{
+        String content = objectMapper.writeValueAsString(new RequestJoin(
+                "HyoungSeok",
+                "qwer1234",
+                "hs_good",
+                "010-1234-5678",
+                "33naver.com",
+                "sangmyung university"));
+
+        mockMvc.perform(post("/join")
+                        .content(content)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isBadRequest())
+                .andDo(print());
+    }
+
     @DisplayName("아이디 중복 확인 성공")
     @Test
     void check_id_success() throws Exception{

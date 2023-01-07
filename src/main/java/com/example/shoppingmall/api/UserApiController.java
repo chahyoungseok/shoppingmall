@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.validation.Valid;
 
 @RestController
 public class UserApiController {
@@ -17,7 +18,7 @@ public class UserApiController {
     private UserService userService;
 
     @PostMapping("/join")
-    public ResponseEntity<ResponseUser> join(@RequestBody RequestJoin requestJoin){
+    public ResponseEntity<ResponseUser> join(@Valid @RequestBody RequestJoin requestJoin){
         ResponseUser responseUser = userService.create(requestJoin);
 
         return (responseUser != null) ?
@@ -47,7 +48,7 @@ public class UserApiController {
 //    }
 
     @PutMapping("/user/update")
-    public ResponseEntity<ResponseUser> update(@RequestBody RequestModify requestModify) {
+    public ResponseEntity<ResponseUser> update(@Valid @RequestBody RequestModify requestModify) {
         ResponseUser responseUser = userService.updateUser(requestModify);
         return (responseUser != null) ?
                 ResponseEntity.status(HttpStatus.OK).body(responseUser) :
@@ -64,7 +65,7 @@ public class UserApiController {
     }
 
     @PostMapping("/user/pwd_change")
-    public ResponseEntity<Boolean> pwd_change(HttpServletRequest request, @RequestBody RequestChangePWD requestChangePWD){
+    public ResponseEntity<Boolean> pwd_change(HttpServletRequest request, @Valid @RequestBody RequestChangePWD requestChangePWD){
         requestChangePWD.setUsername(request.getAttribute("username").toString());
 
         boolean check_pwd = userService.change_pwd(requestChangePWD);
