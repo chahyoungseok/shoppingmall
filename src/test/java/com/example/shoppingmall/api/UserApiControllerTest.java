@@ -1,7 +1,6 @@
 package com.example.shoppingmall.api;
 
 import com.example.shoppingmall.data.dto.request.RequestJoin;
-import com.example.shoppingmall.data.dto.request.RequestUsername;
 import com.example.shoppingmall.service.UserService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.DisplayName;
@@ -14,9 +13,9 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
-
 import javax.transaction.Transactional;
 
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -61,12 +60,9 @@ class UserApiControllerTest {
     @DisplayName("아이디 중복 확인 성공")
     @Test
     void check_id_success() throws Exception{
-        String content = objectMapper.writeValueAsString(new RequestUsername("HyoungSeok"));
+        String content = "HyoungSeok";
 
-        mockMvc.perform(post("/check_id")
-                        .content(content)
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .accept(MediaType.APPLICATION_JSON))
+        mockMvc.perform(get("/check_id/" + content))
                         .andExpect(status().isOk())
                         .andDo(print());
     }
@@ -74,13 +70,11 @@ class UserApiControllerTest {
     @DisplayName("아이디 중복 확인 실패")
     @Test
     void check_id_fail() throws Exception{
-        String content = objectMapper.writeValueAsString(new RequestUsername("hwang"));
+        String content = "hwang";
 
-        mockMvc.perform(post("/check_id")
-                        .content(content)
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .accept(MediaType.APPLICATION_JSON))
-                .andExpect(status().isBadRequest())
-                .andDo(print());
+        mockMvc.perform(get("/check_id/" + content)
+                        .param("username", content))
+                        .andExpect(status().isBadRequest())
+                        .andDo(print());
     }
 }

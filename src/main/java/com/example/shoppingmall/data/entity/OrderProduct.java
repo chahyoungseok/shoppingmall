@@ -20,9 +20,6 @@ public class OrderProduct {
     @Column(nullable = false)
     private int count; // 수량
 
-    @Column(nullable = false)
-    private int price; // 가격
-
     @ManyToOne
     @JoinColumn(name = "order_id")
     @ToString.Exclude
