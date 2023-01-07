@@ -29,10 +29,10 @@ public class ProductApiController {
     }
 
     /** 상품명으로 검색 */
-    @GetMapping("/shop/{keyword}")
+    @GetMapping("/shop/search/{keyword}")
     public ResponseEntity<List<ResponseProductSummary>> findByProductName(@PathVariable String keyword){
         List<ResponseProductSummary> productList = productService.findByProductName(keyword);
-        return (productList != null) ?
+        return (productList.size() != 0) ?
                 ResponseEntity.status(HttpStatus.OK).body(productList) :
                 ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
     }
@@ -47,7 +47,7 @@ public class ProductApiController {
     }
 
     /** 상품 카테고리별 조회 */
-    @GetMapping("/shop/{category}")
+    @GetMapping("/shop/category/{category}")
     public ResponseEntity<List<ResponseProductSummary>> findByCategory(@PathVariable String category){
         List<ResponseProductSummary>productList = productService.findByCategory(category);
         return (productList != null) ?
@@ -56,7 +56,7 @@ public class ProductApiController {
     }
 
     /** 상품 상세 페이지 조회 */
-    @GetMapping("/shop/{id}")
+    @GetMapping("/shop/detail/{id}")
     public ResponseEntity<ResponseProduct> findById(@PathVariable Long id){
         ResponseProduct product = productService.findById(id);
         return (product != null) ?

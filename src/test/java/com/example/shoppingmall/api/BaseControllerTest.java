@@ -15,9 +15,9 @@ import org.springframework.transaction.annotation.Transactional;
 public class BaseControllerTest {
 
     @Autowired
-    protected MockMvc mockMvc;
+    public MockMvc mockMvc;
 
     @Autowired
-    protected ObjectMapper objectMapper;
+    public ObjectMapper objectMapper;
 
 }
