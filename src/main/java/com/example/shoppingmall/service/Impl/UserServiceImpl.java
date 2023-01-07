@@ -4,7 +4,6 @@ import com.example.shoppingmall.dao.UserDAO;
 import com.example.shoppingmall.data.dto.request.RequestChangePWD;
 import com.example.shoppingmall.data.dto.request.RequestJoin;
 import com.example.shoppingmall.data.dto.request.RequestModify;
-import com.example.shoppingmall.data.dto.request.RequestUsername;
 import com.example.shoppingmall.data.dto.response.ResponseUser;
 import com.example.shoppingmall.data.entity.Authority;
 import com.example.shoppingmall.data.entity.User;
@@ -60,9 +59,9 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public ResponseUser findByUsername(RequestUsername requestUsername) {
+    public ResponseUser findByUsername(String username) {
         // Dto -> Entity
-        User user = userDAO.findByUsername(requestUsername.getUsername());
+        User user = userDAO.findByUsername(username);
         if (user == null){return null;}
 
         // Entity -> Dto

@@ -3,7 +3,6 @@ package com.example.shoppingmall.service;
 import com.example.shoppingmall.data.dto.request.RequestChangePWD;
 import com.example.shoppingmall.data.dto.request.RequestJoin;
 import com.example.shoppingmall.data.dto.request.RequestModify;
-import com.example.shoppingmall.data.dto.request.RequestUsername;
 import com.example.shoppingmall.data.dto.response.ResponseUser;
 
 public interface UserService {
@@ -11,7 +10,7 @@ public interface UserService {
 
 //    ResponseUser findById(RequestUserId requestUserId);
 
-    ResponseUser findByUsername(RequestUsername requestUsername);
+    ResponseUser findByUsername(String username);
 
     ResponseUser updateUser(RequestModify requestModify);
 

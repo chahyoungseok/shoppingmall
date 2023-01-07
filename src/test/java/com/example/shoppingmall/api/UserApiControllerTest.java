@@ -1,7 +1,6 @@
 package com.example.shoppingmall.api;
 
 import com.example.shoppingmall.data.dto.request.RequestJoin;
-import com.example.shoppingmall.data.dto.request.RequestUsername;
 import com.example.shoppingmall.service.UserService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.DisplayName;
@@ -14,9 +13,9 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
-
 import javax.transaction.Transactional;
 
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -58,15 +57,54 @@ class UserApiControllerTest {
                         .andDo(print());
     }
 
-    @DisplayName("아이디 중복 확인 성공")
+    // 비밀번호 7자이므로 회원가입 실패
+    @DisplayName("회원 가입 실패")
+    @Transactional
     @Test
-    void check_id_success() throws Exception{
-        String content = objectMapper.writeValueAsString(new RequestUsername("HyoungSeok"));
+    void join_fail_password() throws Exception{
+        String content = objectMapper.writeValueAsString(new RequestJoin(
+                "HyoungSeok",
+                "qwer123",
+                "hs_good",
+                "010-1234-5678",
+                "hs@naver.com",
+                "sangmyung university"));
 
-        mockMvc.perform(post("/check_id")
+        mockMvc.perform(post("/join")
                         .content(content)
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isBadRequest())
+                .andDo(print());
+    }
+
+    // 이메일이 형식에 맞지않으므로 실패
+    @DisplayName("회원 가입 실패")
+    @Transactional
+    @Test
+    void join_fail_email() throws Exception{
+        String content = objectMapper.writeValueAsString(new RequestJoin(
+                "HyoungSeok",
+                "qwer1234",
+                "hs_good",
+                "010-1234-5678",
+                "33naver.com",
+                "sangmyung university"));
+
+        mockMvc.perform(post("/join")
+                        .content(content)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isBadRequest())
+                .andDo(print());
+    }
+
+    @DisplayName("아이디 중복 확인 성공")
+    @Test
+    void check_id_success() throws Exception{
+        String content = "HyoungSeok";
+
+        mockMvc.perform(get("/check_id/" + content))
                         .andExpect(status().isOk())
                         .andDo(print());
     }
@@ -74,13 +112,11 @@ class UserApiControllerTest {
     @DisplayName("아이디 중복 확인 실패")
     @Test
     void check_id_fail() throws Exception{
-        String content = objectMapper.writeValueAsString(new RequestUsername("hwang"));
+        String content = "hwang";
 
-        mockMvc.perform(post("/check_id")
-                        .content(content)
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .accept(MediaType.APPLICATION_JSON))
-                .andExpect(status().isBadRequest())
-                .andDo(print());
+        mockMvc.perform(get("/check_id/" + content)
+                        .param("username", content))
+                        .andExpect(status().isBadRequest())
+                        .andDo(print());
     }
 }

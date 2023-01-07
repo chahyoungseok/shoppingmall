@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.validation.Valid;
 
 @RestController
 public class UserApiController {
@@ -17,7 +18,7 @@ public class UserApiController {
     private UserService userService;
 
     @PostMapping("/join")
-    public ResponseEntity<ResponseUser> join(@RequestBody RequestJoin requestJoin){
+    public ResponseEntity<ResponseUser> join(@Valid @RequestBody RequestJoin requestJoin){
         ResponseUser responseUser = userService.create(requestJoin);
 
         return (responseUser != null) ?
@@ -28,10 +29,8 @@ public class UserApiController {
     @GetMapping("/user/mypage")
     public ResponseEntity<ResponseUser> my_page(HttpServletRequest request){
         Object object = request.getAttribute("username");
-        RequestUsername requestUsername = new RequestUsername();
-        requestUsername.setUsername(object.toString());
 
-        ResponseUser responseUser = userService.findByUsername(requestUsername);
+        ResponseUser responseUser = userService.findByUsername(object.toString());
 
         return (responseUser != null) ?
                 ResponseEntity.status(HttpStatus.OK).body(responseUser) :
@@ -49,16 +48,16 @@ public class UserApiController {
 //    }
 
     @PutMapping("/user/update")
-    public ResponseEntity<ResponseUser> update(@RequestBody RequestModify requestModify) {
+    public ResponseEntity<ResponseUser> update(@Valid @RequestBody RequestModify requestModify) {
         ResponseUser responseUser = userService.updateUser(requestModify);
         return (responseUser != null) ?
                 ResponseEntity.status(HttpStatus.OK).body(responseUser) :
                 ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
     }
 
-    @PostMapping("/check_id")
-    public ResponseEntity<Boolean> check_id(@RequestBody RequestUsername requestUsername){
-        ResponseUser user = userService.findByUsername(requestUsername);
+    @GetMapping("/check_id/{username}")
+    public ResponseEntity<Boolean> check_id(@PathVariable String username){
+        ResponseUser user = userService.findByUsername(username);
 
         return (user == null) ?
                 ResponseEntity.status(HttpStatus.OK).body(true) :
@@ -66,7 +65,7 @@ public class UserApiController {
     }
 
     @PostMapping("/user/pwd_change")
-    public ResponseEntity<Boolean> pwd_change(HttpServletRequest request, @RequestBody RequestChangePWD requestChangePWD){
+    public ResponseEntity<Boolean> pwd_change(HttpServletRequest request, @Valid @RequestBody RequestChangePWD requestChangePWD){
         requestChangePWD.setUsername(request.getAttribute("username").toString());
 
         boolean check_pwd = userService.change_pwd(requestChangePWD);
@@ -76,9 +75,9 @@ public class UserApiController {
     }
 
     // 삭제 후 제대로 삭제되었는지 확인 후에 여부에따라 200, 400
-    @DeleteMapping("/user/delete")
-    public ResponseEntity<Boolean> delete(@RequestBody RequestUsername requestUsername) {
-        boolean check_delete = userService.deleteUser(requestUsername.getUsername());
+    @DeleteMapping("/user/delete/{username}")
+    public ResponseEntity<Boolean> delete(@PathVariable String username) {
+        boolean check_delete = userService.deleteUser(username);
         return (check_delete) ?
                 ResponseEntity.status(HttpStatus.OK).body(true) :
                 ResponseEntity.status(HttpStatus.BAD_REQUEST).body(false);
@@ -95,10 +94,10 @@ public class UserApiController {
     }
 
 
-    @PostMapping("/admin/upgradeAuth")
-    public ResponseEntity<ResponseUser> upgradeAuth(@RequestBody RequestUsername requestUsername){
+    @PatchMapping("/admin/upgradeAuth/{username}")
+    public ResponseEntity<ResponseUser> upgradeAuth(@PathVariable String username){
         // 한번에 많은 유저의 업그레이드를 할 수 있게 할것인가.
-        ResponseUser responseUser = userService.upgradeAuth(requestUsername.getUsername());
+        ResponseUser responseUser = userService.upgradeAuth(username);
 
         return (responseUser != null) ?
                 ResponseEntity.status(HttpStatus.OK).body(responseUser) :
