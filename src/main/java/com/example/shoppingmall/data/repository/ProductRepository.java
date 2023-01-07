@@ -1,18 +1,19 @@
 package com.example.shoppingmall.data.repository;
 
 import com.example.shoppingmall.data.entity.Product;
-import com.example.shoppingmall.data.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.security.core.parameters.P;
 
 import java.util.List;
-import java.util.Optional;
 
 public interface ProductRepository extends JpaRepository<Product, Long> {
-    List<Product> findByUserId(Long user_id);
 
-    /** 제품명으로 찾기 */
-    List<Product> findByName(String name);
+    // Containing 으로 포함 결과 검색
+    /** 상품명으로 검색 */
+    List<Product> findByNameContaining(String name);
 
+    /** 판매등록한 상품 목록 조회 */
+    List<Product> findByUserId(Long userId);
+
+    /** 상품 카테고리별 조회 */
     List<Product> findByCategory(String category);
 }

@@ -3,11 +3,10 @@ package com.example.shoppingmall.dao.Impl;
 import com.example.shoppingmall.dao.ProductDAO;
 import com.example.shoppingmall.data.entity.Product;
 import com.example.shoppingmall.data.repository.ProductRepository;
+import com.example.shoppingmall.data.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Component;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -15,29 +14,22 @@ import java.util.Optional;
 public class ProductDAOImpl implements ProductDAO {
 
     private final ProductRepository productRepository;
+    private final UserRepository userRepository;
 
     @Autowired
-    public ProductDAOImpl(ProductRepository productRepository){
+    public ProductDAOImpl(ProductRepository productRepository, UserRepository userRepository){
         this.productRepository = productRepository;
+        this.userRepository = userRepository;
     }
 
-    public Product CreateProduct(Product product) {
-        return productRepository.save(product);
+    @Override
+    public List<Product> findByProductName(String name) {
+        return productRepository.findByNameContaining(name);
     }
 
     @Override
     public List<Product> findAllProduct() {
         return productRepository.findAll();
-    }
-
-    @Override
-    public List<Product> findByUserId(Long user_id) {
-        return productRepository.findByUserId(user_id);
-    }
-
-    @Override
-    public List<Product> findByProductName(String name) {
-        return productRepository.findByName(name);
     }
 
     @Override
@@ -56,6 +48,15 @@ public class ProductDAOImpl implements ProductDAO {
     }
 
     @Override
+    public List<Product> findByUsername(String username) {
+        return productRepository.findByUserId(userRepository.findByUsername(username).getId());
+    }
+
+    public Product createProduct(Product product) {
+        return productRepository.save(product);
+    }
+
+    @Override
     public Product updateProduct(Product product) {
         return productRepository.save(product);
     }
@@ -64,6 +65,5 @@ public class ProductDAOImpl implements ProductDAO {
     public void deleteProduct(Product product) {
         productRepository.delete(product);
     }
-
 
 }

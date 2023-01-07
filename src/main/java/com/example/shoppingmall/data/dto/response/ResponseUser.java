@@ -1,11 +1,7 @@
 package com.example.shoppingmall.data.dto.response;
 
 
-import com.example.shoppingmall.data.entity.Product;
 import lombok.*;
-
-import java.util.ArrayList;
-import java.util.List;
 
 @Getter
 @Setter

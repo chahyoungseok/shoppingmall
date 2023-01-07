@@ -1,10 +1,6 @@
 package com.example.shoppingmall.dao;
 
-import com.example.shoppingmall.data.entity.Product;
 import com.example.shoppingmall.data.entity.User;
-
-import java.util.List;
-import java.util.Optional;
 
 public interface UserDAO {
     User createUser(User user);

@@ -9,7 +9,7 @@ import java.util.List;
 
 @Entity
 @ToString
-@Table(name="cart")
+@Table(name="orders")
 @Getter
 @Setter
 @NoArgsConstructor

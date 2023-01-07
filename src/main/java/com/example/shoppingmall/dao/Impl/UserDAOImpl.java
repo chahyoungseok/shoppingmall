@@ -1,14 +1,10 @@
 package com.example.shoppingmall.dao.Impl;
 
 import com.example.shoppingmall.dao.UserDAO;
-import com.example.shoppingmall.data.entity.Product;
 import com.example.shoppingmall.data.entity.User;
 import com.example.shoppingmall.data.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-
-import java.util.List;
-import java.util.Optional;
 
 @Component
 public class UserDAOImpl implements UserDAO {

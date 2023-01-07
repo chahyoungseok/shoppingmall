@@ -1,5 +1,5 @@
 package com.example.shoppingmall.data.dto.request;
-import com.fasterxml.jackson.annotation.JsonProperty;
+
 import lombok.*;
 
 @Getter
@@ -19,4 +19,6 @@ public class RequestProduct {
     private String description;
 
     private String size;
+
+    private String imgKey;
 }

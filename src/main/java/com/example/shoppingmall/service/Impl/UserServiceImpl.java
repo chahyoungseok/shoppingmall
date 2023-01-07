@@ -1,6 +1,5 @@
 package com.example.shoppingmall.service.Impl;
 
-import com.example.shoppingmall.config.jwt.JwtProperties;
 import com.example.shoppingmall.dao.UserDAO;
 import com.example.shoppingmall.data.dto.request.RequestChangePWD;
 import com.example.shoppingmall.data.dto.request.RequestJoin;
@@ -11,9 +10,6 @@ import com.example.shoppingmall.data.entity.Authority;
 import com.example.shoppingmall.data.entity.User;
 import com.example.shoppingmall.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
