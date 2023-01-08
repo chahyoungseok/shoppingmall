@@ -4,4 +4,12 @@ INSERT INTO user(id, username, nickname, password, telephone, authority, e_mail,
 
 --------------- 상품 데이터 ---------------
 INSERT INTO product(id, name, price, category, description, size, imgKey, user_id) values (null, 'padding', 1000, 'outer', '패딩이다', 'S', 'A', 1)
+INSERT INTO product(id, name, price, category, description, size, imgKey, user_id) values (null, 'padding', 1000, 'outer', '패딩이다', 'M', 'A', 1)
+INSERT INTO product(id, name, price, category, description, size, imgKey, user_id) values (null, 'padding', 1000, 'outer', '패딩이다', 'L', 'A', 1)
+INSERT INTO product(id, name, price, category, description, size, imgKey, user_id) values (null, 'coat', 1000, 'outer', '코트이다', 'S', 'A', 1)
+INSERT INTO product(id, name, price, category, description, size, imgKey, user_id) values (null, 'coat', 1000, 'outer', '코트이다', 'M', 'A', 1)
 INSERT INTO product(id, name, price, category, description, size, imgKey, user_id) values (null, 'coat', 1000, 'outer', '코트이다', 'L', 'A', 1)
+
+--------------- 상품 데이터 ---------------
+INSERT INTO cart(id, user_id, product_id, count) values (null, 1, 2, 1)
+INSERT INTO cart(id, user_id, product_id, count) values (null, 1, 4, 1)

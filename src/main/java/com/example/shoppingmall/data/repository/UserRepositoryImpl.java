@@ -1,5 +1,6 @@
 package com.example.shoppingmall.data.repository;
 
+import static com.example.shoppingmall.data.entity.QCart.cart;
 import static com.example.shoppingmall.data.entity.QUser.user;
 import static com.example.shoppingmall.data.entity.QProduct.product;
 
@@ -24,6 +25,10 @@ public class UserRepositoryImpl implements UserRepositoryCustom{
                 .fetch();
 
         for(Product p : productList) {
+            queryFactory.delete(cart)
+                    .where(cart.product.id.eq(p.getId()))
+                    .execute();
+
             queryFactory.delete(product)
                     .where(product.id.eq(p.getId()))
                     .execute();

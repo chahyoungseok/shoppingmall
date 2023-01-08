@@ -38,7 +38,8 @@ public class Product {
     private String imgKey;
 
     @ManyToOne
-    @JoinColumn(name = "user_id") // 다대일 매핑에서 일 쪽의 엔티티에서 참조하는 fk 이름을 적는다
+    @JoinColumn(name = "user_id")
+     // 다대일 매핑에서 일 쪽의 엔티티에서 참조하는 fk 이름을 적는다
     @ToString.Exclude
     private User user;
 
