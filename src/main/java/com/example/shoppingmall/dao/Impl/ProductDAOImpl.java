@@ -3,7 +3,7 @@ package com.example.shoppingmall.dao.Impl;
 import com.example.shoppingmall.dao.ProductDAO;
 import com.example.shoppingmall.data.entity.Product;
 import com.example.shoppingmall.data.repository.ProductRepository;
-import com.example.shoppingmall.data.repository.UserRepository;
+import com.example.shoppingmall.data.repository.UserQueryRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -14,12 +14,12 @@ import java.util.Optional;
 public class ProductDAOImpl implements ProductDAO {
 
     private final ProductRepository productRepository;
-    private final UserRepository userRepository;
+    private final UserQueryRepository userQueryRepository;
 
     @Autowired
-    public ProductDAOImpl(ProductRepository productRepository, UserRepository userRepository){
+    public ProductDAOImpl(ProductRepository productRepository, UserQueryRepository userQueryRepository){
         this.productRepository = productRepository;
-        this.userRepository = userRepository;
+        this.userQueryRepository = userQueryRepository;
     }
 
     @Override
@@ -49,7 +49,7 @@ public class ProductDAOImpl implements ProductDAO {
 
     @Override
     public List<Product> findByUsername(String username) {
-        return productRepository.findByUserId(userRepository.findByUsername(username).getId());
+        return productRepository.findByUserId(userQueryRepository.findByUsername(username).getId());
     }
 
     public Product createProduct(Product product) {

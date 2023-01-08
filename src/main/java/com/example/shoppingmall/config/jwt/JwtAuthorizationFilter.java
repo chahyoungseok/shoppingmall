@@ -7,8 +7,8 @@ package com.example.shoppingmall.config.jwt;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.example.shoppingmall.config.auth.PrincipalDetails;
+import com.example.shoppingmall.dao.UserDAO;
 import com.example.shoppingmall.data.entity.User;
-import com.example.shoppingmall.data.repository.UserRepository;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -23,11 +23,11 @@ import java.io.IOException;
 
 public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
 
-    private final UserRepository userRepository;
+    private final UserDAO userDAO;
 
-    public JwtAuthorizationFilter(AuthenticationManager authenticationManager, UserRepository userRepository) {
+    public JwtAuthorizationFilter(AuthenticationManager authenticationManager, UserDAO userDAO) {
         super(authenticationManager);
-        this.userRepository = userRepository;
+        this.userDAO = userDAO;
     }
 
     // 인증이나 권한이 필요한 주소요청이 있을 때 해당 필터를 타게 됨.
@@ -52,7 +52,7 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
         // 서명이 정상적으로 됨
         if (username != null){
             System.out.println("서명이 정상적으로 됨");
-            User userEntity = userRepository.findByUsername(username);
+            User userEntity = userDAO.findByUsername(username);
 
             PrincipalDetails principalDetails = new PrincipalDetails(userEntity);
 

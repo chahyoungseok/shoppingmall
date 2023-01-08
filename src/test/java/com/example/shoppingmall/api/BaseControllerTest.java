@@ -14,6 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 @AutoConfigureMockMvc
 public class BaseControllerTest {
 
+    // Request와 Response에 직접적으로 연결되어있는 Controller에서 Request와 Response를 만들기 위해 사용.
     @Autowired
     public MockMvc mockMvc;
 

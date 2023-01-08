@@ -12,9 +12,9 @@ public interface UserService {
 
     ResponseUser findByUsername(String username);
 
-    ResponseUser updateUser(RequestModify requestModify);
+    ResponseUser updateUser(RequestModify requestModify, String username);
 
-    boolean deleteUser(String username);
+    boolean deleteUser(String username, String real_username);
 
     boolean change_pwd(RequestChangePWD requestChangePWD);
 

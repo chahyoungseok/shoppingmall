@@ -2,6 +2,7 @@ package com.example.shoppingmall.dao.Impl;
 
 import com.example.shoppingmall.dao.UserDAO;
 import com.example.shoppingmall.data.entity.User;
+import com.example.shoppingmall.data.repository.UserQueryRepository;
 import com.example.shoppingmall.data.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -11,9 +12,13 @@ public class UserDAOImpl implements UserDAO {
 
     private final UserRepository userRepository;
 
+    private final UserQueryRepository userQueryRepository;
+
+
     @Autowired
-    public UserDAOImpl(UserRepository userRepository){
+    public UserDAOImpl(UserRepository userRepository, UserQueryRepository userQueryRepository){
         this.userRepository = userRepository;
+        this.userQueryRepository = userQueryRepository;
     }
     @Override
     public User createUser(User user) {
@@ -22,7 +27,7 @@ public class UserDAOImpl implements UserDAO {
 
     @Override
     public User findByUsername(String username) {
-        return userRepository.findByUsername(username);
+        return userQueryRepository.findByUsername(username);
     }
 
     @Override
@@ -31,8 +36,8 @@ public class UserDAOImpl implements UserDAO {
     }
 
     @Override
-    public void deleteUser(User user) {
-        userRepository.delete(user);
+    public void deleteUser(String username) {
+        userQueryRepository.deleteUser(username);
     }
 
 }

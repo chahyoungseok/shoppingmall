@@ -10,6 +10,6 @@ public interface UserDAO {
 
     User updateUser(User user);
 
-    void deleteUser(User user);
+    void deleteUser(String username);
 
 }

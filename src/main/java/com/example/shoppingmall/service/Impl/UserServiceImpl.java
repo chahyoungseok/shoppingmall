@@ -41,8 +41,6 @@ public class UserServiceImpl implements UserService {
         user.setAuthority(Authority.USER);
         user.setE_mail(requestJoin.getE_mail());
         user.setAddress(requestJoin.getAddress());
-        user.setCartList(null);
-        user.setOrderList(null);
 
         User created_user = userDAO.createUser(user);
         if (created_user == null) {return null;}
@@ -75,7 +73,10 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public ResponseUser updateUser(RequestModify requestModify) {
+    public ResponseUser updateUser(RequestModify requestModify, String username) {
+        if (!requestModify.getUsername().equals(username)) {
+            return null;
+        }
 
         // Dto -> Entity
         User user = userDAO.findByUsername(requestModify.getUsername());
@@ -101,9 +102,11 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public boolean deleteUser(String username) {
-        User user = userDAO.findByUsername(username);
-        userDAO.deleteUser(user);
+    public boolean deleteUser(String username, String real_username) {
+        if (!username.equals(real_username)){
+            return false;
+        }
+        userDAO.deleteUser(username);
 
         User check_delete = userDAO.findByUsername(username);
 
