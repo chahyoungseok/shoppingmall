@@ -2,7 +2,7 @@ package com.example.shoppingmall.config;
 
 import com.example.shoppingmall.config.jwt.JwtAuthenticationFilter;
 import com.example.shoppingmall.config.jwt.JwtAuthorizationFilter;
-import com.example.shoppingmall.dao.UserDAO;
+import com.example.shoppingmall.data.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -17,7 +17,7 @@ import org.springframework.security.web.SecurityFilterChain;
 @EnableWebSecurity
 public class SecurityConfig {
     @Autowired
-    private UserDAO userDAO;
+    private UserRepository userRepository;
 
     @Autowired
     private CorsConfig corsConfig;
@@ -52,7 +52,7 @@ public class SecurityConfig {
             http
                     .addFilter(corsConfig.corsFilter()) // cors 요청처리 // @CrossOrigin(인증 x), 시큐리티 필터에 등록 인증(o)
                     .addFilter(new JwtAuthenticationFilter(authenticationManager))
-                    .addFilter(new JwtAuthorizationFilter(authenticationManager, userDAO));
+                    .addFilter(new JwtAuthorizationFilter(authenticationManager, userRepository));
         }
     }
 }

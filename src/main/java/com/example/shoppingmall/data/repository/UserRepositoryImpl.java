@@ -11,13 +11,14 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
-// extends / implements 사용하지 않기
 @Repository
 @RequiredArgsConstructor
-public class UserQueryRepository {
+public class UserRepositoryImpl implements UserRepositoryCustom{
+
     private final JPAQueryFactory queryFactory;
 
-    public void deleteUser(String username) {
+    @Override
+    public void deleteByUser(String username) {
         List<Product> productList = queryFactory.selectFrom(product)
                 .where(product.user.username.eq(username))
                 .fetch();
@@ -33,6 +34,7 @@ public class UserQueryRepository {
                 .execute();
     }
 
+    @Override
     public User findByUsername(String username) {
         return queryFactory.selectFrom(user)
                 .where(user.username.eq(username))

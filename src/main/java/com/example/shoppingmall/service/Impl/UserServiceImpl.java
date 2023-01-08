@@ -1,12 +1,12 @@
 package com.example.shoppingmall.service.Impl;
 
-import com.example.shoppingmall.dao.UserDAO;
 import com.example.shoppingmall.data.dto.request.RequestChangePWD;
 import com.example.shoppingmall.data.dto.request.RequestJoin;
 import com.example.shoppingmall.data.dto.request.RequestModify;
 import com.example.shoppingmall.data.dto.response.ResponseUser;
 import com.example.shoppingmall.data.entity.Authority;
 import com.example.shoppingmall.data.entity.User;
+import com.example.shoppingmall.data.repository.UserRepository;
 import com.example.shoppingmall.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -15,18 +15,18 @@ import org.springframework.stereotype.Service;
 @Service
 public class UserServiceImpl implements UserService {
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
-    private final UserDAO userDAO;
+    private final UserRepository userRepository;
 
     @Autowired
-    public UserServiceImpl(BCryptPasswordEncoder bCryptPasswordEncoder, UserDAO userDAO) {
+    public UserServiceImpl(BCryptPasswordEncoder bCryptPasswordEncoder, UserRepository userRepository) {
         this.bCryptPasswordEncoder = bCryptPasswordEncoder;
-        this.userDAO = userDAO;
+        this.userRepository = userRepository;
     }
 
     @Override
     public ResponseUser create(RequestJoin requestJoin) {
         // username 중복 확인
-        User check_username = userDAO.findByUsername(requestJoin.getUsername());
+        User check_username = userRepository.findByUsername(requestJoin.getUsername());
         if(check_username != null) {
             return null;
         }
@@ -42,7 +42,7 @@ public class UserServiceImpl implements UserService {
         user.setE_mail(requestJoin.getE_mail());
         user.setAddress(requestJoin.getAddress());
 
-        User created_user = userDAO.createUser(user);
+        User created_user = userRepository.save(user);
         if (created_user == null) {return null;}
 
         // User Entity -> ResponseUser
@@ -59,7 +59,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public ResponseUser findByUsername(String username) {
         // Dto -> Entity
-        User user = userDAO.findByUsername(username);
+        User user = userRepository.findByUsername(username);
         if (user == null){return null;}
 
         // Entity -> Dto
@@ -79,7 +79,7 @@ public class UserServiceImpl implements UserService {
         }
 
         // Dto -> Entity
-        User user = userDAO.findByUsername(requestModify.getUsername());
+        User user = userRepository.findByUsername(requestModify.getUsername());
         if(user == null) {return null;}
 
         user.setUsername(requestModify.getUsername());
@@ -88,7 +88,7 @@ public class UserServiceImpl implements UserService {
         user.setAddress(requestModify.getAddress());
         user.setE_mail(requestModify.getE_mail());
 
-        User modified_user = userDAO.updateUser(user);
+        User modified_user = userRepository.save(user);
 
         // Entity -> Dto
         ResponseUser responseUser = new ResponseUser();
@@ -106,9 +106,9 @@ public class UserServiceImpl implements UserService {
         if (!username.equals(real_username)){
             return false;
         }
-        userDAO.deleteUser(username);
+        userRepository.deleteByUser(username);
 
-        User check_delete = userDAO.findByUsername(username);
+        User check_delete = userRepository.findByUsername(username);
 
         if(check_delete == null) {return true;}
         return false;
@@ -116,13 +116,13 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public boolean change_pwd(RequestChangePWD requestChangePWD){
-        User check_pwd = userDAO.findByUsername(requestChangePWD.getUsername());
+        User check_pwd = userRepository.findByUsername(requestChangePWD.getUsername());
 
         if(check_pwd == null) {return false;}
 
         if(bCryptPasswordEncoder.matches(requestChangePWD.getOrigin_password(), check_pwd.getPassword())){
             check_pwd.setPassword(bCryptPasswordEncoder.encode(requestChangePWD.getNew_password()));
-            userDAO.updateUser(check_pwd);
+            userRepository.save(check_pwd);
             return true;
         }
         return false;
@@ -131,11 +131,11 @@ public class UserServiceImpl implements UserService {
     @Override
     public ResponseUser upgradeAuth(String username) {
         // Dto -> Entity
-        User user = userDAO.findByUsername(username);
+        User user = userRepository.findByUsername(username);
         if(user == null) {return null;}
 
         user.setAuthority("ROLE_REGISTER");
-        User modified_user = userDAO.updateUser(user);
+        User modified_user = userRepository.save(user);
 
         // Entity -> Dto
         ResponseUser responseUser = new ResponseUser();

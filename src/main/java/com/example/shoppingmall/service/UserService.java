@@ -20,5 +20,4 @@ public interface UserService {
 
     ResponseUser upgradeAuth(String username);
 
-
 }

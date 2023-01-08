@@ -1,11 +1,11 @@
 package com.example.shoppingmall.service.Impl;
 
-import com.example.shoppingmall.dao.ProductDAO;
-import com.example.shoppingmall.dao.UserDAO;
 import com.example.shoppingmall.data.dto.request.*;
 import com.example.shoppingmall.data.dto.response.ResponseProduct;
 import com.example.shoppingmall.data.dto.response.ResponseProductSummary;
 import com.example.shoppingmall.data.entity.Product;
+import com.example.shoppingmall.data.repository.ProductRepository;
+import com.example.shoppingmall.data.repository.UserRepository;
 import com.example.shoppingmall.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -16,13 +16,14 @@ import java.util.List;
 @Service
 public class ProductServiceImpl implements ProductService {
 
-    private final ProductDAO productDAO;
-    private final UserDAO userDAO;
+    private final UserRepository userRepository;
+
+    private final ProductRepository productRepository;
 
     @Autowired
-    public ProductServiceImpl(ProductDAO productDAO, UserDAO userDAO){
-        this.productDAO = productDAO;
-        this.userDAO = userDAO;
+    public ProductServiceImpl(UserRepository userRepository, ProductRepository productRepository){
+        this.productRepository = productRepository;
+        this.userRepository = userRepository;
     }
 
     @Override
@@ -33,7 +34,7 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public List<ResponseProductSummary> findByProductName(String keyword) {
         // Dto -> Entity
-        List<Product> productList = productDAO.findByProductName(keyword);
+        List<Product> productList = productRepository.findByNameContaining(keyword);
         if (productList == null){
             return null;
         }
@@ -55,7 +56,7 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public List<ResponseProductSummary> findAllProduct() {
         // Dto -> Entity
-        List<Product> productList = productDAO.findAllProduct();
+        List<Product> productList = productRepository.findAll();
         if (productList == null){
             return null;
         }
@@ -78,7 +79,7 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public List<ResponseProductSummary> findByCategory(String category) {
         // Dto -> Entity
-        List<Product> productList = productDAO.findByCategory(category);
+        List<Product> productList = productRepository.findByCategory(category);
         if (productList == null){
             return null;
         }
@@ -100,7 +101,7 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public ResponseProduct findById(Long id) {
         // Dto -> Entity
-        Product product = productDAO.findById(id);
+        Product product = productRepository.findById(id).orElse(null);
         if (product == null){
             return null;
         }
@@ -120,7 +121,7 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public List<ResponseProductSummary> findByUsername(String username) {
         // Dto -> Entity
-        List<Product> productList = productDAO.findByUsername(username);
+        List<Product> productList = productRepository.findByUserId(userRepository.findByUsername(username).getId());
         if (productList == null){
             return null;
         }
@@ -149,10 +150,8 @@ public class ProductServiceImpl implements ProductService {
         product.setDescription(requestProduct.getDescription());
         product.setSize(requestProduct.getSize());
         product.setImgKey(requestProduct.getImgKey());
-        product.setUser(userDAO.findByUsername(requestProduct.getUsername()));
-//        product.setCartList(null);
-//        product.setOrderProductList(null);
-        Product createdProduct = productDAO.createProduct(product);
+        product.setUser(userRepository.findByUsername(requestProduct.getUsername()));
+        Product createdProduct = productRepository.save(product);
 
         // Entity -> Dto
         ResponseProduct responseProduct = new ResponseProduct();
@@ -169,7 +168,11 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public ResponseProduct editProduct(Long id, String username) {
         // Dto -> Entity
-        Product product = productDAO.findById(id);
+        Product product = productRepository.findById(id).orElse(null);
+
+        if(product == null) {
+            return null;
+        }
 
         // Entity -> Dto
         if (product.getUser().getUsername().equals(username)) {
@@ -190,14 +193,18 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public ResponseProduct updateProduct(RequestProductModify requestProductModify) {
         // Dto -> Entity
-        Product product = productDAO.findById(requestProductModify.getId());
+        Product product = productRepository.findById(requestProductModify.getId()).orElse(null);
+        if(product == null) {
+            return null;
+        }
+
         product.setName(requestProductModify.getName());
         product.setPrice(requestProductModify.getPrice());
         product.setCategory(requestProductModify.getCategory());
         product.setDescription(requestProductModify.getDescription());
         product.setSize(requestProductModify.getSize());
         product.setImgKey(requestProductModify.getImgKey());
-        Product modified_Product = productDAO.updateProduct(product);
+        Product modified_Product = productRepository.save(product);
 
         // Entity -> Dto
         ResponseProduct responseProduct = new ResponseProduct();
@@ -214,11 +221,15 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public boolean deleteProduct(Long id, String username) {
         // Dto -> Entity
-        Product product = productDAO.findById(id);
+        Product product = productRepository.findById(id).orElse(null);
+
+        if(product == null) {
+            return false;
+        }
 
         // Entity -> Dto
         if (product.getUser().getUsername().equals(username)) {
-            productDAO.deleteProduct(product);
+            productRepository.delete(product);
             return true;
         } else {
             return false;
