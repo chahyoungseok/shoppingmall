@@ -8,7 +8,7 @@ import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.example.shoppingmall.config.auth.PrincipalDetails;
 import com.example.shoppingmall.data.entity.User;
-import com.example.shoppingmall.data.repository.UserRepository;
+import com.example.shoppingmall.data.repository.user.UserRepository;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;

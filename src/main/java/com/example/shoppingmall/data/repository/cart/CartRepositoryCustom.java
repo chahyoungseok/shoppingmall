@@ -1,4 +1,4 @@
-package com.example.shoppingmall.data.repository;
+package com.example.shoppingmall.data.repository.cart;
 
 import com.example.shoppingmall.data.entity.Cart;
 

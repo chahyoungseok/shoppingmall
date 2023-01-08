@@ -4,9 +4,9 @@ import com.example.shoppingmall.data.dto.response.ResponseCart;
 import com.example.shoppingmall.data.entity.Cart;
 import com.example.shoppingmall.data.entity.Product;
 import com.example.shoppingmall.data.entity.User;
-import com.example.shoppingmall.data.repository.CartRepository;
-import com.example.shoppingmall.data.repository.ProductRepository;
-import com.example.shoppingmall.data.repository.UserRepository;
+import com.example.shoppingmall.data.repository.cart.CartRepository;
+import com.example.shoppingmall.data.repository.product.ProductRepository;
+import com.example.shoppingmall.data.repository.user.UserRepository;
 import com.example.shoppingmall.service.CartService;
 import org.springframework.stereotype.Service;
 
@@ -37,10 +37,6 @@ public class CartServiceImpl implements CartService {
         ResponseCart responseCart;
 
         List<Cart> cartList = cartRepository.findAllCart(username);
-        System.out.println(cartList);
-        if(cartList.size() == 0) {
-            return null;
-        }
 
         for (Cart cart : cartList) {
             responseCart = new ResponseCart();
@@ -66,6 +62,7 @@ public class CartServiceImpl implements CartService {
             return null;
         }
 
+
         Boolean check_same  = cartRepository.findSameCart(user.getId(), product_id, ADD);
         if(!check_same) {
             Cart cart = new Cart(null, 1, user, product);
@@ -83,8 +80,7 @@ public class CartServiceImpl implements CartService {
         if(user == null || product == null) {
             return null;
         }
-
-        Boolean check_same  = cartRepository.findSameCart(user.getId(), product_id, DELETE);
+        Boolean check_same = cartRepository.findSameCart(user.getId(), product_id, DELETE);
 
         if(!check_same) {
             return null;

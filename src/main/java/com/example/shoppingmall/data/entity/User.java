@@ -40,15 +40,9 @@ public class User {
     @Column(nullable = false)
     private String authority;
 
-    @OneToMany(mappedBy = "user")
-    @ToString.Exclude
-    private List<Product> productList = new ArrayList<>();
-
-    @OneToMany(mappedBy = "user")
-    @ToString.Exclude
-    private List<Cart> cartList = new ArrayList<>();
-
-    @OneToMany(mappedBy = "user")
+    @OneToMany(mappedBy = "user", fetch = FetchType.EAGER)
     @ToString.Exclude
     private List<Order> orderList = new ArrayList<>();
+
+    public void addOrder(Order order) { this.orderList.add(order); }
 }

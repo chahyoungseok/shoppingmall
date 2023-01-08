@@ -6,7 +6,7 @@ import com.example.shoppingmall.data.dto.request.RequestModify;
 import com.example.shoppingmall.data.dto.response.ResponseUser;
 import com.example.shoppingmall.data.entity.Authority;
 import com.example.shoppingmall.data.entity.User;
-import com.example.shoppingmall.data.repository.UserRepository;
+import com.example.shoppingmall.data.repository.user.UserRepository;
 import com.example.shoppingmall.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;

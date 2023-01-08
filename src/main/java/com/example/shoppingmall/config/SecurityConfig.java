@@ -2,7 +2,7 @@ package com.example.shoppingmall.config;
 
 import com.example.shoppingmall.config.jwt.JwtAuthenticationFilter;
 import com.example.shoppingmall.config.jwt.JwtAuthorizationFilter;
-import com.example.shoppingmall.data.repository.UserRepository;
+import com.example.shoppingmall.data.repository.user.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

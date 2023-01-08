@@ -31,7 +31,9 @@ public class Order {
     @ToString.Exclude
     private User user;
 
-    @OneToMany(mappedBy = "order")
+    @OneToMany(mappedBy = "order", fetch = FetchType.EAGER)
     @ToString.Exclude
     private List<OrderProduct> orderProductList = new ArrayList<>();
+
+    public void addOrderProduct(OrderProduct orderProduct) { this.orderProductList.add(orderProduct); }
 }
