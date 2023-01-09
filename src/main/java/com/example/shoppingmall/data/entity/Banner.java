@@ -7,7 +7,7 @@ import javax.persistence.*;
 
 @Entity
 @ToString
-@Table(name="Banner")
+@Table(name="banner")
 @Getter
 @Setter
 @NoArgsConstructor

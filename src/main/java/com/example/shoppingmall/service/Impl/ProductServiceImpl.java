@@ -1,6 +1,7 @@
 package com.example.shoppingmall.service.Impl;
 
-import com.example.shoppingmall.data.dto.request.*;
+import com.example.shoppingmall.data.dto.request.RequestProduct;
+import com.example.shoppingmall.data.dto.request.RequestProductModify;
 import com.example.shoppingmall.data.dto.response.ResponseProduct;
 import com.example.shoppingmall.data.dto.response.ResponseProductSummary;
 import com.example.shoppingmall.data.entity.Product;
@@ -35,7 +36,7 @@ public class ProductServiceImpl implements ProductService {
     public List<ResponseProductSummary> findByProductName(String keyword) {
         // Dto -> Entity
         List<Product> productList = productRepository.findByNameContaining(keyword);
-        if (productList == null){
+        if (productList.isEmpty()){
             return null;
         }
 
@@ -57,7 +58,7 @@ public class ProductServiceImpl implements ProductService {
     public List<ResponseProductSummary> findAllProduct() {
         // Dto -> Entity
         List<Product> productList = productRepository.findAll();
-        if (productList == null){
+        if (productList.isEmpty()){
             return null;
         }
 
@@ -80,7 +81,7 @@ public class ProductServiceImpl implements ProductService {
     public List<ResponseProductSummary> findByCategory(String category) {
         // Dto -> Entity
         List<Product> productList = productRepository.findByCategory(category);
-        if (productList == null){
+        if (productList.isEmpty()){
             return null;
         }
 
