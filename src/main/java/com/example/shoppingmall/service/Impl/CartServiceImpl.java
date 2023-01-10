@@ -4,9 +4,9 @@ import com.example.shoppingmall.data.dto.response.ResponseCart;
 import com.example.shoppingmall.data.entity.Cart;
 import com.example.shoppingmall.data.entity.Product;
 import com.example.shoppingmall.data.entity.User;
-import com.example.shoppingmall.data.repository.cart.CartRepository;
-import com.example.shoppingmall.data.repository.product.ProductRepository;
-import com.example.shoppingmall.data.repository.user.UserRepository;
+import com.example.shoppingmall.repository.cart.CartRepository;
+import com.example.shoppingmall.repository.product.ProductRepository;
+import com.example.shoppingmall.repository.user.UserRepository;
 import com.example.shoppingmall.service.CartService;
 import org.springframework.stereotype.Service;
 

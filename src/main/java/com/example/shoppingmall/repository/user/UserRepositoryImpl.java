@@ -1,4 +1,4 @@
-package com.example.shoppingmall.data.repository.user;
+package com.example.shoppingmall.repository.user;
 
 import static com.example.shoppingmall.data.entity.QCart.cart;
 import static com.example.shoppingmall.data.entity.QUser.user;

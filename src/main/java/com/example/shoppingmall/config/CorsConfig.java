@@ -18,7 +18,7 @@ public class CorsConfig {
         config.addAllowedHeader("*"); // 모든 header에 응답을 허용하겠다.
         config.addAllowedMethod("*"); // 모든 methode(get, post, put...)에 응답을 허용하겠다.
         config.addAllowedOriginPattern("*");
-
+        config.addExposedHeader("Authorization");
         source.registerCorsConfiguration("/**", config);
         return new CorsFilter(source);
     }

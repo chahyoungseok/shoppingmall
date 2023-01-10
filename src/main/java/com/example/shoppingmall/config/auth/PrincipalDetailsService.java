@@ -1,7 +1,7 @@
 package com.example.shoppingmall.config.auth;
 
 import com.example.shoppingmall.data.entity.User;
-import com.example.shoppingmall.data.repository.user.UserRepository;
+import com.example.shoppingmall.repository.user.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;

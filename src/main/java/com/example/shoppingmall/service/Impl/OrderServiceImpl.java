@@ -6,10 +6,10 @@ import com.example.shoppingmall.data.entity.Order;
 import com.example.shoppingmall.data.entity.OrderProduct;
 import com.example.shoppingmall.data.entity.Product;
 import com.example.shoppingmall.data.entity.User;
-import com.example.shoppingmall.data.repository.order.OrderProductRepository;
-import com.example.shoppingmall.data.repository.order.OrderRepository;
-import com.example.shoppingmall.data.repository.product.ProductRepository;
-import com.example.shoppingmall.data.repository.user.UserRepository;
+import com.example.shoppingmall.repository.order.OrderProductRepository;
+import com.example.shoppingmall.repository.order.OrderRepository;
+import com.example.shoppingmall.repository.product.ProductRepository;
+import com.example.shoppingmall.repository.user.UserRepository;
 import com.example.shoppingmall.service.OrderService;
 import org.springframework.stereotype.Service;
 

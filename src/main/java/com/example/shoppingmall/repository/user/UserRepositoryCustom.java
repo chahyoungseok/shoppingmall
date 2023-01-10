@@ -1,4 +1,4 @@
-package com.example.shoppingmall.data.repository.user;
+package com.example.shoppingmall.repository.user;
 
 import com.example.shoppingmall.data.entity.User;
 

@@ -6,7 +6,7 @@ import com.example.shoppingmall.data.dto.request.RequestModify;
 import com.example.shoppingmall.data.dto.response.ResponseUser;
 import com.example.shoppingmall.data.entity.Authority;
 import com.example.shoppingmall.data.entity.User;
-import com.example.shoppingmall.data.repository.user.UserRepository;
+import com.example.shoppingmall.repository.user.UserRepository;
 import com.example.shoppingmall.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -43,7 +43,7 @@ public class UserServiceImpl implements UserService {
         user.setAddress(requestJoin.getAddress());
 
         User created_user = userRepository.save(user);
-        if (created_user == null) {return null;}
+        if (created_user.getUsername().isEmpty()) {return null;}
 
         // User Entity -> ResponseUser
         ResponseUser responseUser = new ResponseUser();

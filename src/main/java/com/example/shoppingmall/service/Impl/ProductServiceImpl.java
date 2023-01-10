@@ -5,8 +5,8 @@ import com.example.shoppingmall.data.dto.request.RequestProductModify;
 import com.example.shoppingmall.data.dto.response.ResponseProduct;
 import com.example.shoppingmall.data.dto.response.ResponseProductSummary;
 import com.example.shoppingmall.data.entity.Product;
-import com.example.shoppingmall.data.repository.product.ProductRepository;
-import com.example.shoppingmall.data.repository.user.UserRepository;
+import com.example.shoppingmall.repository.product.ProductRepository;
+import com.example.shoppingmall.repository.user.UserRepository;
 import com.example.shoppingmall.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -36,9 +36,6 @@ public class ProductServiceImpl implements ProductService {
     public List<ResponseProductSummary> findByProductName(String keyword) {
         // Dto -> Entity
         List<Product> productList = productRepository.findByNameContaining(keyword);
-        if (productList.isEmpty()){
-            return null;
-        }
 
         // Entity -> Dto
         List<ResponseProductSummary> responseProductList = new ArrayList<>();

@@ -1,6 +1,4 @@
-package com.example.shoppingmall.data.repository.cart;
-
-import static com.example.shoppingmall.data.entity.QCart.cart;
+package com.example.shoppingmall.repository.cart;
 
 import com.example.shoppingmall.data.entity.Cart;
 import com.example.shoppingmall.service.Impl.CartServiceImpl;
@@ -10,6 +8,8 @@ import org.springframework.stereotype.Repository;
 
 import javax.transaction.Transactional;
 import java.util.List;
+
+import static com.example.shoppingmall.data.entity.QCart.cart;
 
 @Repository
 @RequiredArgsConstructor
