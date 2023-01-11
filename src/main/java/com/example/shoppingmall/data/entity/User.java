@@ -40,7 +40,7 @@ public class User {
     @Column(nullable = false)
     private String authority;
 
-    @OneToMany(mappedBy = "user", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
     @ToString.Exclude
     private List<Order> orderList = new ArrayList<>();
 

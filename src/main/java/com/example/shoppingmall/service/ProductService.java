@@ -1,6 +1,7 @@
 package com.example.shoppingmall.service;
 
-import com.example.shoppingmall.data.dto.request.*;
+import com.example.shoppingmall.data.dto.request.RequestProduct;
+import com.example.shoppingmall.data.dto.request.RequestProductModify;
 import com.example.shoppingmall.data.dto.response.ResponseProduct;
 import com.example.shoppingmall.data.dto.response.ResponseProductSummary;
 
@@ -9,7 +10,7 @@ import java.util.List;
 public interface ProductService {
 
     /** 메인 페이지 상품 조회 */
-    List<ResponseProductSummary> mainPageProductList();
+    List<List<?>>  mainPageProductList();
 
     /** 상품명으로 검색 */
     List<ResponseProductSummary> findByProductName(String keyword);

@@ -22,3 +22,8 @@ INSERT INTO orders(id, user_id, orderdate, orderstatus) values (null, 2, '2022-0
 INSERT INTO order_product(id, product_id, order_id, count) values (null, 2, 1, 1)
 INSERT INTO order_product(id, product_id, order_id, count) values (null, 1, 1, 2)
 INSERT INTO order_product(id, product_id, order_id, count) values (null, 4, 2, 3)
+
+insert into banner(id, imgKey) values (null, 'A')
+insert into banner(id, imgKey) values (null, 'B')
+insert into banner(id, imgKey) values (null, 'C')
+insert into banner(id, imgKey) values (null, 'D')

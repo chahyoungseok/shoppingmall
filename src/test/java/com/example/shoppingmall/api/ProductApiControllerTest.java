@@ -16,7 +16,23 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
 class ProductApiControllerTest extends BaseControllerTest{
+
+    @Test
+    @DisplayName("메인 페이지")
+    void mainPage() throws Exception {
+        // given
+        String url = "/";
+        // when
+        ResultActions resultActions = mockMvc
+                .perform(get(url));
+        // then
+        resultActions
+                .andExpect(status().isOk())
+                .andDo(print())
+                .andReturn();
+    }
 
     @Nested
     @DisplayName("상품명으로 검색")

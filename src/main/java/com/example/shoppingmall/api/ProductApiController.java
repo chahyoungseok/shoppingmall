@@ -4,6 +4,7 @@ import com.example.shoppingmall.data.dto.request.*;
 import com.example.shoppingmall.data.dto.response.ResponseProduct;
 import com.example.shoppingmall.data.dto.response.ResponseProductSummary;
 import com.example.shoppingmall.service.ProductService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -13,26 +14,25 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 @RestController
+@Slf4j
 public class ProductApiController {
     @Autowired
     private ProductService productService;
 
     /** 메인 페이지 */
     @GetMapping("/")
-    public ResponseEntity<List<ResponseProduct>> mainPage(){
-//        List<ResponseProduct> productList = productService.mainPageProductList();
-//        배너리스트에서 이미지 키 값 가져오는 함수
-//        return (productList != null) ?
-//                ResponseEntity.status(HttpStatus.OK).body(productList) :
-//                ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
-        return null;
+    public ResponseEntity<List<List<?>>> mainPage(){
+        List<List<?>> returnList = productService.mainPageProductList();
+        return (!returnList.isEmpty()) ?
+                ResponseEntity.status(HttpStatus.OK).body(returnList) :
+                ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
     }
 
     /** 상품명으로 검색 */
     @GetMapping("/shop/search/{keyword}")
     public ResponseEntity<List<ResponseProductSummary>> findByProductName(@PathVariable String keyword){
         List<ResponseProductSummary> productList = productService.findByProductName(keyword);
-        return (productList.size() != 0) ?
+        return (!productList.isEmpty()) ?
                 ResponseEntity.status(HttpStatus.OK).body(productList) :
                 ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
     }
@@ -41,22 +41,22 @@ public class ProductApiController {
     @GetMapping("/shop")
     public ResponseEntity<List<ResponseProductSummary>> findAllProduct(){
         List<ResponseProductSummary> productList = productService.findAllProduct();
-        return (productList != null) ?
+        return (!productList.isEmpty()) ?
                 ResponseEntity.status(HttpStatus.OK).body(productList) :
                 ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
     }
 
     /** 상품 카테고리별 조회 */
-    @GetMapping("/shop/category/{category}")
+    @GetMapping("/shop/category/{category}") // n+1 수정해야함
     public ResponseEntity<List<ResponseProductSummary>> findByCategory(@PathVariable String category){
         List<ResponseProductSummary>productList = productService.findByCategory(category);
-        return (productList != null) ?
+        return (!productList.isEmpty()) ?
                 ResponseEntity.status(HttpStatus.OK).body(productList) :
                 ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
     }
 
     /** 상품 상세 페이지 조회 */
-    @GetMapping("/shop/detail/{id}")
+    @GetMapping("/shop/detail/{id}") // n+1 발생 x
     public ResponseEntity<ResponseProduct> findById(@PathVariable Long id){
         ResponseProduct product = productService.findById(id);
         return (product != null) ?

@@ -2,9 +2,12 @@ package com.example.shoppingmall.service.Impl;
 
 import com.example.shoppingmall.data.dto.request.RequestProduct;
 import com.example.shoppingmall.data.dto.request.RequestProductModify;
+import com.example.shoppingmall.data.dto.response.ResponseBanner;
 import com.example.shoppingmall.data.dto.response.ResponseProduct;
 import com.example.shoppingmall.data.dto.response.ResponseProductSummary;
+import com.example.shoppingmall.data.entity.Banner;
 import com.example.shoppingmall.data.entity.Product;
+import com.example.shoppingmall.repository.banner.BannerRepository;
 import com.example.shoppingmall.repository.product.ProductRepository;
 import com.example.shoppingmall.repository.user.UserRepository;
 import com.example.shoppingmall.service.ProductService;
@@ -18,18 +21,44 @@ import java.util.List;
 public class ProductServiceImpl implements ProductService {
 
     private final UserRepository userRepository;
-
     private final ProductRepository productRepository;
+    private final BannerRepository bannerRepository;
 
     @Autowired
-    public ProductServiceImpl(UserRepository userRepository, ProductRepository productRepository){
+    public ProductServiceImpl(UserRepository userRepository, ProductRepository productRepository, BannerRepository bannerRepository){
         this.productRepository = productRepository;
         this.userRepository = userRepository;
+        this.bannerRepository = bannerRepository;
     }
 
     @Override
-    public List<ResponseProductSummary> mainPageProductList() {
-        return null;
+    public List<List<?>>  mainPageProductList() {
+        // Dto -> Entity
+        List<Product> productList = productRepository.findTop2ByOrderByIdDesc();
+        List<Banner> bannerList = bannerRepository.findAll();
+
+        // Entity -> Dto
+        List<ResponseProductSummary> responseProductList = new ArrayList<>();
+        for(Product product : productList){
+            ResponseProductSummary newDto = new ResponseProductSummary();
+            newDto.setId(product.getId());
+            newDto.setName(product.getName());
+            newDto.setPrice(product.getPrice());
+            newDto.setImgKey(product.getImgKey());
+
+            responseProductList.add(newDto);
+        }
+        List<ResponseBanner> responseBannerList = new ArrayList<>();
+        for (Banner banner : bannerList) {
+            ResponseBanner newDto = new ResponseBanner();
+            newDto.setImgKey(banner.getImgKey());
+
+            responseBannerList.add(newDto);
+        }
+        List<List<?>> returnList = new ArrayList<>();
+        returnList.add(responseProductList);
+        returnList.add(responseBannerList);
+        return returnList;
     }
 
     @Override
@@ -54,7 +83,7 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public List<ResponseProductSummary> findAllProduct() {
         // Dto -> Entity
-        List<Product> productList = productRepository.findAll();
+        List<Product> productList = productRepository.findAllFetchJoin();
         if (productList.isEmpty()){
             return null;
         }
