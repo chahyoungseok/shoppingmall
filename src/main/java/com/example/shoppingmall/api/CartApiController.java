@@ -25,7 +25,7 @@ public class CartApiController {
     }
 
     /** 장바구니 상품 추가 */
-    @GetMapping("/user/create_cart/{product_id}")
+    @PostMapping("/user/create_cart/{product_id}")
     public ResponseEntity<List<ResponseCart>> createCart(HttpServletRequest request, @PathVariable Long product_id) {
         List<ResponseCart> cartList = cartService.createCart(request.getAttribute("username").toString(), product_id);
         return (cartList != null) ?
