@@ -2,6 +2,7 @@ package com.example.shoppingmall.config;
 
 import com.example.shoppingmall.config.jwt.JwtAuthenticationFilter;
 import com.example.shoppingmall.config.jwt.JwtAuthorizationFilter;
+import com.example.shoppingmall.config.jwt.JwtExceptionFilter;
 import com.example.shoppingmall.repository.user.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -24,6 +25,7 @@ public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+        http.addFilterBefore(new JwtExceptionFilter(), JwtAuthorizationFilter.class);
         http.csrf().disable()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS) //세션을 사용하지 않아 Stateless로 만들겠다.
                 .and()

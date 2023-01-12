@@ -78,6 +78,7 @@ public class UserApiController {
     @DeleteMapping("/user/delete/{username}")
     public ResponseEntity<Boolean> delete(HttpServletRequest request, @PathVariable String username) {
         boolean check_delete = userService.deleteUser(username, request.getAttribute("username").toString());
+
         return (check_delete) ?
                 ResponseEntity.status(HttpStatus.OK).body(true) :
                 ResponseEntity.status(HttpStatus.BAD_REQUEST).body(false);

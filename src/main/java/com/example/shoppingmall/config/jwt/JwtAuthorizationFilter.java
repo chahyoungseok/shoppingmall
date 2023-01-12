@@ -6,6 +6,7 @@ package com.example.shoppingmall.config.jwt;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
+import com.auth0.jwt.exceptions.TokenExpiredException;
 import com.example.shoppingmall.config.auth.PrincipalDetails;
 import com.example.shoppingmall.data.entity.User;
 import com.example.shoppingmall.repository.user.UserRepository;
@@ -45,13 +46,19 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
         }
 
         String token = request.getHeader(JwtProperties.HEADER_STRING).replace(JwtProperties.TOKEN_PREFIX, "");
+        String username = null;
 
-        String username =
-                JWT.require(Algorithm.HMAC512(JwtProperties.SECRET)).build().verify(token).getClaim("username").asString();
+        try {
+            username = JWT.require(Algorithm.HMAC512(JwtProperties.SECRET)).build().verify(token).getClaim("username").asString();
+        } catch (TokenExpiredException e) {
+            logger.warn("the token is expired and not valid anymore", e);
+            throw new TokenExpiredException("토큰 기한 만료");
+        }
 
-        // 서명이 정상적으로 됨
-        if (username != null){
+        if(username != null) {
+            // 서명이 정상적으로 됨
             System.out.println("서명이 정상적으로 됨");
+
             User userEntity = userRepository.findByUsername(username);
 
             PrincipalDetails principalDetails = new PrincipalDetails(userEntity);
