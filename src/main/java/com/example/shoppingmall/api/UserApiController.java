@@ -78,12 +78,10 @@ public class UserApiController {
     @DeleteMapping("/user/delete/{username}")
     public ResponseEntity<Boolean> delete(HttpServletRequest request, @PathVariable String username) {
         boolean check_delete = userService.deleteUser(username, request.getAttribute("username").toString());
-
         return (check_delete) ?
                 ResponseEntity.status(HttpStatus.OK).body(true) :
                 ResponseEntity.status(HttpStatus.BAD_REQUEST).body(false);
     }
-
 
     // Security Example
     @RunningTime
@@ -92,6 +90,12 @@ public class UserApiController {
         Object object = request.getAttribute("username");
         System.out.println(object.toString());
         return "example success";
+    }
+
+    @PostMapping("/xss")
+    public String xss(@RequestBody XssRequestDto requestDto){
+
+        return requestDto.getContent();
     }
 
 
