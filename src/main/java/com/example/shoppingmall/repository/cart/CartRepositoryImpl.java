@@ -2,6 +2,7 @@ package com.example.shoppingmall.repository.cart;
 
 import com.example.shoppingmall.data.entity.Cart;
 import com.example.shoppingmall.service.Impl.CartServiceImpl;
+import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
@@ -27,10 +28,7 @@ public class CartRepositoryImpl implements CartRepositoryCustom{
     @Override
     @Transactional
     public Boolean findSameCart(Long user_id, Long product_id, int state) {
-        Cart cartEntity = queryFactory.selectFrom(cart)
-                                .where(cart.user.id.eq(user_id)
-                                .and(cart.product.id.eq(product_id)))
-                                .fetchOne();
+        Cart cartEntity = selectFromUserID_N_ProductID(user_id, product_id);
 
         if(cartEntity == null) {
             return false;
@@ -42,17 +40,93 @@ public class CartRepositoryImpl implements CartRepositoryCustom{
             state_value = -1;
             // 삭제요청에 개수가 1개일때
             if(cartEntity.getCount() == 1) {
-                queryFactory.delete(cart)
-                        .where(cart.id.eq(cartEntity.getId()))
-                        .execute();
+                deleteCartID(cartEntity.getId());
                 return true;
             }
         }
-        queryFactory.update(cart)
-                .set(cart.count, cartEntity.getCount() + state_value)
-                .where(cart.id.eq(cartEntity.getId()))
-                .execute();
 
+        updateCartID(cartEntity.getId(), cartEntity.getCount() + state_value);
         return true;
+    }
+
+    @Override
+    public BooleanExpression eqUserID(Long id){
+        if (id == null) {
+            return null;
+        }
+        return cart.user.id.eq(id);
+    }
+
+    @Override
+    public BooleanExpression eqProductID(Long id){
+        if (id == null) {
+            return null;
+        }
+        return cart.product.id.eq(id);
+    }
+
+    @Override
+    public BooleanExpression eqCartID(Long id){
+        if (id == null) {
+            return null;
+        }
+        return cart.id.eq(id);
+    }
+
+    @Override
+    public Cart selectFromUserID_N_ProductID(Long user_id, Long product_id){
+        BooleanExpression status_user = eqUserID(user_id);
+        BooleanExpression status_product = eqProductID(product_id);
+
+        if (status_user == null && status_product == null) {
+            return null;
+        }
+
+        return queryFactory.selectFrom(cart)
+                .where(status_user, status_product)
+                .fetchOne();
+    }
+
+    @Override
+    public void updateCartID(Long id, int updated_value){
+        BooleanExpression status = null;
+        status = eqCartID(id);
+
+        if (status == null) {
+            return;
+        }
+
+        queryFactory.update(cart)
+                .set(cart.count, updated_value)
+                .where(status)
+                .execute();
+    }
+
+    @Override
+    public void deleteProductID(Long id){
+        BooleanExpression status = null;
+        status = eqProductID(id);
+
+        if (status == null) {
+            return;
+        }
+
+        queryFactory.delete(cart)
+                .where(status)
+                .execute();
+    }
+
+    @Override
+    public void deleteCartID(Long id){
+        BooleanExpression status = null;
+        status = eqCartID(id);
+
+        if (status == null) {
+            return;
+        }
+
+        queryFactory.delete(cart)
+                .where(status)
+                .execute();
     }
 }

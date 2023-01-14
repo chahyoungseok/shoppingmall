@@ -1,17 +1,20 @@
 package com.example.shoppingmall.repository.user;
 
-import static com.example.shoppingmall.data.entity.QCart.cart;
 import static com.example.shoppingmall.data.entity.QUser.user;
-import static com.example.shoppingmall.data.entity.QProduct.product;
-import static com.example.shoppingmall.data.entity.QOrder.order;
-import static com.example.shoppingmall.data.entity.QOrderProduct.orderProduct;
 
 import com.example.shoppingmall.data.entity.Order;
 import com.example.shoppingmall.data.entity.Product;
 import com.example.shoppingmall.data.entity.User;
+import com.example.shoppingmall.repository.cart.CartRepository;
+import com.example.shoppingmall.repository.order.OrderProductRepository;
+import com.example.shoppingmall.repository.order.OrderRepository;
+import com.example.shoppingmall.repository.product.ProductRepository;
+import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
+import org.springframework.util.StringUtils;
 
 import javax.transaction.Transactional;
 import java.util.List;
@@ -22,40 +25,38 @@ public class UserRepositoryImpl implements UserRepositoryCustom{
 
     private final JPAQueryFactory queryFactory;
 
+    @Autowired
+    private ProductRepository productRepository;
+
+    @Autowired
+    private CartRepository cartRepository;
+
+    @Autowired
+    private OrderRepository orderRepository;
+
+    @Autowired
+    private OrderProductRepository orderProductRepository;
+
     @Override
     @Transactional
     public void deleteByUser(String username) {
-        List<Product> productList = queryFactory.selectFrom(product)
-                .where(product.user.username.eq(username))
-                .fetch();
+        List<Product> productList = productRepository.selectFromUsername(username);
 
-        List<Order> orderList = queryFactory.selectFrom(order)
-                .where(order.user.username.eq(username))
-                .fetch();
+        List<Order> orderList = orderRepository.selectFromUsername(username);
 
         for(Order o : orderList) {
-            queryFactory.delete(orderProduct)
-                    .where(orderProduct.order.id.eq(o.getId()))
-                    .execute();
+            orderProductRepository.deleteOrderID(o.getId());
 
-            queryFactory.delete(order)
-                    .where(order.id.eq(o.getId()))
-                    .execute();
+            orderRepository.deleteOrderID(o.getId());
         }
 
         for(Product p : productList) {
-            queryFactory.delete(cart)
-                    .where(cart.product.id.eq(p.getId()))
-                    .execute();
+            cartRepository.deleteProductID(p.getId());
 
-            queryFactory.delete(product)
-                    .where(product.id.eq(p.getId()))
-                    .execute();
+            productRepository.deleteProductID(p.getId());
         }
 
-        queryFactory.delete(user)
-                .where(user.username.eq(username))
-                .execute();
+        deleteUsername(username);
     }
 
     @Override
@@ -63,5 +64,27 @@ public class UserRepositoryImpl implements UserRepositoryCustom{
         return queryFactory.selectFrom(user)
                 .where(user.username.eq(username))
                 .fetchOne();
+    }
+
+    @Override
+    public BooleanExpression eqUsername(String username){
+        if(!StringUtils.hasText(username)){
+            return null;
+        }
+        return user.username.eq(username);
+    }
+
+    @Override
+    public void deleteUsername(String username){
+        BooleanExpression status = null;
+        status = eqUsername(username);
+
+        if (status == null) {
+            return;
+        }
+
+        queryFactory.delete(user)
+                .where(status)
+                .execute();
     }
 }
