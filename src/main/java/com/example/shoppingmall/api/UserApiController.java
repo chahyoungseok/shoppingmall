@@ -37,16 +37,6 @@ public class UserApiController {
                 ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
     }
 
-
-//    쓰임이 없어 일단 주석
-//    @GetMapping("/findUser")
-//    public ResponseEntity<ResponseUser> findUser(@RequestBody RequestUsername requestUsername) {
-//        ResponseUser responseUser = userService.findByUsername(requestUsername);
-//        return (responseUser != null) ?
-//                ResponseEntity.status(HttpStatus.OK).body(responseUser) :
-//                ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
-//    }
-
     @PutMapping("/user/update")
     public ResponseEntity<ResponseUser> update(HttpServletRequest request, @Valid @RequestBody RequestModify requestModify) {
         ResponseUser responseUser = userService.updateUser(requestModify, request.getAttribute("username").toString());
