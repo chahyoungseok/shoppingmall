@@ -1,5 +1,6 @@
 package com.example.shoppingmall.api;
 
+import com.example.shoppingmall.config.auth.PrincipalDetails;
 import com.example.shoppingmall.service.CartService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -36,10 +37,11 @@ class CartApiControllerTest extends BaseControllerTest{
         void success() throws Exception{
             String url = "/user/cart";
             Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+            PrincipalDetails principalDetails = (PrincipalDetails) authentication.getPrincipal();
 
             RequestBuilder requestBuilder = MockMvcRequestBuilders
                     .get(url)
-                    .requestAttr("username", authentication.getName());
+                    .requestAttr("user", principalDetails.getUser());
             ResultActions resultActions = mockMvc
                     .perform(requestBuilder);
             // then
@@ -60,10 +62,11 @@ class CartApiControllerTest extends BaseControllerTest{
         void success() throws Exception{
             String url = "/user/create_cart/1";
             Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+            PrincipalDetails principalDetails = (PrincipalDetails) authentication.getPrincipal();
 
             RequestBuilder requestBuilder = MockMvcRequestBuilders
-                    .get(url)
-                    .requestAttr("username", authentication.getName());
+                    .post(url)
+                    .requestAttr("user", principalDetails.getUser());
             ResultActions resultActions = mockMvc
                     .perform(requestBuilder);
             // then
@@ -84,10 +87,11 @@ class CartApiControllerTest extends BaseControllerTest{
         void success() throws Exception{
             String url = "/user/delete_cart/2";
             Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+            PrincipalDetails principalDetails = (PrincipalDetails) authentication.getPrincipal();
 
             RequestBuilder requestBuilder = MockMvcRequestBuilders
                     .delete(url)
-                    .requestAttr("username", authentication.getName());
+                    .requestAttr("user", principalDetails.getUser());
             ResultActions resultActions = mockMvc
                     .perform(requestBuilder);
             // then
@@ -103,10 +107,11 @@ class CartApiControllerTest extends BaseControllerTest{
         void fail() throws Exception{
             String url = "/user/delete_cart/1";
             Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+            PrincipalDetails principalDetails = (PrincipalDetails) authentication.getPrincipal();
 
             RequestBuilder requestBuilder = MockMvcRequestBuilders
                     .delete(url)
-                    .requestAttr("username", authentication.getName());
+                    .requestAttr("user", principalDetails.getUser());
             ResultActions resultActions = mockMvc
                     .perform(requestBuilder);
             // then

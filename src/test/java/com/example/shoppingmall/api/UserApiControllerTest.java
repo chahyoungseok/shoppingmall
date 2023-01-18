@@ -1,6 +1,8 @@
 package com.example.shoppingmall.api;
 
+import com.example.shoppingmall.config.auth.PrincipalDetails;
 import com.example.shoppingmall.data.dto.request.*;
+import com.example.shoppingmall.data.entity.User;
 import com.example.shoppingmall.service.UserService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -8,9 +10,11 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.test.context.support.WithUserDetails;
 import org.springframework.test.web.servlet.RequestBuilder;
 import org.springframework.test.web.servlet.ResultActions;
@@ -42,9 +46,9 @@ class UserApiControllerTest extends BaseControllerTest{
                     "HyoungSeok",
                     "qwer1234",
                     "hs_good",
-                    "010-1234-5678",
+                    "010-5161-6611",
                     "hs@naver.com",
-                    "sangmyung university"));
+                    "sangmyung university - 123"));
 
             mockMvc.perform(post("/join")
                             .content(content)
@@ -124,39 +128,24 @@ class UserApiControllerTest extends BaseControllerTest{
 
     @Nested
     @DisplayName("내 정보 페이지")
-    @WithUserDetails(value = "hwang")
     class my_page {
+        @WithUserDetails(value = "hwang")
         @DisplayName("성공")
         @Test
         void success() throws Exception{
             String url = "/user/mypage";
+
             Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+            PrincipalDetails principalDetails = (PrincipalDetails) authentication.getPrincipal();
 
             RequestBuilder requestBuilder = MockMvcRequestBuilders
                     .get(url)
-                    .requestAttr("username", authentication.getName());
+                    .requestAttr("user", principalDetails.getUser());
             ResultActions resultActions = mockMvc
                     .perform(requestBuilder);
             // then
             resultActions
                     .andExpect(status().isOk())
-                    .andDo(print());
-        }
-
-        // DB에 없는 username이 요청 온 경우
-        @DisplayName("실패")
-        @Test
-        void fail() throws Exception{
-            String url = "/user/mypage";
-
-            RequestBuilder requestBuilder = MockMvcRequestBuilders
-                    .get(url)
-                    .requestAttr("username", "HyoungSeok");
-            ResultActions resultActions = mockMvc
-                    .perform(requestBuilder);
-            // then
-            resultActions
-                    .andExpect(status().isBadRequest())
                     .andDo(print());
         }
     }
@@ -177,10 +166,11 @@ class UserApiControllerTest extends BaseControllerTest{
                     "sangmyung university"));
 
             Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+            PrincipalDetails principalDetails = (PrincipalDetails) authentication.getPrincipal();
 
             RequestBuilder requestBuilder = MockMvcRequestBuilders
                     .put(url)
-                    .requestAttr("username", authentication.getName())
+                    .requestAttr("user", principalDetails.getUser())
                     .content(content)
                     .contentType(MediaType.APPLICATION_JSON);
             ResultActions resultActions = mockMvc
@@ -188,31 +178,6 @@ class UserApiControllerTest extends BaseControllerTest{
 
             resultActions
                     .andExpect(status().isOk())
-                    .andDo(print());
-        }
-
-        // 토큰의 username과 Dto의 username이 다를 때
-        @DisplayName("실패")
-        @Test
-        void fail() throws Exception{
-            String url = "/user/update";
-            String content = objectMapper.writeValueAsString(new RequestModify(
-                    "hwang",
-                    "hs_good",
-                    "010-1234-5678",
-                    "hs@naver.com",
-                    "sangmyung university"));
-
-            RequestBuilder requestBuilder = MockMvcRequestBuilders
-                    .put(url)
-                    .requestAttr("username", "HyoungSeok")
-                    .content(content)
-                    .contentType(MediaType.APPLICATION_JSON);
-            ResultActions resultActions = mockMvc
-                    .perform(requestBuilder);
-
-            resultActions
-                    .andExpect(status().isBadRequest())
                     .andDo(print());
         }
     }
@@ -227,15 +192,15 @@ class UserApiControllerTest extends BaseControllerTest{
             String url = "/user/pwd_change";
 
             Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+            PrincipalDetails principalDetails = (PrincipalDetails) authentication.getPrincipal();
 
             String content = objectMapper.writeValueAsString(new RequestChangePWD(
-                    "hwang",
                     "qwer1234",
                     "rewq4321"));
 
             RequestBuilder requestBuilder = MockMvcRequestBuilders
                     .post(url)
-                    .requestAttr("username", authentication.getName())
+                    .requestAttr("user", principalDetails.getUser())
                     .content(content)
                     .contentType(MediaType.APPLICATION_JSON);
             ResultActions resultActions = mockMvc
@@ -252,15 +217,15 @@ class UserApiControllerTest extends BaseControllerTest{
             String url = "/user/pwd_change";
 
             Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+            PrincipalDetails principalDetails = (PrincipalDetails) authentication.getPrincipal();
 
             String content = objectMapper.writeValueAsString(new RequestChangePWD(
-                    "hwang",
                     "qwer1233",
                     "rewq4321"));
 
             RequestBuilder requestBuilder = MockMvcRequestBuilders
                     .post(url)
-                    .requestAttr("username", authentication.getName())
+                    .requestAttr("user", principalDetails.getUser())
                     .content(content)
                     .contentType(MediaType.APPLICATION_JSON);
             ResultActions resultActions = mockMvc
@@ -282,10 +247,11 @@ class UserApiControllerTest extends BaseControllerTest{
             String url = "/user/delete/hwang";
 
             Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+            PrincipalDetails principalDetails = (PrincipalDetails) authentication.getPrincipal();
 
             RequestBuilder requestBuilder = MockMvcRequestBuilders
                     .delete(url)
-                    .requestAttr("username", authentication.getName());
+                    .requestAttr("user", principalDetails.getUser());
             ResultActions resultActions = mockMvc
                     .perform(requestBuilder);
 
@@ -300,10 +266,11 @@ class UserApiControllerTest extends BaseControllerTest{
             String url = "/user/delete/2";
 
             Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+            PrincipalDetails principalDetails = (PrincipalDetails) authentication.getPrincipal();
 
             RequestBuilder requestBuilder = MockMvcRequestBuilders
                     .delete(url)
-                    .requestAttr("username", authentication.getName());
+                    .requestAttr("user", principalDetails.getUser());
             ResultActions resultActions = mockMvc
                     .perform(requestBuilder);
 
@@ -322,11 +289,8 @@ class UserApiControllerTest extends BaseControllerTest{
         void success() throws Exception{
             String url = "/admin/upgradeAuth/ann";
 
-            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-
             RequestBuilder requestBuilder = MockMvcRequestBuilders
-                    .patch(url)
-                    .requestAttr("username", authentication.getName());
+                    .patch(url);
             ResultActions resultActions = mockMvc
                     .perform(requestBuilder);
 
@@ -340,11 +304,9 @@ class UserApiControllerTest extends BaseControllerTest{
         void fail() throws Exception{
             String url = "/admin/upgradeAuth/ann_dd";
 
-            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
             RequestBuilder requestBuilder = MockMvcRequestBuilders
-                    .patch(url)
-                    .requestAttr("username", authentication.getName());
+                    .patch(url);
             ResultActions resultActions = mockMvc
                     .perform(requestBuilder);
 

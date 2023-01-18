@@ -19,7 +19,7 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false)
+    @Column(nullable = false, unique = true)
     private String username; // UserID, 실제 로그인하는 ID
 
     @Column(nullable = false)
@@ -28,13 +28,13 @@ public class User {
     @Column(nullable = false)
     private String password;
 
-    @Column(nullable = false)
+    @Column(nullable = false, unique = true)
     private String telephone;
 
-    @Column(nullable = false)
+    @Column(nullable = false, unique = true)
     private String e_mail;
 
-    @Column(nullable = false)
+    @Column(nullable = false, unique = true)
     private String address;
 
     @Column(nullable = false)

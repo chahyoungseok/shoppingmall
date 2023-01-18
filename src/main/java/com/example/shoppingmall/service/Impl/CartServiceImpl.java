@@ -32,11 +32,11 @@ public class CartServiceImpl implements CartService {
     }
 
     @Override
-    public List<ResponseCart> readCart(String username) {
+    public List<ResponseCart> readCart(User user) {
         List<ResponseCart> responseCartList = new ArrayList<>();
         ResponseCart responseCart;
 
-        List<Cart> cartList = cartRepository.findAllCart(username);
+        List<Cart> cartList = cartRepository.findAllCart(user.getUsername());
 
         for (Cart cart : cartList) {
             responseCart = new ResponseCart();
@@ -54,27 +54,24 @@ public class CartServiceImpl implements CartService {
     }
 
     @Override
-    public List<ResponseCart> createCart(String username, Long product_id) {
-        User user = userRepository.findByUsername(username);
+    public List<ResponseCart> createCart(User user, Long product_id) {
         Product product = productRepository.findById(product_id).orElse(null);
 
         if(user == null || product == null) {
             return null;
         }
 
-
-        Boolean check_same  = cartRepository.findSameCart(user.getId(), product_id, ADD);
+        Boolean check_same = cartRepository.findSameCart(user.getId(), product_id, ADD);
         if(!check_same) {
             Cart cart = new Cart(null, 1, user, product);
             cartRepository.save(cart);
         }
 
-        return readCart(user.getUsername());
+        return readCart(user);
     }
 
     @Override
-    public List<ResponseCart> deleteCart(String username, Long product_id) {
-        User user = userRepository.findByUsername(username);
+    public List<ResponseCart> deleteCart(User user, Long product_id) {
         Product product = productRepository.findById(product_id).orElse(null);
 
         if(user == null || product == null) {
@@ -86,6 +83,6 @@ public class CartServiceImpl implements CartService {
             return null;
         }
 
-        return readCart(user.getUsername());
+        return readCart(user);
     }
 }

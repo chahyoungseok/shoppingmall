@@ -37,12 +37,7 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public List<ResponseOrder> read_order(String username) {
-        User user = userRepository.findByUsername(username);
-        if(user == null) {
-            return null;
-        }
-
+    public List<ResponseOrder> read_order(User user) {
         List<Order> orderList = user.getOrderList();
         List<ResponseOrder> result = new ArrayList<>();
 
@@ -67,8 +62,7 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public List<ResponseOrder> create_order(RequestOrder requestOrder) {
-        User user = userRepository.findByUsername(requestOrder.getUsername());
+    public List<ResponseOrder> create_order(User user, RequestOrder requestOrder) {
         Product product = productRepository.findById(requestOrder.getProduct_id()).orElse(null);
 
         if (user == null || product == null) {
@@ -90,6 +84,6 @@ public class OrderServiceImpl implements OrderService {
 
         orderProductRepository.save(orderProduct);
 
-        return read_order(user.getUsername());
+        return read_order(user);
     }
 }

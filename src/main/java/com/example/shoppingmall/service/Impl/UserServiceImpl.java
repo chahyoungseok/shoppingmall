@@ -73,15 +73,13 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public ResponseUser updateUser(RequestModify requestModify, String username) {
-        if (!requestModify.getUsername().equals(username)) {
+    public ResponseUser updateUser(RequestModify requestModify, User user) {
+        if (!requestModify.getUsername().equals(user.getUsername())) {
             return null;
         }
+        //해당 user는 검증을 통해 얻어온 Entity 이기에 null일 수 가 없습니다.
 
         // Dto -> Entity
-        User user = userRepository.findByUsername(requestModify.getUsername());
-        if(user == null) {return null;}
-
         user.setUsername(requestModify.getUsername());
         user.setNickname(requestModify.getNickname());
         user.setTelephone(requestModify.getTelephone());
@@ -115,14 +113,10 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public boolean change_pwd(RequestChangePWD requestChangePWD){
-        User check_pwd = userRepository.findByUsername(requestChangePWD.getUsername());
-
-        if(check_pwd == null) {return false;}
-
-        if(bCryptPasswordEncoder.matches(requestChangePWD.getOrigin_password(), check_pwd.getPassword())){
-            check_pwd.setPassword(bCryptPasswordEncoder.encode(requestChangePWD.getNew_password()));
-            userRepository.save(check_pwd);
+    public boolean change_pwd(RequestChangePWD requestChangePWD, User user){
+        if(bCryptPasswordEncoder.matches(requestChangePWD.getOrigin_password(), user.getPassword())){
+            user.setPassword(bCryptPasswordEncoder.encode(requestChangePWD.getNew_password()));
+            userRepository.save(user);
             return true;
         }
         return false;

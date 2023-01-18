@@ -1,6 +1,7 @@
 package com.example.shoppingmall.data.dto.response;
 
 
+import com.example.shoppingmall.data.entity.User;
 import lombok.*;
 
 @Getter
@@ -18,4 +19,12 @@ public class ResponseUser {
     private String e_mail;
 
     private String address;
+
+    public void patch(User user){
+        this.username = user.getUsername();
+        this.nickname = user.getNickname();
+        this.telephone = user.getTelephone();
+        this.e_mail = user.getE_mail();
+        this.address = user.getAddress();
+    }
 }
