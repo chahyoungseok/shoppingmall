@@ -21,12 +21,13 @@ public class Cart {
     @Column(nullable = false)
     private int count; // 수량
 
-    @ManyToOne
+    /** ManyToOne의 기본 Fetch는 EAGER */
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     @ToString.Exclude
     private User user;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "product_id")
     @ToString.Exclude
     private Product product;

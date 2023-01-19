@@ -40,9 +40,13 @@ public class User {
     @Column(nullable = false)
     private String authority;
 
-    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
+    /** OneToMany의 기본 Fetch는 LAZY */
+    @OneToMany(mappedBy = "user")
     @ToString.Exclude
     private List<Order> orderList = new ArrayList<>();
 
-    public void addOrder(Order order) { this.orderList.add(order); }
+    public void addOrder(Order order) {
+        order.setUser(this);
+        this.orderList.add(order);
+    }
 }

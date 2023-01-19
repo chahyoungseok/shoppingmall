@@ -1,9 +1,11 @@
 package com.example.shoppingmall.repository.cart;
 
+import com.example.shoppingmall.aop.annotation.RunningTime;
 import com.example.shoppingmall.data.entity.Cart;
 import com.example.shoppingmall.service.Impl.CartServiceImpl;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
+import jdk.jfr.Timestamp;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
@@ -11,6 +13,8 @@ import javax.transaction.Transactional;
 import java.util.List;
 
 import static com.example.shoppingmall.data.entity.QCart.cart;
+import static com.example.shoppingmall.data.entity.QUser.user;
+import static com.example.shoppingmall.data.entity.QProduct.product;
 
 @Repository
 @RequiredArgsConstructor
@@ -19,9 +23,15 @@ public class CartRepositoryImpl implements CartRepositoryCustom{
     private final JPAQueryFactory queryFactory;
 
     @Override
+    @RunningTime
     public List<Cart> findAllCart(String username) {
         return queryFactory.selectFrom(cart)
+                .innerJoin(cart.product, product)
                 .where(cart.user.username.eq(username))
+                .fetchJoin()
+                .innerJoin(cart.user, user)
+                .fetchJoin()
+                .distinct()
                 .fetch();
     }
 

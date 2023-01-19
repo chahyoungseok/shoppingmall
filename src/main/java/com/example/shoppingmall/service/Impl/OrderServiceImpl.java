@@ -11,14 +11,17 @@ import com.example.shoppingmall.repository.order.OrderRepository;
 import com.example.shoppingmall.repository.product.ProductRepository;
 import com.example.shoppingmall.repository.user.UserRepository;
 import com.example.shoppingmall.service.OrderService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 
 @Service
 public class OrderServiceImpl implements OrderService {
-
     private final OrderRepository orderRepository;
 
     private final OrderProductRepository orderProductRepository;
@@ -37,8 +40,16 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
+    @Transactional
     public List<ResponseOrder> read_order(User user) {
-        List<Order> orderList = user.getOrderList();
+        User userPersisted = userRepository.findByUsername(user.getUsername());
+
+        List<Order> orderList = userPersisted.getOrderList();
+
+        if (orderList == null) {
+            return null;
+        }
+
         List<ResponseOrder> result = new ArrayList<>();
 
         for(Order order : orderList) {
@@ -62,28 +73,30 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
+    @Transactional
     public List<ResponseOrder> create_order(User user, RequestOrder requestOrder) {
+        User userPersisted = userRepository.findByUsername(user.getUsername());
         Product product = productRepository.findById(requestOrder.getProduct_id()).orElse(null);
 
-        if (user == null || product == null) {
+        System.out.println("userPersisted = " + userPersisted);
+        if (userPersisted == null || product == null) {
             return null;
         }
 
         Order order = new Order();
         order.setOrderDate(requestOrder.getOrder_date());
         order.setOrderStatus(requestOrder.getOrder_status());
-        order.setUser(user);
+        userPersisted.addOrder(order);
 
-        user.addOrder(order);
         orderRepository.save(order);
 
         OrderProduct orderProduct = new OrderProduct();
         orderProduct.setCount(requestOrder.getCount());
         orderProduct.setProduct(product);
-        orderProduct.setOrder(order);
 
+        order.addOrderProduct(orderProduct);
         orderProductRepository.save(orderProduct);
 
-        return read_order(user);
+        return read_order(userPersisted);
     }
 }

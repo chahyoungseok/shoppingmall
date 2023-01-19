@@ -38,6 +38,10 @@ public class CartServiceImpl implements CartService {
 
         List<Cart> cartList = cartRepository.findAllCart(user.getUsername());
 
+        if (cartList == null){
+            return null;
+        }
+
         for (Cart cart : cartList) {
             responseCart = new ResponseCart();
             responseCart.setId(cart.getProduct().getId());
