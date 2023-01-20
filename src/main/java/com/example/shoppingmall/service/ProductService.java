@@ -28,7 +28,7 @@ public interface ProductService {
     List<ResponseProductSummary> findByUsername(String username);
 
     /** 상품 등록 */
-    ResponseProduct CreateProduct(RequestProduct requestProduct);
+    boolean CreateProduct(RequestProduct requestProduct);
 
     /** 상품 정보 수정 페이지 */
     ResponseProduct editProduct(Long id, String username);

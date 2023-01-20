@@ -7,6 +7,7 @@ import com.example.shoppingmall.data.dto.response.ResponseProduct;
 import com.example.shoppingmall.data.dto.response.ResponseProductSummary;
 import com.example.shoppingmall.data.entity.Banner;
 import com.example.shoppingmall.data.entity.Product;
+import com.example.shoppingmall.data.entity.User;
 import com.example.shoppingmall.repository.banner.BannerRepository;
 import com.example.shoppingmall.repository.product.ProductRepository;
 import com.example.shoppingmall.repository.user.UserRepository;
@@ -168,28 +169,27 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public ResponseProduct CreateProduct(RequestProduct requestProduct){
+    public boolean CreateProduct(RequestProduct requestProduct){
+        String[] parsedSize = requestProduct.getSize().split(",");
         // Dto -> Entity
-        Product product = new Product();
-        product.setName(requestProduct.getName());
-        product.setPrice(requestProduct.getPrice());
-        product.setCategory(requestProduct.getCategory());
-        product.setDescription(requestProduct.getDescription());
-        product.setSize(requestProduct.getSize());
-        product.setImgKey(requestProduct.getImgKey());
-        product.setUser(userRepository.findByUsername(requestProduct.getUsername()));
-        Product createdProduct = productRepository.save(product);
+        User user = userRepository.findByUsername(requestProduct.getUsername());
+        List<Product> productList = new ArrayList<>();
+        for(String size : parsedSize){
+            Product product = new Product();
+            product.setName(requestProduct.getName());
+            product.setPrice(requestProduct.getPrice());
+            product.setCategory(requestProduct.getCategory());
+            product.setDescription(requestProduct.getDescription());
+            product.setImgKey(requestProduct.getImgKey());
+            product.setUser(user);
+            product.setSize(size);
 
-        // Entity -> Dto
-        ResponseProduct responseProduct = new ResponseProduct();
-        responseProduct.setId(createdProduct.getId());
-        responseProduct.setName(createdProduct.getName());
-        responseProduct.setPrice(createdProduct.getPrice());
-        responseProduct.setCategory(createdProduct.getCategory());
-        responseProduct.setDescription(createdProduct.getDescription());
-        responseProduct.setSize(createdProduct.getSize());
-        responseProduct.setImgKey(createdProduct.getImgKey());
-        return responseProduct;
+            productList.add(product);
+        }
+
+        List<Product> createdProductList = productRepository.saveAll(productList);
+
+        return createdProductList.size() == parsedSize.length;
     }
 
     @Override

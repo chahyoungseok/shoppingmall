@@ -140,7 +140,7 @@ class ProductApiControllerTest extends BaseControllerTest{
                 3000,
                 "shoes",
                 "나이키 신발",
-                "270",
+                "270,280,290",
                 "A"));
 
         // when

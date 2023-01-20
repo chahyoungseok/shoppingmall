@@ -77,9 +77,9 @@ public class ProductApiController {
     @PostMapping("/register/create_product")
     public ResponseEntity<ResponseProduct> createProduct(@RequestBody RequestProduct requestProduct, HttpServletRequest request){
         requestProduct.setUsername(request.getAttribute("username").toString());
-        ResponseProduct product = productService.CreateProduct(requestProduct);
-        return (product != null) ?
-                ResponseEntity.status(HttpStatus.OK).body(product) :
+        boolean check = productService.CreateProduct(requestProduct);
+        return (check) ?
+                ResponseEntity.status(HttpStatus.OK).body(null) :
                 ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
     }
 
