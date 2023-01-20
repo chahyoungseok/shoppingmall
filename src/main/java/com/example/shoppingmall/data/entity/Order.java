@@ -26,14 +26,17 @@ public class Order {
     @Column(nullable = false)
     private String orderStatus; // 주문 상태
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     @ToString.Exclude
     private User user;
 
-    @OneToMany(mappedBy = "order", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "order")
     @ToString.Exclude
     private List<OrderProduct> orderProductList = new ArrayList<>();
 
-    public void addOrderProduct(OrderProduct orderProduct) { this.orderProductList.add(orderProduct); }
+    public void addOrderProduct(OrderProduct orderProduct) {
+        orderProduct.setOrder(this);
+        this.orderProductList.add(orderProduct);
+    }
 }

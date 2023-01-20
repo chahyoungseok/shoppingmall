@@ -24,9 +24,9 @@ public class WebMvcConfig implements WebMvcConfigurer {
     }
 
     private HttpMessageConverter<?> htmlEscapingConverter() {
-        ObjectMapper objectMapper = new ObjectMapper();
-        objectMapper.getFactory().setCharacterEscapes(new HtmlCharacterEscapes());
+        ObjectMapper copy = objectMapper.copy();
+        copy.getFactory().setCharacterEscapes(new HtmlCharacterEscapes());
 
-        return new MappingJackson2HttpMessageConverter(objectMapper);
+        return new MappingJackson2HttpMessageConverter(copy);
     }
 }

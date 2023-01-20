@@ -19,7 +19,7 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false)
+    @Column(nullable = false, unique = true)
     private String username; // UserID, 실제 로그인하는 ID
 
     @Column(nullable = false)
@@ -28,21 +28,25 @@ public class User {
     @Column(nullable = false)
     private String password;
 
-    @Column(nullable = false)
+    @Column(nullable = false, unique = true)
     private String telephone;
 
-    @Column(nullable = false)
+    @Column(nullable = false, unique = true)
     private String e_mail;
 
-    @Column(nullable = false)
+    @Column(nullable = false, unique = true)
     private String address;
 
     @Column(nullable = false)
     private String authority;
 
-    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
+    /** OneToMany의 기본 Fetch는 LAZY */
+    @OneToMany(mappedBy = "user")
     @ToString.Exclude
     private List<Order> orderList = new ArrayList<>();
 
-    public void addOrder(Order order) { this.orderList.add(order); }
+    public void addOrder(Order order) {
+        order.setUser(this);
+        this.orderList.add(order);
+    }
 }

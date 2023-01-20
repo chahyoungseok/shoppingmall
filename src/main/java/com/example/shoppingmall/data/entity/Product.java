@@ -37,7 +37,8 @@ public class Product {
     @Column(nullable = false)
     private String imgKey;
 
-    @ManyToOne
+    /** ManyToOne의 기본 Fetch는 EAGER */
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
      // 다대일 매핑에서 일 쪽의 엔티티에서 참조하는 fk 이름을 적는다
     @ToString.Exclude

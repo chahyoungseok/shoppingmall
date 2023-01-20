@@ -10,8 +10,6 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @NoArgsConstructor
 public class RequestOrder {
-    private String username;
-
     private LocalDateTime order_date;
 
     private String order_status;

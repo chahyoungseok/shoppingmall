@@ -10,7 +10,7 @@ INSERT INTO product(id, name, price, category, description, size, imgKey, user_i
 INSERT INTO product(id, name, price, category, description, size, imgKey, user_id) values (null, 'coat', 1000, 'outer', '코트이다', 'M', 'A', 2)
 INSERT INTO product(id, name, price, category, description, size, imgKey, user_id) values (null, 'coat', 1000, 'outer', '코트이다', 'L', 'A', 2)
 
---------------- 상품 데이터 ---------------
+--------------- 카트 데이터 ---------------
 INSERT INTO cart(id, user_id, product_id, count) values (null, 1, 2, 1)
 INSERT INTO cart(id, user_id, product_id, count) values (null, 2, 4, 1)
 

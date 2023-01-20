@@ -1,5 +1,6 @@
 package com.example.shoppingmall.api;
 
+import com.example.shoppingmall.config.auth.PrincipalDetails;
 import com.example.shoppingmall.data.dto.request.RequestModify;
 import com.example.shoppingmall.data.dto.request.RequestOrder;
 import com.example.shoppingmall.service.OrderService;
@@ -39,33 +40,16 @@ class OrderApiControllerTest extends BaseControllerTest {
             String url = "/user/orderlist";
 
             Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+            PrincipalDetails principalDetails = (PrincipalDetails) authentication.getPrincipal();
 
             RequestBuilder requestBuilder = MockMvcRequestBuilders
                     .get(url)
-                    .requestAttr("username", authentication.getName());
+                    .requestAttr("user", principalDetails.getUser());
             ResultActions resultActions = mockMvc
                     .perform(requestBuilder);
 
             resultActions
                     .andExpect(status().isOk())
-                    .andDo(print());
-        }
-
-
-        @Test
-        @DisplayName("실패")
-        @Transactional
-        void fail() throws Exception {
-            String url = "/user/orderlist";
-
-            RequestBuilder requestBuilder = MockMvcRequestBuilders
-                    .get(url)
-                    .requestAttr("username", "HyoungSeok");
-            ResultActions resultActions = mockMvc
-                    .perform(requestBuilder);
-
-            resultActions
-                    .andExpect(status().isBadRequest())
                     .andDo(print());
         }
     }
@@ -80,17 +64,17 @@ class OrderApiControllerTest extends BaseControllerTest {
         void success() throws Exception {
             String url = "/user/create_order";
             String content = objectMapper.writeValueAsString(new RequestOrder(
-                    null,
                     LocalDateTime.now(),
                     "배송완료",
                     4,
                     1L));
 
             Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+            PrincipalDetails principalDetails = (PrincipalDetails) authentication.getPrincipal();
 
             RequestBuilder requestBuilder = MockMvcRequestBuilders
                     .post(url)
-                    .requestAttr("username", authentication.getName())
+                    .requestAttr("user", principalDetails.getUser())
                     .content(content)
                     .contentType(MediaType.APPLICATION_JSON);
             ResultActions resultActions = mockMvc

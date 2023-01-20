@@ -20,12 +20,13 @@ public class OrderProduct {
     @Column(nullable = false)
     private int count; // 수량
 
-    @ManyToOne
+    /** ManyToOne의 기본 Fetch는 EAGER */
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "order_id")
     @ToString.Exclude
     private Order order;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "product_id")
     @ToString.Exclude
     private Product product;
