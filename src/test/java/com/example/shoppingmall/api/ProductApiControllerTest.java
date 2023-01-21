@@ -1,5 +1,6 @@
 package com.example.shoppingmall.api;
 
+import com.example.shoppingmall.config.auth.PrincipalDetails;
 import com.example.shoppingmall.data.dto.request.RequestProduct;
 import com.example.shoppingmall.data.dto.request.RequestProductModify;
 import org.junit.jupiter.api.DisplayName;
@@ -15,7 +16,7 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 class ProductApiControllerTest extends BaseControllerTest{
 
@@ -30,8 +31,8 @@ class ProductApiControllerTest extends BaseControllerTest{
         // then
         resultActions
                 .andExpect(status().isOk())
-                .andDo(print())
-                .andReturn();
+                .andExpect(jsonPath("$").exists())
+                .andDo(print());
     }
 
     @Nested
@@ -48,6 +49,7 @@ class ProductApiControllerTest extends BaseControllerTest{
             // then
             resultActions
                     .andExpect(status().isOk())
+                    .andExpect(jsonPath("$").exists())
                     .andDo(print());
         }
 
@@ -62,6 +64,7 @@ class ProductApiControllerTest extends BaseControllerTest{
             // then
             resultActions
                     .andExpect(status().isBadRequest())
+                    .andExpect(jsonPath("$").doesNotExist())
                     .andDo(print());
         }
     }
@@ -78,6 +81,7 @@ class ProductApiControllerTest extends BaseControllerTest{
         // then
         resultActions
                 .andExpect(status().isOk())
+                .andExpect(jsonPath("$").exists())
                 .andDo(print());
     }
 
@@ -92,6 +96,7 @@ class ProductApiControllerTest extends BaseControllerTest{
         // then
         resultActions
                 .andExpect(status().isOk())
+                .andExpect(jsonPath("$").exists())
                 .andDo(print());
     }
 
@@ -106,6 +111,7 @@ class ProductApiControllerTest extends BaseControllerTest{
         // then
         resultActions
                 .andExpect(status().isOk())
+                .andExpect(jsonPath("$").exists())
                 .andDo(print());
     }
 
@@ -116,8 +122,12 @@ class ProductApiControllerTest extends BaseControllerTest{
         // given
         String url = "/register/read_product";
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        PrincipalDetails principalDetails = (PrincipalDetails) authentication.getPrincipal();
+
         // when
-        RequestBuilder requestBuilder = MockMvcRequestBuilders.get(url).requestAttr("username", authentication.getName());
+        RequestBuilder requestBuilder = MockMvcRequestBuilders
+                .get(url)
+                .requestAttr("user", principalDetails.getUser());
         ResultActions resultActions = mockMvc
                 .perform(requestBuilder);
         // then
@@ -135,7 +145,6 @@ class ProductApiControllerTest extends BaseControllerTest{
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
         String content = objectMapper.writeValueAsString(new RequestProduct(
-                "hwang",
                 "nike",
                 3000,
                 "shoes",
