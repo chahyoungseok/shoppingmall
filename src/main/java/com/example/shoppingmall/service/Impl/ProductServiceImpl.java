@@ -88,7 +88,7 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public List<ResponseProductSummary> findAllProduct() {
         // Dto -> Entity
-        List<Product> productList = productRepository.findAllFetchJoin();
+        List<Product> productList = productRepository.findAll();
 
         // Entity -> Dto
         List<ResponseProductSummary> responseProductList = new ArrayList<>();
