@@ -13,8 +13,12 @@ import java.util.List;
 
 @RestController
 public class CartApiController {
+
+    private final CartService cartService;
     @Autowired
-    private CartService cartService;
+    public CartApiController(CartService cartService) {
+        this.cartService = cartService;
+    }
 
     /** 장바구니 목록 조회 */
     @GetMapping("/user/cart")

@@ -10,7 +10,6 @@ import com.example.shoppingmall.data.entity.Product;
 import com.example.shoppingmall.data.entity.User;
 import com.example.shoppingmall.repository.banner.BannerRepository;
 import com.example.shoppingmall.repository.product.ProductRepository;
-import com.example.shoppingmall.repository.user.UserRepository;
 import com.example.shoppingmall.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -21,14 +20,12 @@ import java.util.List;
 @Service
 public class ProductServiceImpl implements ProductService {
 
-    private final UserRepository userRepository;
     private final ProductRepository productRepository;
     private final BannerRepository bannerRepository;
 
     @Autowired
-    public ProductServiceImpl(UserRepository userRepository, ProductRepository productRepository, BannerRepository bannerRepository){
+    public ProductServiceImpl(ProductRepository productRepository, BannerRepository bannerRepository){
         this.productRepository = productRepository;
-        this.userRepository = userRepository;
         this.bannerRepository = bannerRepository;
     }
 
@@ -40,25 +37,29 @@ public class ProductServiceImpl implements ProductService {
 
         // Entity -> Dto
         List<ResponseProductSummary> responseProductList = new ArrayList<>();
-        for(Product product : productList){
-            ResponseProductSummary newDto = new ResponseProductSummary();
-            newDto.setId(product.getId());
-            newDto.setName(product.getName());
-            newDto.setPrice(product.getPrice());
-            newDto.setImgKey(product.getImgKey());
-
-            responseProductList.add(newDto);
-        }
         List<ResponseBanner> responseBannerList = new ArrayList<>();
-        for (Banner banner : bannerList) {
-            ResponseBanner newDto = new ResponseBanner();
-            newDto.setImgKey(banner.getImgKey());
-
-            responseBannerList.add(newDto);
-        }
         List<List<?>> returnList = new ArrayList<>();
-        returnList.add(responseProductList);
-        returnList.add(responseBannerList);
+
+        if (!productList.isEmpty() && !bannerList.isEmpty()) {
+            for(Product product : productList){
+                ResponseProductSummary newDto = new ResponseProductSummary();
+                newDto.setId(product.getId());
+                newDto.setName(product.getName());
+                newDto.setPrice(product.getPrice());
+                newDto.setImgKey(product.getImgKey());
+
+                responseProductList.add(newDto);
+            }
+            for (Banner banner : bannerList) {
+                ResponseBanner newDto = new ResponseBanner();
+                newDto.setImgKey(banner.getImgKey());
+
+                responseBannerList.add(newDto);
+            }
+            returnList.add(responseProductList);
+            returnList.add(responseBannerList);
+        }
+
         return returnList;
     }
 
@@ -69,15 +70,18 @@ public class ProductServiceImpl implements ProductService {
 
         // Entity -> Dto
         List<ResponseProductSummary> responseProductList = new ArrayList<>();
-        for(Product product : productList){
-            ResponseProductSummary newDto = new ResponseProductSummary();
-            newDto.setId(product.getId());
-            newDto.setName(product.getName());
-            newDto.setPrice(product.getPrice());
-            newDto.setImgKey(product.getImgKey());
+        if (!productList.isEmpty()) {
+            for(Product product : productList){
+                ResponseProductSummary newDto = new ResponseProductSummary();
+                newDto.setId(product.getId());
+                newDto.setName(product.getName());
+                newDto.setPrice(product.getPrice());
+                newDto.setImgKey(product.getImgKey());
 
-            responseProductList.add(newDto);
+                responseProductList.add(newDto);
+            }
         }
+
         return responseProductList;
     }
 
@@ -85,20 +89,19 @@ public class ProductServiceImpl implements ProductService {
     public List<ResponseProductSummary> findAllProduct() {
         // Dto -> Entity
         List<Product> productList = productRepository.findAllFetchJoin();
-        if (productList.isEmpty()){
-            return null;
-        }
 
         // Entity -> Dto
         List<ResponseProductSummary> responseProductList = new ArrayList<>();
-        for(Product product : productList){
-            ResponseProductSummary newDto = new ResponseProductSummary();
-            newDto.setId(product.getId());
-            newDto.setName(product.getName());
-            newDto.setPrice(product.getPrice());
-            newDto.setImgKey(product.getImgKey());
+        if (!productList.isEmpty()){
+            for(Product product : productList){
+                ResponseProductSummary newDto = new ResponseProductSummary();
+                newDto.setId(product.getId());
+                newDto.setName(product.getName());
+                newDto.setPrice(product.getPrice());
+                newDto.setImgKey(product.getImgKey());
 
-            responseProductList.add(newDto);
+                responseProductList.add(newDto);
+            }
         }
 
         return responseProductList;
@@ -108,21 +111,21 @@ public class ProductServiceImpl implements ProductService {
     public List<ResponseProductSummary> findByCategory(String category) {
         // Dto -> Entity
         List<Product> productList = productRepository.findByCategory(category);
-        if (productList.isEmpty()){
-            return null;
-        }
 
         // Entity -> Dto
         List<ResponseProductSummary> responseProductList = new ArrayList<>();
-        for(Product product : productList){
-            ResponseProductSummary newDto = new ResponseProductSummary();
-            newDto.setId(product.getId());
-            newDto.setName(product.getName());
-            newDto.setPrice(product.getPrice());
-            newDto.setImgKey(product.getImgKey());
+        if (!productList.isEmpty()){
+            for(Product product : productList){
+                ResponseProductSummary newDto = new ResponseProductSummary();
+                newDto.setId(product.getId());
+                newDto.setName(product.getName());
+                newDto.setPrice(product.getPrice());
+                newDto.setImgKey(product.getImgKey());
 
-            responseProductList.add(newDto);
+                responseProductList.add(newDto);
+            }
         }
+
         return responseProductList;
     }
 
@@ -147,32 +150,32 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public List<ResponseProductSummary> findByUsername(String username) {
+    public List<ResponseProductSummary> findByUsername(Long userId) {
         // Dto -> Entity
-        List<Product> productList = productRepository.findByUserId(userRepository.findByUsername(username).getId());
-        if (productList == null){
-            return null;
-        }
+        List<Product> productList = productRepository.findByUserId(userId);
 
         // Entity -> Dto
         List<ResponseProductSummary> responseProductList = new ArrayList<>();
-        for(Product product : productList){
-            ResponseProductSummary newDto = new ResponseProductSummary();
-            newDto.setId(product.getId());
-            newDto.setName(product.getName());
-            newDto.setPrice(product.getPrice());
-            newDto.setImgKey(product.getImgKey());
+        if (!productList.isEmpty()){
+            for(Product product : productList){
+                ResponseProductSummary newDto = new ResponseProductSummary();
+                newDto.setId(product.getId());
+                newDto.setName(product.getName());
+                newDto.setPrice(product.getPrice());
+                newDto.setImgKey(product.getImgKey());
 
-            responseProductList.add(newDto);
+                responseProductList.add(newDto);
+            }
         }
+
         return responseProductList;
     }
 
     @Override
-    public boolean CreateProduct(RequestProduct requestProduct){
+    public boolean CreateProduct(RequestProduct requestProduct, User user){
         String[] parsedSize = requestProduct.getSize().split(",");
+
         // Dto -> Entity
-        User user = userRepository.findByUsername(requestProduct.getUsername());
         List<Product> productList = new ArrayList<>();
         for(String size : parsedSize){
             Product product = new Product();
@@ -196,12 +199,12 @@ public class ProductServiceImpl implements ProductService {
     public ResponseProduct editProduct(Long id, String username) {
         // Dto -> Entity
         Product product = productRepository.findById(id).orElse(null);
-
         if(product == null) {
             return null;
         }
 
         // Entity -> Dto
+        // product 를 등록한 유저아이디와 받은 jwt 의 유저 아이디가 같은지 확인
         if (product.getUser().getUsername().equals(username)) {
             ResponseProduct responseProduct = new ResponseProduct();
             responseProduct.setId(product.getId());
@@ -225,24 +228,30 @@ public class ProductServiceImpl implements ProductService {
             return null;
         }
 
-        product.setName(requestProductModify.getName());
-        product.setPrice(requestProductModify.getPrice());
-        product.setCategory(requestProductModify.getCategory());
-        product.setDescription(requestProductModify.getDescription());
-        product.setSize(requestProductModify.getSize());
-        product.setImgKey(requestProductModify.getImgKey());
-        Product modified_Product = productRepository.save(product);
-
-        // Entity -> Dto
         ResponseProduct responseProduct = new ResponseProduct();
-        responseProduct.setId(modified_Product.getId());
-        responseProduct.setName(modified_Product.getName());
-        responseProduct.setPrice(modified_Product.getPrice());
-        responseProduct.setCategory(modified_Product.getCategory());
-        responseProduct.setDescription(modified_Product.getDescription());
-        responseProduct.setSize(modified_Product.getSize());
-        responseProduct.setImgKey(modified_Product.getImgKey());
-        return responseProduct;
+
+        // product 를 등록한 유저아이디와 받은 jwt 의 유저 아이디가 같은지 확인
+        if(product.getUser().getUsername().equals(requestProductModify.getUsername())){
+            product.setName(requestProductModify.getName());
+            product.setPrice(requestProductModify.getPrice());
+            product.setCategory(requestProductModify.getCategory());
+            product.setDescription(requestProductModify.getDescription());
+            product.setSize(requestProductModify.getSize());
+            product.setImgKey(requestProductModify.getImgKey());
+            Product modified_Product = productRepository.save(product);
+
+            // Entity -> Dto
+            responseProduct.setId(modified_Product.getId());
+            responseProduct.setName(modified_Product.getName());
+            responseProduct.setPrice(modified_Product.getPrice());
+            responseProduct.setCategory(modified_Product.getCategory());
+            responseProduct.setDescription(modified_Product.getDescription());
+            responseProduct.setSize(modified_Product.getSize());
+            responseProduct.setImgKey(modified_Product.getImgKey());
+            return responseProduct;
+        }else {
+            return null;
+        }
     }
 
     @Override
@@ -255,6 +264,7 @@ public class ProductServiceImpl implements ProductService {
         }
 
         // Entity -> Dto
+        // product 를 등록한 유저아이디와 받은 jwt 의 유저 아이디가 같은지 확인
         if (product.getUser().getUsername().equals(username)) {
             productRepository.delete(product);
             return true;

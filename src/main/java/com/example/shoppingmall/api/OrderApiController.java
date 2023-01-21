@@ -7,16 +7,23 @@ import com.example.shoppingmall.service.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.transaction.Transactional;
 import java.util.List;
 
 @RestController
 public class OrderApiController {
+
+    private final OrderService orderService;
+
     @Autowired
-    private OrderService orderService;
+    public OrderApiController(OrderService orderService) {
+        this.orderService = orderService;
+    }
 
     /** 주문목록 조회 */
     @GetMapping("/user/orderlist")

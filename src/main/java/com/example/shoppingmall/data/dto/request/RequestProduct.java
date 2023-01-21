@@ -3,7 +3,6 @@ package com.example.shoppingmall.data.dto.request;
 import lombok.*;
 
 import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.Size;
 
 @Getter
 @Setter
@@ -11,10 +10,6 @@ import javax.validation.constraints.Size;
 @AllArgsConstructor
 @NoArgsConstructor
 public class RequestProduct {
-    @NotEmpty
-    @Size(min =  4, max = 12, message = "아이디는 최소 4자이상 12자 이하입니다.")
-    private String username; // UserID
-
     @NotEmpty(message = "상품명 입력은 필수 입니다.")
     private String name; // 상품명
 

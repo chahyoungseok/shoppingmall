@@ -1,8 +1,10 @@
 package com.example.shoppingmall.api;
 
-import com.example.shoppingmall.data.dto.request.*;
+import com.example.shoppingmall.data.dto.request.RequestProduct;
+import com.example.shoppingmall.data.dto.request.RequestProductModify;
 import com.example.shoppingmall.data.dto.response.ResponseProduct;
 import com.example.shoppingmall.data.dto.response.ResponseProductSummary;
+import com.example.shoppingmall.data.entity.User;
 import com.example.shoppingmall.service.ProductService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,8 +18,12 @@ import java.util.List;
 @RestController
 @Slf4j
 public class ProductApiController {
+
+    private final ProductService productService;
     @Autowired
-    private ProductService productService;
+    public ProductApiController(ProductService productService) {
+        this.productService = productService;
+    }
 
     /** 메인 페이지 */
     @GetMapping("/")
@@ -47,7 +53,7 @@ public class ProductApiController {
     }
 
     /** 상품 카테고리별 조회 */
-    @GetMapping("/shop/category/{category}") // n+1 수정해야함
+    @GetMapping("/shop/category/{category}")
     public ResponseEntity<List<ResponseProductSummary>> findByCategory(@PathVariable String category){
         List<ResponseProductSummary>productList = productService.findByCategory(category);
         return (!productList.isEmpty()) ?
@@ -56,7 +62,7 @@ public class ProductApiController {
     }
 
     /** 상품 상세 페이지 조회 */
-    @GetMapping("/shop/detail/{id}") // n+1 발생 x
+    @GetMapping("/shop/detail/{id}")
     public ResponseEntity<ResponseProduct> findById(@PathVariable Long id){
         ResponseProduct product = productService.findById(id);
         return (product != null) ?
@@ -67,8 +73,9 @@ public class ProductApiController {
     /** 판매등록한 상품 목록 조회 */
     @GetMapping("/register/read_product")
     public ResponseEntity<List<ResponseProductSummary>> findByUsername(HttpServletRequest request){
-        List<ResponseProductSummary> productList = productService.findByUsername(request.getAttribute("username").toString());
-        return (productList != null) ?
+        User user = (User) request.getAttribute("user");
+        List<ResponseProductSummary> productList = productService.findByUsername(user.getId());
+        return (!productList.isEmpty()) ?
                 ResponseEntity.status(HttpStatus.OK).body(productList) :
                 ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
     }
@@ -76,8 +83,8 @@ public class ProductApiController {
     /** 상품 등록 */
     @PostMapping("/register/create_product")
     public ResponseEntity<ResponseProduct> createProduct(@RequestBody RequestProduct requestProduct, HttpServletRequest request){
-        requestProduct.setUsername(request.getAttribute("username").toString());
-        boolean check = productService.CreateProduct(requestProduct);
+        User user = (User) request.getAttribute("user");
+        boolean check = productService.CreateProduct(requestProduct, user);
         return (check) ?
                 ResponseEntity.status(HttpStatus.OK).body(null) :
                 ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);

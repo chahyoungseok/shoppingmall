@@ -108,8 +108,7 @@ public class UserServiceImpl implements UserService {
 
         User check_delete = userRepository.findByUsername(username);
 
-        if(check_delete == null) {return true;}
-        return false;
+        return check_delete == null;
     }
 
     @Override

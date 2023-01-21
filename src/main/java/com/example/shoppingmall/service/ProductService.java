@@ -4,6 +4,7 @@ import com.example.shoppingmall.data.dto.request.RequestProduct;
 import com.example.shoppingmall.data.dto.request.RequestProductModify;
 import com.example.shoppingmall.data.dto.response.ResponseProduct;
 import com.example.shoppingmall.data.dto.response.ResponseProductSummary;
+import com.example.shoppingmall.data.entity.User;
 
 import java.util.List;
 
@@ -25,10 +26,10 @@ public interface ProductService {
     ResponseProduct findById(Long id);
 
     /** 판매등록한 상품 목록 조회 */
-    List<ResponseProductSummary> findByUsername(String username);
+    List<ResponseProductSummary> findByUsername(Long userId);
 
     /** 상품 등록 */
-    boolean CreateProduct(RequestProduct requestProduct);
+    boolean CreateProduct(RequestProduct requestProduct, User user);
 
     /** 상품 정보 수정 페이지 */
     ResponseProduct editProduct(Long id, String username);

@@ -1,7 +1,10 @@
 package com.example.shoppingmall.api;
 
 import com.example.shoppingmall.aop.annotation.RunningTime;
-import com.example.shoppingmall.data.dto.request.*;
+import com.example.shoppingmall.data.dto.request.RequestChangePWD;
+import com.example.shoppingmall.data.dto.request.RequestJoin;
+import com.example.shoppingmall.data.dto.request.RequestModify;
+import com.example.shoppingmall.data.dto.request.XssRequestDto;
 import com.example.shoppingmall.data.dto.response.ResponseUser;
 import com.example.shoppingmall.data.entity.User;
 import com.example.shoppingmall.service.UserService;
@@ -15,8 +18,13 @@ import javax.validation.Valid;
 
 @RestController
 public class UserApiController {
+
+    private final UserService userService;
+
     @Autowired
-    private UserService userService;
+    public UserApiController(UserService userService) {
+        this.userService = userService;
+    }
 
     @PostMapping("/join")
     public ResponseEntity<Void> join(@Valid @RequestBody RequestJoin requestJoin){

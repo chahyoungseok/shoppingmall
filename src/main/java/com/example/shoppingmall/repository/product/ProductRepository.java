@@ -15,13 +15,15 @@ public interface ProductRepository extends JpaRepository<Product, Long>, Product
     /** 상품명으로 검색 */
     List<Product> findByNameContaining(String name);
 
-    /** 판매등록한 상품 목록 조회 */
-    List<Product> findByUserId(Long userId);
+    /** 상품 전체 조회 */
+    @Query("select o from Product o join fetch o.user")
+    List<Product> findAllFetchJoin();
 
     /** 상품 카테고리별 조회 */
     List<Product> findByCategory(String category);
 
-    /** 상품 전체 조회 */
-    @Query("select o from Product o join fetch o.user")
-    List<Product> findAllFetchJoin();
+    /** 판매등록한 상품 목록 조회 */
+    List<Product> findByUserId(Long userId);
+
+
 }
