@@ -1,10 +1,8 @@
 package com.example.shoppingmall.api;
 
-import com.example.shoppingmall.aop.annotation.RunningTime;
 import com.example.shoppingmall.data.dto.request.RequestChangePWD;
 import com.example.shoppingmall.data.dto.request.RequestJoin;
 import com.example.shoppingmall.data.dto.request.RequestModify;
-import com.example.shoppingmall.data.dto.request.XssRequestDto;
 import com.example.shoppingmall.data.dto.response.ResponseUser;
 import com.example.shoppingmall.data.entity.User;
 import com.example.shoppingmall.service.UserService;
@@ -28,9 +26,9 @@ public class UserApiController {
 
     @PostMapping("/join")
     public ResponseEntity<Void> join(@Valid @RequestBody RequestJoin requestJoin){
-        ResponseUser responseUser = userService.create(requestJoin);
+        boolean check = userService.create(requestJoin);
 
-        return (responseUser != null) ?
+        return (check) ?
                 ResponseEntity.status(HttpStatus.OK).body(null) :
                 ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
     }
@@ -55,9 +53,9 @@ public class UserApiController {
 
     @GetMapping("/check_id/{username}")
     public ResponseEntity<Void> check_id(@PathVariable String username){
-        ResponseUser user = userService.findByUsername(username);
+        boolean check = userService.findByUsername(username);
 
-        return (user == null) ?
+        return (check) ?
                 ResponseEntity.status(HttpStatus.OK).body(null) :
                 ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
     }
@@ -82,28 +80,13 @@ public class UserApiController {
                 ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
     }
 
-    // Security Example
-    @RunningTime
-    @PostMapping("/user")
-    public String user(HttpServletRequest request){
-        User user = (User) request.getAttribute("user");
-        System.out.println(user);
-        return "example success";
-    }
-
-    @PostMapping("/xss")
-    public String xss(@RequestBody XssRequestDto requestDto){
-
-        return requestDto.getContent();
-    }
-
     @PatchMapping("/admin/upgradeAuth/{username}")
-    public ResponseEntity<ResponseUser> upgradeAuth(@PathVariable String username){
+    public ResponseEntity<Void> upgradeAuth(@PathVariable String username){
         // 한번에 많은 유저의 업그레이드를 할 수 있게 할것인가.
-        ResponseUser responseUser = userService.upgradeAuth(username);
+        boolean check = userService.upgradeAuth(username);
 
-        return (responseUser != null) ?
-                ResponseEntity.status(HttpStatus.OK).body(responseUser) :
+        return (check) ?
+                ResponseEntity.status(HttpStatus.OK).body(null) :
                 ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
     }
 }

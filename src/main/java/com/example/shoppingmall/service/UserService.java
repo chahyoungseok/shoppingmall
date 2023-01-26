@@ -7,11 +7,9 @@ import com.example.shoppingmall.data.dto.response.ResponseUser;
 import com.example.shoppingmall.data.entity.User;
 
 public interface UserService {
-    ResponseUser create(RequestJoin requestJoin);
+    boolean create(RequestJoin requestJoin);
 
-//    ResponseUser findById(RequestUserId requestUserId);
-
-    ResponseUser findByUsername(String username);
+    boolean findByUsername(String username);
 
     ResponseUser updateUser(RequestModify requestModify, User user);
 
@@ -19,6 +17,6 @@ public interface UserService {
 
     boolean change_pwd(RequestChangePWD requestChangePWD, User user);
 
-    ResponseUser upgradeAuth(String username);
+    boolean upgradeAuth(String username);
 
 }

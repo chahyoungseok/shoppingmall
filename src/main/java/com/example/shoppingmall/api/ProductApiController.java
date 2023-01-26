@@ -82,7 +82,7 @@ public class ProductApiController {
 
     /** 상품 등록 */
     @PostMapping("/register/create_product")
-    public ResponseEntity<ResponseProduct> createProduct(@RequestBody RequestProduct requestProduct, HttpServletRequest request){
+    public ResponseEntity<Void> createProduct(@RequestBody RequestProduct requestProduct, HttpServletRequest request){
         User user = (User) request.getAttribute("user");
         boolean check = productService.CreateProduct(requestProduct, user);
         return (check) ?
@@ -111,11 +111,11 @@ public class ProductApiController {
 
     /** 상품 삭제 */
     @DeleteMapping("/register/deleteProduct/{id}")
-    public ResponseEntity<Boolean> deleteProduct(@PathVariable Long id, HttpServletRequest request) {
+    public ResponseEntity<Void> deleteProduct(@PathVariable Long id, HttpServletRequest request) {
         boolean check = productService.deleteProduct(id, request.getAttribute("username").toString());
         return (check) ?
-                ResponseEntity.status(HttpStatus.OK).body(true) :
-                ResponseEntity.status(HttpStatus.BAD_REQUEST).body(false);
+                ResponseEntity.status(HttpStatus.OK).body(null) :
+                ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
     }
 
 }

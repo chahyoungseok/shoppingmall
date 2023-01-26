@@ -24,11 +24,11 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public ResponseUser create(RequestJoin requestJoin) {
+    public boolean create(RequestJoin requestJoin) {
         // username 중복 확인
         User check_username = userRepository.findByUsername(requestJoin.getUsername());
         if(check_username != null) {
-            return null;
+            return false;
         }
 
         // RequestJoin -> User Entity
@@ -43,33 +43,15 @@ public class UserServiceImpl implements UserService {
         user.setAddress(requestJoin.getAddress());
 
         User created_user = userRepository.save(user);
-        if (created_user.getUsername().isEmpty()) {return null;}
 
-        // User Entity -> ResponseUser
-        ResponseUser responseUser = new ResponseUser();
-        responseUser.setUsername(created_user.getUsername());
-        responseUser.setNickname(created_user.getNickname());
-        responseUser.setTelephone(created_user.getTelephone());
-        responseUser.setE_mail(created_user.getE_mail());
-        responseUser.setAddress(created_user.getAddress());
-
-        return responseUser;
+        return !created_user.getUsername().isEmpty();
     }
 
     @Override
-    public ResponseUser findByUsername(String username) {
+    public boolean findByUsername(String username) {
         // Dto -> Entity
         User user = userRepository.findByUsername(username);
-        if (user == null){return null;}
-
-        // Entity -> Dto
-        ResponseUser responseUser = new ResponseUser();
-        responseUser.setUsername(user.getUsername());
-        responseUser.setNickname(user.getNickname());
-        responseUser.setTelephone(user.getTelephone());
-        responseUser.setE_mail(user.getE_mail());
-        responseUser.setAddress(user.getAddress());
-        return responseUser;
+        return user == null;
     }
 
     @Override
@@ -122,22 +104,14 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public ResponseUser upgradeAuth(String username) {
+    public boolean upgradeAuth(String username) {
         // Dto -> Entity
         User user = userRepository.findByUsername(username);
-        if(user == null) {return null;}
+        if(user == null) {return false;}
 
         user.setAuthority("ROLE_REGISTER");
         User modified_user = userRepository.save(user);
 
-        // Entity -> Dto
-        ResponseUser responseUser = new ResponseUser();
-        responseUser.setUsername(modified_user.getUsername());
-        responseUser.setNickname(modified_user.getNickname());
-        responseUser.setTelephone(modified_user.getTelephone());
-        responseUser.setAddress(modified_user.getAddress());
-        responseUser.setE_mail(modified_user.getE_mail());
-
-        return responseUser;
+        return !modified_user.getUsername().isEmpty();
     }
 }

@@ -20,11 +20,14 @@ public class ResponseUser {
 
     private String address;
 
+    private String authority;
+
     public void patch(User user){
         this.username = user.getUsername();
         this.nickname = user.getNickname();
         this.telephone = user.getTelephone();
         this.e_mail = user.getE_mail();
         this.address = user.getAddress();
+        this.authority = user.getAuthority();
     }
 }
