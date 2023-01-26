@@ -1,9 +1,5 @@
 package com.example.shoppingmall.repository.user;
 
-import static com.example.shoppingmall.data.entity.QUser.user;
-
-import com.example.shoppingmall.data.entity.Order;
-import com.example.shoppingmall.data.entity.Product;
 import com.example.shoppingmall.data.entity.User;
 import com.example.shoppingmall.repository.cart.CartRepository;
 import com.example.shoppingmall.repository.order.OrderProductRepository;
@@ -18,6 +14,8 @@ import org.springframework.util.StringUtils;
 
 import javax.transaction.Transactional;
 import java.util.List;
+
+import static com.example.shoppingmall.data.entity.QUser.user;
 
 @Repository
 @RequiredArgsConstructor
@@ -40,21 +38,16 @@ public class UserRepositoryImpl implements UserRepositoryCustom{
     @Override
     @Transactional
     public void deleteByUser(String username) {
-        List<Product> productList = productRepository.selectFromUsername(username);
+        List<Long> productIDList = productRepository.selectIDFromUsername(username)
+                .stream().map(selectID -> selectID.getId()).toList();
+        List<Long> orderIDList = orderRepository.selectIDFromUsername(username)
+                .stream().map(selectID -> selectID.getId()).toList();
 
-        List<Order> orderList = orderRepository.selectFromUsername(username);
+        orderProductRepository.deleteOrderID(orderIDList);
+        orderRepository.deleteOrderID(orderIDList);
 
-        for(Order o : orderList) {
-            orderProductRepository.deleteOrderID(o.getId());
-
-            orderRepository.deleteOrderID(o.getId());
-        }
-
-        for(Product p : productList) {
-            cartRepository.deleteProductID(p.getId());
-
-            productRepository.deleteProductID(p.getId());
-        }
+        cartRepository.deleteProductID(productIDList);
+        productRepository.deleteProductID(productIDList);
 
         deleteUsername(username);
     }

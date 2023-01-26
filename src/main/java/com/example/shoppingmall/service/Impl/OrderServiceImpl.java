@@ -11,11 +11,8 @@ import com.example.shoppingmall.repository.order.OrderRepository;
 import com.example.shoppingmall.repository.product.ProductRepository;
 import com.example.shoppingmall.repository.user.UserRepository;
 import com.example.shoppingmall.service.OrderService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
 import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
@@ -27,8 +24,6 @@ public class OrderServiceImpl implements OrderService {
     private final OrderProductRepository orderProductRepository;
 
     private final ProductRepository productRepository;
-
-    public ResponseOrder responseOrder;
 
     private final UserRepository userRepository;
 
@@ -55,18 +50,15 @@ public class OrderServiceImpl implements OrderService {
         for(Order order : orderList) {
             List<OrderProduct> orderProductList = order.getOrderProductList();
 
-            for(OrderProduct orderProduct : orderProductList) {
-                responseOrder = new ResponseOrder(
-                        order.getOrderDate(),
-                        order.getOrderStatus(),
-                        orderProduct.getCount(),
-                        orderProduct.getProduct().getPrice(),
-                        orderProduct.getProduct().getSize(),
-                        orderProduct.getProduct().getImgKey()
-                );
-
-                result.add(responseOrder);
-            }
+            result.addAll(orderProductRepository.findResponseOrder(orderProductList)
+                    .stream().map(readOrderQuery -> new ResponseOrder(
+                            order.getOrderDate(),
+                            order.getOrderStatus(),
+                            readOrderQuery.getCount(),
+                            readOrderQuery.getPrice(),
+                            readOrderQuery.getSize(),
+                            readOrderQuery.getImgKey()
+                    )).toList());
         }
 
         return result;

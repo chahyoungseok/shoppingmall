@@ -1,5 +1,6 @@
 package com.example.shoppingmall.repository.cart;
 
+import com.example.shoppingmall.data.dto.response.ResponseCart;
 import com.example.shoppingmall.data.entity.Cart;
 import com.querydsl.core.types.dsl.BooleanExpression;
 
@@ -7,7 +8,7 @@ import java.util.List;
 
 public interface CartRepositoryCustom {
 
-    List<Cart> findAllCart(String username);
+    List<ResponseCart> findAllCart(String username);
 
     Boolean findSameCart(Long user_id, Long product_id, int state);
 
@@ -17,7 +18,9 @@ public interface CartRepositoryCustom {
 
     BooleanExpression eqCartID(Long id);
 
-    void deleteProductID(Long id);
+    BooleanExpression eqProductIDList(List<Long> IDList);
+
+    void deleteProductID(List<Long> IDList);
 
     void deleteCartID(Long id);
 

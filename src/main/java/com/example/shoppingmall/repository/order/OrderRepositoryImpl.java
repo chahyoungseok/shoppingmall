@@ -1,6 +1,7 @@
 package com.example.shoppingmall.repository.order;
 
-import com.example.shoppingmall.data.entity.Order;
+import com.example.shoppingmall.data.dto.queryselect.SelectIDQuery;
+import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
@@ -25,30 +26,32 @@ public class OrderRepositoryImpl implements OrderRepositoryCustom{
     }
 
     @Override
-    public List<Order> selectFromUsername(String username){
+    public List<SelectIDQuery> selectIDFromUsername(String username){
         BooleanExpression status = null;
         status = eqUsername(username);
 
         if (status == null) {
             return null;
         }
-        return queryFactory.selectFrom(order)
+        return queryFactory.select(Projections.fields(
+                SelectIDQuery.class, order.id))
+                .from(order)
                 .where(status)
                 .fetch();
     }
 
     @Override
-    public BooleanExpression eqOrderID(Long id){
-        if (id == null){
+    public BooleanExpression eqOrderIDList(List<Long> IDList){
+        if (IDList == null){
             return null;
         }
-        return order.id.eq(id);
+        return order.id.in(IDList);
     }
 
     @Override
-    public void deleteOrderID(Long id){
+    public void deleteOrderID(List<Long> IDList){
         BooleanExpression status = null;
-        status = eqOrderID(id);
+        status = eqOrderIDList(IDList);
 
         if (status == null) {
             return;

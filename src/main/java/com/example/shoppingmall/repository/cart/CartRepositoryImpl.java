@@ -1,11 +1,13 @@
 package com.example.shoppingmall.repository.cart;
 
 import com.example.shoppingmall.aop.annotation.RunningTime;
+import com.example.shoppingmall.data.dto.response.ResponseCart;
 import com.example.shoppingmall.data.entity.Cart;
 import com.example.shoppingmall.service.Impl.CartServiceImpl;
+import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
+import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import jdk.jfr.Timestamp;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
@@ -13,7 +15,6 @@ import javax.transaction.Transactional;
 import java.util.List;
 
 import static com.example.shoppingmall.data.entity.QCart.cart;
-import static com.example.shoppingmall.data.entity.QUser.user;
 import static com.example.shoppingmall.data.entity.QProduct.product;
 
 @Repository
@@ -24,14 +25,16 @@ public class CartRepositoryImpl implements CartRepositoryCustom{
 
     @Override
     @RunningTime
-    public List<Cart> findAllCart(String username) {
-        return queryFactory.selectFrom(cart)
-                .innerJoin(cart.product, product)
-                .where(cart.user.username.eq(username))
-                .fetchJoin()
-                .innerJoin(cart.user, user)
-                .fetchJoin()
-                .distinct()
+    public List<ResponseCart> findAllCart(String username) {
+        return queryFactory.select(Projections.fields(ResponseCart.class,
+                    product.id,
+                    product.name,
+                    product.price,
+                    product.size,
+                    product.imgKey,
+                    cart.count
+                ))
+                .from(cart)
                 .fetch();
     }
 
@@ -67,6 +70,13 @@ public class CartRepositoryImpl implements CartRepositoryCustom{
         return cart.user.id.eq(id);
     }
 
+    public BooleanExpression eqProductIDList(List<Long> IDList){
+        if (IDList == null) {
+            return null;
+        }
+        return cart.product.id.in(IDList);
+    }
+
     @Override
     public BooleanExpression eqProductID(Long id){
         if (id == null) {
@@ -92,7 +102,12 @@ public class CartRepositoryImpl implements CartRepositoryCustom{
             return null;
         }
 
-        return queryFactory.selectFrom(cart)
+        return queryFactory.select(Projections.fields(Cart.class,
+                        cart.id,
+                        cart.count,
+                        Expressions.asNumber(user_id).as("user_id"),
+                        Expressions.asNumber(product_id).as("product_id")))
+                .from(cart)
                 .where(status_user, status_product)
                 .fetchOne();
     }
@@ -113,9 +128,9 @@ public class CartRepositoryImpl implements CartRepositoryCustom{
     }
 
     @Override
-    public void deleteProductID(Long id){
+    public void deleteProductID(List<Long> IDList){
         BooleanExpression status = null;
-        status = eqProductID(id);
+        status = eqProductIDList(IDList);
 
         if (status == null) {
             return;

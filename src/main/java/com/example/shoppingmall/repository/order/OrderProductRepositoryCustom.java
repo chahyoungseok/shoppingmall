@@ -1,9 +1,15 @@
 package com.example.shoppingmall.repository.order;
 
+import com.example.shoppingmall.data.dto.queryselect.ReadOrderQuery;
+import com.example.shoppingmall.data.entity.OrderProduct;
 import com.querydsl.core.types.dsl.BooleanExpression;
 
-public interface OrderProductRepositoryCustom {
-    BooleanExpression eqOrderID(Long id);
+import java.util.List;
 
-    void deleteOrderID(Long id);
+public interface OrderProductRepositoryCustom {
+    BooleanExpression eqOrderIDList(List<Long> orderIDList);
+
+    void deleteOrderID(List<Long> IDList);
+
+    List<ReadOrderQuery> findResponseOrder(List<OrderProduct> orderProductList);
 }
