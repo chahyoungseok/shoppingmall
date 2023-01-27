@@ -13,7 +13,7 @@ public interface UserService {
 
     ResponseUser updateUser(RequestModify requestModify, User user);
 
-    boolean deleteUser(String username, String real_username);
+    boolean deleteUser(String username);
 
     boolean change_pwd(RequestChangePWD requestChangePWD, User user);
 

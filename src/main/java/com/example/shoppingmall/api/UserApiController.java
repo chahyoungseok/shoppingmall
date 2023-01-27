@@ -70,10 +70,10 @@ public class UserApiController {
     }
 
     // 삭제 후 제대로 삭제되었는지 확인 후에 여부에따라 200, 400
-    @DeleteMapping("/user/delete/{username}")
-    public ResponseEntity<Void> delete(HttpServletRequest request, @PathVariable String username) {
+    @DeleteMapping("/user/delete")
+    public ResponseEntity<Void> delete(HttpServletRequest request) {
         User user = (User) request.getAttribute("user");
-        boolean check_delete = userService.deleteUser(username, user.getUsername());
+        boolean check_delete = userService.deleteUser(user.getUsername());
 
         return (check_delete) ?
                 ResponseEntity.status(HttpStatus.OK).body(null) :

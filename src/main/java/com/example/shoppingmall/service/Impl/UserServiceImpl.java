@@ -59,10 +59,8 @@ public class UserServiceImpl implements UserService {
         if (!requestModify.getUsername().equals(user.getUsername())) {
             return null;
         }
-        //해당 user는 검증을 통해 얻어온 Entity 이기에 null일 수 가 없습니다.
 
         // Dto -> Entity
-        user.setUsername(requestModify.getUsername());
         user.setNickname(requestModify.getNickname());
         user.setTelephone(requestModify.getTelephone());
         user.setAddress(requestModify.getAddress());
@@ -82,10 +80,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public boolean deleteUser(String username, String real_username) {
-        if (!username.equals(real_username)){
-            return false;
-        }
+    public boolean deleteUser(String username) {
         userRepository.deleteByUser(username);
 
         User check_delete = userRepository.findByUsername(username);
