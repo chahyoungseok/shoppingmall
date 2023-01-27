@@ -3,6 +3,7 @@ package com.example.shoppingmall.data.dto.request;
 import lombok.*;
 
 import javax.validation.constraints.NotEmpty;
+import java.time.LocalDateTime;
 
 @Getter
 @Setter
@@ -27,4 +28,7 @@ public class RequestProduct {
 
     @NotEmpty(message = "이미지 키 입력은 필수 입니다.")
     private String imgKey;
+
+    @NotEmpty
+    private LocalDateTime date;
 }

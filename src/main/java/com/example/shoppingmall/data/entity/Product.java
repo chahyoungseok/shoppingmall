@@ -3,6 +3,7 @@ package com.example.shoppingmall.data.entity;
 import lombok.*;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 
 @Entity
 @ToString
@@ -34,6 +35,12 @@ public class Product {
 
     @Column(nullable = false)
     private String imgKey;
+
+    @Column(nullable = false)
+    private LocalDateTime date; // 상품 등록 날짜
+
+    @Column(nullable = false)
+    private int hits; // 조회 수
 
     /** ManyToOne의 기본 Fetch는 EAGER */
     @ManyToOne(fetch = FetchType.LAZY)

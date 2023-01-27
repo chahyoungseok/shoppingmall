@@ -86,9 +86,15 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public List<ResponseProductSummary> findAllProduct() {
+    public List<ResponseProductSummary> findAllProduct(String sort) {
         // Dto -> Entity
-        List<Product> productList = productRepository.findAll();
+        List<Product> productList = new ArrayList<>();
+        switch (sort) {
+            case "hits" -> productList = productRepository.findAllByOrderByHitsDesc();
+            case "latest" -> productList = productRepository.findAllByOrderByDateDesc();
+//            case "popular"-> productList = productRepository.findAll();
+//            case "purchase"-> productList = productRepository.findAll();
+        }
 
         // Entity -> Dto
         List<ResponseProductSummary> responseProductList = new ArrayList<>();
@@ -186,6 +192,8 @@ public class ProductServiceImpl implements ProductService {
             product.setImgKey(requestProduct.getImgKey());
             product.setUser(user);
             product.setSize(size);
+            product.setDate(requestProduct.getDate());
+            product.setHits(0);
 
             productList.add(product);
         }
@@ -271,6 +279,11 @@ public class ProductServiceImpl implements ProductService {
         } else {
             return false;
         }
+    }
+
+    @Override
+    public void increaseHits(Long id) {
+        productRepository.increaseHits(id);
     }
 
 }

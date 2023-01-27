@@ -17,7 +17,7 @@ public interface ProductService {
     List<ResponseProductSummary> findByProductName(String keyword);
 
     /** 상품 전체 조회 */
-    List<ResponseProductSummary> findAllProduct();
+    List<ResponseProductSummary> findAllProduct(String sort);
 
     /** 상품 카테고리별 조회 */
     List<ResponseProductSummary> findByCategory(String category);
@@ -39,5 +39,7 @@ public interface ProductService {
 
     /** 상품 삭제 */
     boolean deleteProduct(Long id, String username);
+
+    void increaseHits(Long id);
 
 }
