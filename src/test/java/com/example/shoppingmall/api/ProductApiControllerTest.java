@@ -14,6 +14,8 @@ import org.springframework.test.web.servlet.RequestBuilder;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
+import java.time.LocalDateTime;
+
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -150,7 +152,8 @@ class ProductApiControllerTest extends BaseControllerTest{
                 "shoes",
                 "나이키 신발",
                 "270,280,290",
-                "A"));
+                "A",
+                LocalDateTime.now()));
 
         // when
         RequestBuilder requestBuilder = MockMvcRequestBuilders

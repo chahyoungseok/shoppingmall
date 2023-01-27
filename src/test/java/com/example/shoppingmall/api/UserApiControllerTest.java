@@ -1,20 +1,17 @@
 package com.example.shoppingmall.api;
 
 import com.example.shoppingmall.config.auth.PrincipalDetails;
-import com.example.shoppingmall.data.dto.request.*;
-import com.example.shoppingmall.data.entity.User;
-import com.example.shoppingmall.service.UserService;
+import com.example.shoppingmall.data.dto.request.RequestChangePWD;
+import com.example.shoppingmall.data.dto.request.RequestJoin;
+import com.example.shoppingmall.data.dto.request.RequestModify;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.test.context.support.WithUserDetails;
 import org.springframework.test.web.servlet.RequestBuilder;
 import org.springframework.test.web.servlet.ResultActions;
@@ -31,9 +28,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 // 실제 객체를 만들기에는 비용과 시간, 의존성이 크게 걸쳐져있어 테스트 시 제대로 구현하기 어려울 경우 만드는 가짜 객체입니다.
 @ExtendWith(MockitoExtension.class)
 class UserApiControllerTest extends BaseControllerTest{
-
-    @Mock
-    private UserService userService;
 
     @Nested
     @DisplayName("회원가입")
@@ -244,7 +238,7 @@ class UserApiControllerTest extends BaseControllerTest{
         @DisplayName("성공")
         @Test
         void success() throws Exception{
-            String url = "/user/delete/hwang";
+            String url = "/user/delete";
 
             Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
             PrincipalDetails principalDetails = (PrincipalDetails) authentication.getPrincipal();
@@ -257,25 +251,6 @@ class UserApiControllerTest extends BaseControllerTest{
 
             resultActions
                     .andExpect(status().isOk())
-                    .andDo(print());
-        }
-
-        @DisplayName("실패")
-        @Test
-        void fail() throws Exception{
-            String url = "/user/delete/2";
-
-            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-            PrincipalDetails principalDetails = (PrincipalDetails) authentication.getPrincipal();
-
-            RequestBuilder requestBuilder = MockMvcRequestBuilders
-                    .delete(url)
-                    .requestAttr("user", principalDetails.getUser());
-            ResultActions resultActions = mockMvc
-                    .perform(requestBuilder);
-
-            resultActions
-                    .andExpect(status().isBadRequest())
                     .andDo(print());
         }
     }
