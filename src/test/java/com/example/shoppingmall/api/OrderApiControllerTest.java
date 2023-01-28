@@ -1,7 +1,7 @@
 package com.example.shoppingmall.api;
 
 import com.example.shoppingmall.config.auth.PrincipalDetails;
-import com.example.shoppingmall.data.dto.request.RequestModify;
+import com.example.shoppingmall.data.dto.queryselect.RequestOrderProduct;
 import com.example.shoppingmall.data.dto.request.RequestOrder;
 import com.example.shoppingmall.service.OrderService;
 import org.junit.jupiter.api.DisplayName;
@@ -20,6 +20,7 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 import javax.transaction.Transactional;
 import java.time.LocalDateTime;
+import java.util.Arrays;
 
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -66,8 +67,7 @@ class OrderApiControllerTest extends BaseControllerTest {
             String content = objectMapper.writeValueAsString(new RequestOrder(
                     LocalDateTime.now(),
                     "배송완료",
-                    4,
-                    1L));
+                    Arrays.asList(new RequestOrderProduct(1L, 2), new RequestOrderProduct(2L, 2))));
 
             Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
             PrincipalDetails principalDetails = (PrincipalDetails) authentication.getPrincipal();

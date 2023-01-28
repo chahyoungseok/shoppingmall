@@ -1,8 +1,10 @@
 package com.example.shoppingmall.data.dto.request;
 
+import com.example.shoppingmall.data.dto.queryselect.RequestOrderProduct;
 import lombok.*;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Getter
 @Setter
@@ -14,7 +16,5 @@ public class RequestOrder {
 
     private String order_status;
 
-    private int count;
-
-    private Long product_id;
+    private List<RequestOrderProduct> requestOrderProductList;
 }

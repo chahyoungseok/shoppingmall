@@ -1,6 +1,7 @@
 package com.example.shoppingmall.repository.product;
 
 import com.example.shoppingmall.data.dto.queryselect.SelectIDQuery;
+import com.example.shoppingmall.data.entity.Product;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -63,5 +64,19 @@ public class ProductRepositoryImpl implements ProductRepositoryCustom{
         queryFactory.delete(product)
                 .where(status)
                 .execute();
+    }
+
+    @Override
+    public List<Product> findByIdList(List<Long> IDList) {
+        BooleanExpression status = null;
+        status = eqProductIDList(IDList);
+
+        if (status == null) {
+            return null;
+        }
+
+        return queryFactory.selectFrom(product)
+                .where(status)
+                .fetch();
     }
 }

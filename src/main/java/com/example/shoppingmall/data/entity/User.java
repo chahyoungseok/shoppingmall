@@ -47,6 +47,6 @@ public class User {
 
     public void addOrder(Order order) {
         order.setUser(this);
-        this.orderList.add(order);
+        getOrderList().add(order);
     }
 }

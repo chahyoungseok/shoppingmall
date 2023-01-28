@@ -35,8 +35,8 @@ public class Order {
     @ToString.Exclude
     private List<OrderProduct> orderProductList = new ArrayList<>();
 
-    public void addOrderProduct(OrderProduct orderProduct) {
-        orderProduct.setOrder(this);
-        this.orderProductList.add(orderProduct);
+    public void addAllOrderProduct(List<OrderProduct> orderProductList) {
+        orderProductList.forEach(orderProduct -> orderProduct.setOrder(this));
+        getOrderProductList().addAll(orderProductList);
     }
 }
