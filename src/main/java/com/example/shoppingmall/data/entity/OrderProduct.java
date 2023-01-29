@@ -26,6 +26,14 @@ public class OrderProduct {
     @ToString.Exclude
     private Order order;
 
+    public void setOrder(Order order){
+        if (this.order != null){
+            this.order.getOrderProductList().remove(this);
+        }
+
+        this.order = order;
+    }
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "product_id")
     @ToString.Exclude

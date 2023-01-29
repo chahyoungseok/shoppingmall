@@ -80,9 +80,8 @@ public class OrderServiceImpl implements OrderService {
                 requestOrder.getOrder_status(),
                 null, new ArrayList<>());
 
-        userPersisted.addOrder(order);
-        entityManager.flush();
-        orderRepository.save(order);
+        Order savedOrder = orderRepository.save(order);
+        userPersisted.addOrder(savedOrder);
 
         List<OrderProduct> orderProductList = productRepository.findByIdList(requestOrder.getRequestOrderProductList()
                 .stream().map(RequestOrderProduct::getProduct_id).toList())
@@ -103,7 +102,7 @@ public class OrderServiceImpl implements OrderService {
             }
         }
 
-        order.addAllOrderProduct(orderProductList);
+        savedOrder.addAllOrderProduct(orderProductList);
         orderProductRepository.saveAll(orderProductList);
 
         return read_order(userPersisted);

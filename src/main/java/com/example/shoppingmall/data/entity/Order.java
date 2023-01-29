@@ -31,6 +31,14 @@ public class Order {
     @ToString.Exclude
     private User user;
 
+    public void setUser(User user){
+        if (this.user != null){
+            this.user.getOrderList().remove(this);
+        }
+
+        this.user = user;
+    }
+
     @OneToMany(mappedBy = "order")
     @ToString.Exclude
     private List<OrderProduct> orderProductList = new ArrayList<>();
