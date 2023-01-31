@@ -182,7 +182,7 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public boolean CreateProduct(RequestProduct requestProduct, User user){
         String[] parsedSize = requestProduct.getSize().split(",");
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss");
 
         // Dto -> Entity
         List<Product> productList = new ArrayList<>();
@@ -196,11 +196,13 @@ public class ProductServiceImpl implements ProductService {
             product.setUser(user);
             product.setSize(size);
             product.setDate(LocalDateTime.parse(requestProduct.getDate(), formatter));
+            LocalDateTime localDateTime = LocalDateTime.parse(requestProduct.getDate(), formatter);
+            System.out.println(requestProduct.getDate());
+            System.out.println(localDateTime);
             product.setHits(0);
 
             productList.add(product);
         }
-
         List<Product> createdProductList = productRepository.saveAll(productList);
 
         return createdProductList.size() == parsedSize.length;

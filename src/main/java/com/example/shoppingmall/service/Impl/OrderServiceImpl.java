@@ -72,7 +72,7 @@ public class OrderServiceImpl implements OrderService {
     @Transactional
     public List<ResponseOrder> create_order(User user, RequestOrder requestOrder) {
         User userPersisted = entityManager.find(User.class, user.getId());
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss");
 
         if (userPersisted == null || requestOrder.getRequestOrderProductList().isEmpty()) {
             return null;
