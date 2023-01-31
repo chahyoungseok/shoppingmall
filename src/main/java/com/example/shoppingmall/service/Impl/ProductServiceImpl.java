@@ -14,6 +14,8 @@ import com.example.shoppingmall.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -180,6 +182,7 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public boolean CreateProduct(RequestProduct requestProduct, User user){
         String[] parsedSize = requestProduct.getSize().split(",");
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
         // Dto -> Entity
         List<Product> productList = new ArrayList<>();
@@ -192,7 +195,7 @@ public class ProductServiceImpl implements ProductService {
             product.setImgKey(requestProduct.getImgKey());
             product.setUser(user);
             product.setSize(size);
-            product.setDate(requestProduct.getDate());
+            product.setDate(LocalDateTime.parse(requestProduct.getDate(), formatter));
             product.setHits(0);
 
             productList.add(product);

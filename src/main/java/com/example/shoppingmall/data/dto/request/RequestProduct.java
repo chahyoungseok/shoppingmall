@@ -3,7 +3,6 @@ package com.example.shoppingmall.data.dto.request;
 import lombok.*;
 
 import javax.validation.constraints.NotEmpty;
-import java.time.LocalDateTime;
 
 @Getter
 @Setter
@@ -30,5 +29,5 @@ public class RequestProduct {
     private String imgKey;
 
     @NotEmpty
-    private LocalDateTime date;
+    private String date;
 }

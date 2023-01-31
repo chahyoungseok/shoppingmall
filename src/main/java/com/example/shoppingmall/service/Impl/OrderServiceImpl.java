@@ -15,6 +15,8 @@ import org.springframework.stereotype.Service;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.transaction.Transactional;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -70,13 +72,14 @@ public class OrderServiceImpl implements OrderService {
     @Transactional
     public List<ResponseOrder> create_order(User user, RequestOrder requestOrder) {
         User userPersisted = entityManager.find(User.class, user.getId());
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
         if (userPersisted == null || requestOrder.getRequestOrderProductList().isEmpty()) {
             return null;
         }
 
         Order order = new Order(null,
-                requestOrder.getOrder_date(),
+                LocalDateTime.parse(requestOrder.getOrder_date(), formatter),
                 requestOrder.getOrder_status(),
                 null, new ArrayList<>());
 
