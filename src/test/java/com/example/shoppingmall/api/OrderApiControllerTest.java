@@ -65,7 +65,7 @@ class OrderApiControllerTest extends BaseControllerTest {
         void success() throws Exception {
             String url = "/user/order";
             String content = objectMapper.writeValueAsString(new RequestOrder(
-                    LocalDateTime.now(),
+                    LocalDateTime.now().withNano(0).toString(),
                     "배송완료",
                     Arrays.asList(new RequestOrderProduct(1L, 2), new RequestOrderProduct(2L, 2))));
 

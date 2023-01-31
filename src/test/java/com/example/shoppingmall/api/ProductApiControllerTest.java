@@ -153,7 +153,7 @@ class ProductApiControllerTest extends BaseControllerTest{
                 "나이키 신발",
                 "270,280,290",
                 "A",
-                LocalDateTime.now()));
+                LocalDateTime.now().withNano(0).toString()));
 
         // when
         RequestBuilder requestBuilder = MockMvcRequestBuilders
