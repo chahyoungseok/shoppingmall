@@ -1,6 +1,5 @@
 package com.example.shoppingmall.repository.cart;
 
-import com.example.shoppingmall.aop.annotation.RunningTime;
 import com.example.shoppingmall.data.dto.response.ResponseCart;
 import com.example.shoppingmall.data.entity.Cart;
 import com.example.shoppingmall.service.Impl.CartServiceImpl;
@@ -24,7 +23,6 @@ public class CartRepositoryImpl implements CartRepositoryCustom{
     private final JPAQueryFactory queryFactory;
 
     @Override
-    @RunningTime
     public List<ResponseCart> findAllCart(String username) {
         return queryFactory.select(Projections.fields(ResponseCart.class,
                     product.id,

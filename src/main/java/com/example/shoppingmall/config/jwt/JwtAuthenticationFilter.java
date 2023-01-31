@@ -6,6 +6,7 @@ import com.example.shoppingmall.config.auth.PrincipalDetails;
 import com.example.shoppingmall.data.dto.request.RequestLogin;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -25,13 +26,14 @@ import java.util.Date;
 // formLogin().disable()에 의해 위의 과정이 막힘.
 // 동작을 원한다면 아래의 필터를 SecurityFilter에 등록해줘야함.
 @RequiredArgsConstructor
+@Slf4j
 public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
     private final AuthenticationManager authenticationManager;
 
     // /login 요청을 하면 로그인 시도를 위해서 실행되는 함수
     @Override
     public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException {
-        System.out.println("attemptAuthentication : 로그인 시도함.");
+        log.info("로그인 시도");
 
         ObjectMapper om = new ObjectMapper();
         RequestLogin loginRequestDto = null;
@@ -48,7 +50,6 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         UsernamePasswordAuthenticationToken authenticationToken =
                 new UsernamePasswordAuthenticationToken(loginRequestDto.getUsername(), loginRequestDto.getPassword());
 
-        System.out.println("authenticationToken : " + authenticationToken);
         // 2. 정상인지 로그인 시도. authenticationManager로 로그인 시도하면 PrincipalDetailsService가 호출.
         // 토큰을 이용해 PrincipalDetailsService의 loadUserByUsername() 함수를 실행시켜
         // DB에 있는 username과 password가 일치한다.
@@ -69,7 +70,7 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
     // JWT 토큰을 만들어서 request 요청한 사용자에게 jwt 토큰을 response 해주면 됨.
     @Override
     protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain, Authentication authResult) throws IOException, ServletException {
-        System.out.println("successfulAuthentication 실행 : 정상적으로 로그인 됨.");
+        log.info("로그인 성공");
         PrincipalDetails principalDetails = (PrincipalDetails) authResult.getPrincipal();
 
         // HMAC512 방식

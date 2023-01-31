@@ -10,6 +10,7 @@ import com.auth0.jwt.exceptions.TokenExpiredException;
 import com.example.shoppingmall.config.auth.PrincipalDetails;
 import com.example.shoppingmall.data.entity.User;
 import com.example.shoppingmall.repository.user.UserRepository;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -22,6 +23,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
+@Slf4j
 public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
 
     private final UserRepository userRepository;
@@ -34,10 +36,8 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
     // 인증이나 권한이 필요한 주소요청이 있을 때 해당 필터를 타게 됨.
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain) throws IOException, ServletException {
-        System.out.println("doFilterInternal : 인증이나 권한이 필요한 주소 요청이 됨");
-
+        log.info("권한 체크");
         String jwtHeader = request.getHeader(JwtProperties.HEADER_STRING);
-        System.out.println("jwtHeader : " + jwtHeader);
 
         // header가 있는지 확인
         if(jwtHeader == null || !jwtHeader.startsWith(JwtProperties.TOKEN_PREFIX)) {
@@ -57,7 +57,7 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
 
         if(username != null) {
             // 서명이 정상적으로 됨
-            System.out.println("서명이 정상적으로 됨");
+            log.info("서명이 정상적으로 됨");
 
             User userEntity = userRepository.findByUsername(username);
 
