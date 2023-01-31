@@ -60,7 +60,7 @@ class CartApiControllerTest extends BaseControllerTest{
         @Transactional
         @Test
         void success() throws Exception{
-            String url = "/user/create_cart/1";
+            String url = "/user/cart/1";
             Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
             PrincipalDetails principalDetails = (PrincipalDetails) authentication.getPrincipal();
 
@@ -85,7 +85,7 @@ class CartApiControllerTest extends BaseControllerTest{
         @Transactional
         @Test
         void success() throws Exception{
-            String url = "/user/delete_cart/2";
+            String url = "/user/cart/2";
             Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
             PrincipalDetails principalDetails = (PrincipalDetails) authentication.getPrincipal();
 
@@ -105,7 +105,7 @@ class CartApiControllerTest extends BaseControllerTest{
         @Transactional
         @Test
         void fail() throws Exception{
-            String url = "/user/delete_cart/1";
+            String url = "/user/cart/1";
             Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
             PrincipalDetails principalDetails = (PrincipalDetails) authentication.getPrincipal();
 

@@ -38,7 +38,7 @@ class OrderApiControllerTest extends BaseControllerTest {
         @DisplayName("성공")
         @Transactional
         void success() throws Exception {
-            String url = "/user/orderlist";
+            String url = "/user/order";
 
             Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
             PrincipalDetails principalDetails = (PrincipalDetails) authentication.getPrincipal();
@@ -63,7 +63,7 @@ class OrderApiControllerTest extends BaseControllerTest {
         @DisplayName("성공")
         @Transactional
         void success() throws Exception {
-            String url = "/user/create_order";
+            String url = "/user/order";
             String content = objectMapper.writeValueAsString(new RequestOrder(
                     LocalDateTime.now(),
                     "배송완료",

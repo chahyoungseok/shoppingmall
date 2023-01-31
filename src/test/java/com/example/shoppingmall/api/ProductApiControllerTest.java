@@ -122,7 +122,7 @@ class ProductApiControllerTest extends BaseControllerTest{
     @WithUserDetails(value = "hwang")
     void findByUsername() throws Exception{
         // given
-        String url = "/register/read_product";
+        String url = "/register/product";
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         PrincipalDetails principalDetails = (PrincipalDetails) authentication.getPrincipal();
 
@@ -143,7 +143,7 @@ class ProductApiControllerTest extends BaseControllerTest{
     @WithUserDetails(value = "hwang")
     void createProduct() throws Exception{
         // given
-        String url = "/register/create_product";
+        String url = "/register/product";
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
         String content = objectMapper.writeValueAsString(new RequestProduct(
@@ -174,7 +174,7 @@ class ProductApiControllerTest extends BaseControllerTest{
     @WithUserDetails(value = "hwang")
     void editProduct() throws Exception{
         // given
-        String url = "/register/edit_product/1";
+        String url = "/register/product/1";
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
         // when
@@ -194,10 +194,10 @@ class ProductApiControllerTest extends BaseControllerTest{
     @WithUserDetails(value = "hwang")
     void updateProduct() throws Exception{
         // given
-        String url = "/register/update_product";
+        String url = "/register/product/1";
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String content = objectMapper.writeValueAsString(new RequestProductModify(
-                1L,
+                null,
                 null,
                 "nike",
                 3000,
@@ -224,7 +224,7 @@ class ProductApiControllerTest extends BaseControllerTest{
     @WithUserDetails(value = "hwang")
     void deleteProduct() throws Exception{
         // given
-        String url = "/register/deleteProduct/1";
+        String url = "/register/product/1";
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         // when
         RequestBuilder requestBuilder = MockMvcRequestBuilders

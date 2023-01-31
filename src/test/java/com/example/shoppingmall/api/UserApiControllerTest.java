@@ -127,7 +127,7 @@ class UserApiControllerTest extends BaseControllerTest{
         @DisplayName("성공")
         @Test
         void success() throws Exception{
-            String url = "/user/mypage";
+            String url = "/user";
 
             Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
             PrincipalDetails principalDetails = (PrincipalDetails) authentication.getPrincipal();
@@ -151,7 +151,7 @@ class UserApiControllerTest extends BaseControllerTest{
         @DisplayName("성공")
         @Test
         void success() throws Exception{
-            String url = "/user/update";
+            String url = "/user";
             String content = objectMapper.writeValueAsString(new RequestModify(
                     "hwang",
                     "hs_good",
@@ -238,7 +238,7 @@ class UserApiControllerTest extends BaseControllerTest{
         @DisplayName("성공")
         @Test
         void success() throws Exception{
-            String url = "/user/delete";
+            String url = "/user";
 
             Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
             PrincipalDetails principalDetails = (PrincipalDetails) authentication.getPrincipal();
