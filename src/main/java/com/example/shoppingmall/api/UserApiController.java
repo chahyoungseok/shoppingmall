@@ -33,7 +33,7 @@ public class UserApiController {
                 ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
     }
 
-    @GetMapping("/user/mypage")
+    @GetMapping("/user")
     public ResponseEntity<ResponseUser> my_page(HttpServletRequest request){
         User user = (User) request.getAttribute("user");
 
@@ -43,7 +43,7 @@ public class UserApiController {
         return ResponseEntity.status(HttpStatus.OK).body(responseUser);
     }
 
-    @PutMapping("/user/update")
+    @PutMapping("/user")
     public ResponseEntity<ResponseUser> update(HttpServletRequest request, @Valid @RequestBody RequestModify requestModify) {
         ResponseUser responseUser = userService.updateUser(requestModify, (User) request.getAttribute("user"));
         return (responseUser != null) ?
@@ -70,7 +70,7 @@ public class UserApiController {
     }
 
     // 삭제 후 제대로 삭제되었는지 확인 후에 여부에따라 200, 400
-    @DeleteMapping("/user/delete")
+    @DeleteMapping("/user")
     public ResponseEntity<Void> delete(HttpServletRequest request) {
         User user = (User) request.getAttribute("user");
         boolean check_delete = userService.deleteUser(user.getUsername());

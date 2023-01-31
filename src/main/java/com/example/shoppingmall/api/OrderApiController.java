@@ -26,7 +26,7 @@ public class OrderApiController {
     }
 
     /** 주문목록 조회 */
-    @GetMapping("/user/orderlist")
+    @GetMapping("/user/order")
     public ResponseEntity<List<ResponseOrder>> read_order(HttpServletRequest request){
         List<ResponseOrder> responseOrderList = orderService.read_order((User) request.getAttribute("user"));
 
@@ -36,7 +36,7 @@ public class OrderApiController {
     }
 
     /** 주문목록 추가 */
-    @PostMapping("/user/create_order")
+    @PostMapping("/user/order")
     public ResponseEntity<List<ResponseOrder>> create_order(HttpServletRequest request, @RequestBody RequestOrder requestOrder){
         List<ResponseOrder> responseOrderList = orderService.create_order((User) request.getAttribute("user"), requestOrder);
 

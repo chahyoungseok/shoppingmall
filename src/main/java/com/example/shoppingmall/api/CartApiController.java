@@ -30,18 +30,18 @@ public class CartApiController {
     }
 
     /** 장바구니 상품 추가 */
-    @PostMapping("/user/create_cart/{product_id}")
-    public ResponseEntity<List<ResponseCart>> createCart(HttpServletRequest request, @PathVariable Long product_id) {
-        List<ResponseCart> cartList = cartService.createCart((User) request.getAttribute("user"), product_id);
+    @PostMapping("/user/cart/{id}")
+    public ResponseEntity<List<ResponseCart>> createCart(HttpServletRequest request, @PathVariable Long id) {
+        List<ResponseCart> cartList = cartService.createCart((User) request.getAttribute("user"), id);
         return (cartList != null) ?
                 ResponseEntity.status(HttpStatus.OK).body(cartList) :
                 ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
     }
 
     /** 장바구니 상품 삭제 */
-    @DeleteMapping("/user/delete_cart/{product_id}")
-    public ResponseEntity<List<ResponseCart>> deleteCart(HttpServletRequest request, @PathVariable Long product_id) {
-        List<ResponseCart> cartList = cartService.deleteCart((User) request.getAttribute("user"), product_id);
+    @DeleteMapping("/user/cart/{id}")
+    public ResponseEntity<List<ResponseCart>> deleteCart(HttpServletRequest request, @PathVariable Long id) {
+        List<ResponseCart> cartList = cartService.deleteCart((User) request.getAttribute("user"), id);
         return (cartList != null) ?
                 ResponseEntity.status(HttpStatus.OK).body(cartList) :
                 ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);

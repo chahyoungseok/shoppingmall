@@ -72,7 +72,7 @@ public class ProductApiController {
     }
 
     /** 판매등록한 상품 목록 조회 */
-    @GetMapping("/register/read_product")
+    @GetMapping("/register/product")
     public ResponseEntity<List<ResponseProductSummary>> findByUsername(HttpServletRequest request){
         User user = (User) request.getAttribute("user");
         List<ResponseProductSummary> productList = productService.findByUsername(user.getId());
@@ -82,7 +82,7 @@ public class ProductApiController {
     }
 
     /** 상품 등록 */
-    @PostMapping("/register/create_product")
+    @PostMapping("/register/product")
     public ResponseEntity<Void> createProduct(@RequestBody RequestProduct requestProduct, HttpServletRequest request){
         User user = (User) request.getAttribute("user");
         boolean check = productService.CreateProduct(requestProduct, user);
@@ -92,7 +92,7 @@ public class ProductApiController {
     }
 
     /** 상품 정보 수정 페이지 */
-    @GetMapping("/register/edit_product/{id}")
+    @GetMapping("/register/product/{id}")
     public ResponseEntity<ResponseProduct> editProduct(@PathVariable Long id, HttpServletRequest request){
         ResponseProduct product = productService.editProduct(id, request.getAttribute("username").toString());
         return (product != null) ?
@@ -101,8 +101,9 @@ public class ProductApiController {
     }
 
     /** 상품 정보 수정 */
-    @PutMapping("/register/update_product")
-    public ResponseEntity<ResponseProduct> updateProduct(@RequestBody RequestProductModify requestProductModify, HttpServletRequest request) {
+    @PutMapping("/register/product/{id}")
+    public ResponseEntity<ResponseProduct> updateProduct(@PathVariable Long id, @RequestBody RequestProductModify requestProductModify, HttpServletRequest request) {
+        requestProductModify.setId(id);
         requestProductModify.setUsername(request.getAttribute("username").toString());
         ResponseProduct product = productService.updateProduct(requestProductModify);
         return (product != null) ?
@@ -111,7 +112,7 @@ public class ProductApiController {
     }
 
     /** 상품 삭제 */
-    @DeleteMapping("/register/deleteProduct/{id}")
+    @DeleteMapping("/register/product/{id}")
     public ResponseEntity<Void> deleteProduct(@PathVariable Long id, HttpServletRequest request) {
         boolean check = productService.deleteProduct(id, request.getAttribute("username").toString());
         return (check) ?
