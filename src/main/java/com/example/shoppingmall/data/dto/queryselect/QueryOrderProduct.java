@@ -7,7 +7,7 @@ import lombok.*;
 @ToString
 @AllArgsConstructor
 @NoArgsConstructor
-public class RequestOrderProduct {
+public class QueryOrderProduct {
     private Long product_id;
 
     private int count;

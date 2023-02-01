@@ -1,14 +1,12 @@
 package com.example.shoppingmall.api;
 
 import com.example.shoppingmall.config.auth.PrincipalDetails;
-import com.example.shoppingmall.data.dto.queryselect.RequestOrderProduct;
+import com.example.shoppingmall.data.dto.queryselect.QueryOrderProduct;
 import com.example.shoppingmall.data.dto.request.RequestOrder;
-import com.example.shoppingmall.service.OrderService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.MediaType;
 import org.springframework.security.core.Authentication;
@@ -27,8 +25,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @ExtendWith(MockitoExtension.class)
 class OrderApiControllerTest extends BaseControllerTest {
-    @Mock
-    private OrderService orderService;
 
     @Nested
     @DisplayName("주문 조회")
@@ -67,7 +63,7 @@ class OrderApiControllerTest extends BaseControllerTest {
             String content = objectMapper.writeValueAsString(new RequestOrder(
                     LocalDateTime.now().withNano(0).toString(),
                     "배송완료",
-                    Arrays.asList(new RequestOrderProduct(1L, 2), new RequestOrderProduct(2L, 2))));
+                    Arrays.asList(new QueryOrderProduct(1L, 2), new QueryOrderProduct(2L, 2))));
 
             Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
             PrincipalDetails principalDetails = (PrincipalDetails) authentication.getPrincipal();

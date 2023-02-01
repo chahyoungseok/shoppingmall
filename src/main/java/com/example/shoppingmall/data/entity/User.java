@@ -10,9 +10,7 @@ import java.util.List;
 @ToString
 @Table(name="user")
 @Getter
-@Setter
-@NoArgsConstructor
-@AllArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class User {
 
     @Id
@@ -34,7 +32,7 @@ public class User {
     @Column(nullable = false, unique = true)
     private String e_mail;
 
-    @Column(nullable = false, unique = true)
+    @Column(nullable = false)
     private String address;
 
     @Column(nullable = false)
@@ -44,6 +42,33 @@ public class User {
     @OneToMany(mappedBy = "user")
     @ToString.Exclude
     private List<Order> orderList = new ArrayList<>();
+
+    @Builder
+    public User(Long id, String username, String nickname, String password, String telephone, String e_mail, String address, String authority) {
+        this.id = id;
+        this.username = username;
+        this.nickname = nickname;
+        this.password = password;
+        this.telephone = telephone;
+        this.e_mail = e_mail;
+        this.address = address;
+        this.authority = authority;
+    }
+
+    public void updateUser(String nickname, String telephone, String e_mail, String address) {
+        this.nickname = nickname;
+        this.telephone = telephone;
+        this.e_mail = e_mail;
+        this.address = address;
+    }
+
+    public void changePWD(String password) {
+        this.password = password;
+    }
+
+    public void upgradeAuth(String authority) {
+        this.authority = authority;
+    }
 
     public void addOrder(Order order) {
         order.setUser(this);

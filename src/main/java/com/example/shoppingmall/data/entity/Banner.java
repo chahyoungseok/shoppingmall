@@ -9,7 +9,6 @@ import javax.persistence.*;
 @ToString
 @Table(name="banner")
 @Getter
-@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 public class Banner {

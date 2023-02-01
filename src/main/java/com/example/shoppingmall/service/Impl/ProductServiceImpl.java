@@ -187,19 +187,18 @@ public class ProductServiceImpl implements ProductService {
         // Dto -> Entity
         List<Product> productList = new ArrayList<>();
         for(String size : parsedSize){
-            Product product = new Product();
-            product.setName(requestProduct.getName());
-            product.setPrice(requestProduct.getPrice());
-            product.setCategory(requestProduct.getCategory());
-            product.setDescription(requestProduct.getDescription());
-            product.setImgKey(requestProduct.getImgKey());
-            product.setUser(user);
-            product.setSize(size);
-            product.setDate(LocalDateTime.parse(requestProduct.getDate(), formatter));
-            LocalDateTime localDateTime = LocalDateTime.parse(requestProduct.getDate(), formatter);
-            System.out.println(requestProduct.getDate());
-            System.out.println(localDateTime);
-            product.setHits(0);
+            Product product = Product.builder()
+                    .id(null)
+                    .name(requestProduct.getName())
+                    .price(requestProduct.getPrice())
+                    .category(requestProduct.getCategory())
+                    .description(requestProduct.getDescription())
+                    .size(size)
+                    .imgKey(requestProduct.getImgKey())
+                    .date(LocalDateTime.parse(requestProduct.getDate(), formatter))
+                    .hits(0)
+                    .user(user)
+                    .build();
 
             productList.add(product);
         }
@@ -245,12 +244,14 @@ public class ProductServiceImpl implements ProductService {
 
         // product 를 등록한 유저아이디와 받은 jwt 의 유저 아이디가 같은지 확인
         if(product.getUser().getUsername().equals(requestProductModify.getUsername())){
-            product.setName(requestProductModify.getName());
-            product.setPrice(requestProductModify.getPrice());
-            product.setCategory(requestProductModify.getCategory());
-            product.setDescription(requestProductModify.getDescription());
-            product.setSize(requestProductModify.getSize());
-            product.setImgKey(requestProductModify.getImgKey());
+            product.updateProduct(
+                    requestProductModify.getName(),
+                    requestProductModify.getPrice(),
+                    requestProductModify.getCategory(),
+                    requestProductModify.getDescription(),
+                    requestProductModify.getSize(),
+                    requestProductModify.getImgKey()
+            );
             Product modified_Product = productRepository.save(product);
 
             // Entity -> Dto

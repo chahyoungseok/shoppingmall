@@ -1,7 +1,7 @@
 package com.example.shoppingmall.repository.cart;
 
+import com.example.shoppingmall.data.dto.queryselect.SelectCart;
 import com.example.shoppingmall.data.dto.response.ResponseCart;
-import com.example.shoppingmall.data.entity.Cart;
 import com.example.shoppingmall.service.Impl.CartServiceImpl;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
@@ -39,9 +39,9 @@ public class CartRepositoryImpl implements CartRepositoryCustom{
     @Override
     @Transactional
     public Boolean findSameCart(Long user_id, Long product_id, int state) {
-        Cart cartEntity = selectFromUserID_N_ProductID(user_id, product_id);
+        SelectCart selectCart = selectFromUserID_N_ProductID(user_id, product_id);
 
-        if(cartEntity == null) {
+        if(selectCart == null) {
             return false;
         }
 
@@ -50,13 +50,13 @@ public class CartRepositoryImpl implements CartRepositoryCustom{
         if(state == CartServiceImpl.DELETE){
             state_value = -1;
             // 삭제요청에 개수가 1개일때
-            if(cartEntity.getCount() == 1) {
-                deleteCartID(cartEntity.getId());
+            if(selectCart.getCount() == 1) {
+                deleteCartID(selectCart.getId());
                 return true;
             }
         }
 
-        updateCartID(cartEntity.getId(), cartEntity.getCount() + state_value);
+        updateCartID(selectCart.getId(), selectCart.getCount() + state_value);
         return true;
     }
 
@@ -92,15 +92,16 @@ public class CartRepositoryImpl implements CartRepositoryCustom{
     }
 
     @Override
-    public Cart selectFromUserID_N_ProductID(Long user_id, Long product_id){
+    public SelectCart selectFromUserID_N_ProductID(Long user_id, Long product_id){
         BooleanExpression status_user = eqUserID(user_id);
         BooleanExpression status_product = eqProductID(product_id);
-
+        System.out.println(status_product);
+        System.out.println(status_user);
         if (status_user == null && status_product == null) {
             return null;
         }
 
-        return queryFactory.select(Projections.fields(Cart.class,
+        return queryFactory.select(Projections.fields(SelectCart.class,
                         cart.id,
                         cart.count,
                         Expressions.asNumber(user_id).as("user_id"),

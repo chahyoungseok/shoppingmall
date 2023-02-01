@@ -9,9 +9,7 @@ import java.time.LocalDateTime;
 @ToString
 @Table(name="product")
 @Getter
-@Setter
-@NoArgsConstructor
-@AllArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Product {
 
     @Id
@@ -44,8 +42,30 @@ public class Product {
 
     /** ManyToOne의 기본 Fetch는 EAGER */
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id")
-     // 다대일 매핑에서 일 쪽의 엔티티에서 참조하는 fk 이름을 적는다
+    @JoinColumn(name = "user_id") // 다대일 매핑에서 일 쪽의 엔티티에서 참조하는 fk 이름을 적는다
     @ToString.Exclude
     private User user;
+
+    @Builder
+    public Product(Long id, String name, int price, String category, String description, String size, String imgKey, LocalDateTime date, int hits, User user) {
+        this.id = id;
+        this.name = name;
+        this.price = price;
+        this.category = category;
+        this.description = description;
+        this.size = size;
+        this.imgKey = imgKey;
+        this.date = date;
+        this.hits = hits;
+        this.user = user;
+    }
+
+    public void updateProduct(String name, int price, String category, String description, String size, String imgKey) {
+        this.name = name;
+        this.price = price;
+        this.category = category;
+        this.description = description;
+        this.size = size;
+        this.imgKey = imgKey;
+    }
 }

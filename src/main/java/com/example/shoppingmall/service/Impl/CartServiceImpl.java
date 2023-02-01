@@ -30,10 +30,6 @@ public class CartServiceImpl implements CartService {
     public List<ResponseCart> readCart(User user) {
         List<ResponseCart> responseCartList = cartRepository.findAllCart(user.getUsername());
 
-        if (responseCartList == null){
-            return null;
-        }
-
         return responseCartList;
     }
 
@@ -47,7 +43,12 @@ public class CartServiceImpl implements CartService {
 
         Boolean check_same = cartRepository.findSameCart(user.getId(), product_id, ADD);
         if(!check_same) {
-            Cart cart = new Cart(null, 1, user, product);
+            Cart cart = Cart.builder()
+                    .id(null)
+                    .count(1)
+                    .user(user)
+                    .product(product)
+                    .build();
             cartRepository.save(cart);
         }
 

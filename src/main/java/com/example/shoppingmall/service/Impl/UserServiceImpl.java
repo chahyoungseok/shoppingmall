@@ -32,15 +32,16 @@ public class UserServiceImpl implements UserService {
         }
 
         // RequestJoin -> User Entity
-        User user = new User();
-        user.setId(null);
-        user.setUsername(requestJoin.getUsername());
-        user.setNickname(requestJoin.getNickname());
-        user.setPassword(bCryptPasswordEncoder.encode(requestJoin.getPassword()));
-        user.setTelephone(requestJoin.getTelephone());
-        user.setAuthority(Authority.USER);
-        user.setE_mail(requestJoin.getE_mail());
-        user.setAddress(requestJoin.getAddress());
+        User user = User.builder()
+                .id(null)
+                .username(requestJoin.getUsername())
+                .nickname(requestJoin.getNickname())
+                .password(bCryptPasswordEncoder.encode(requestJoin.getPassword()))
+                .telephone(requestJoin.getTelephone())
+                .e_mail(requestJoin.getE_mail())
+                .address(requestJoin.getAddress())
+                .authority(Authority.USER)
+                .build();
 
         User created_user = userRepository.save(user);
 
@@ -61,10 +62,12 @@ public class UserServiceImpl implements UserService {
         }
 
         // Dto -> Entity
-        user.setNickname(requestModify.getNickname());
-        user.setTelephone(requestModify.getTelephone());
-        user.setAddress(requestModify.getAddress());
-        user.setE_mail(requestModify.getE_mail());
+        user.updateUser(
+                requestModify.getNickname(),
+                requestModify.getTelephone(),
+                requestModify.getE_mail(),
+                requestModify.getAddress()
+        );
 
         User modified_user = userRepository.save(user);
 
@@ -91,7 +94,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public boolean change_pwd(RequestChangePWD requestChangePWD, User user){
         if(bCryptPasswordEncoder.matches(requestChangePWD.getOrigin_password(), user.getPassword())){
-            user.setPassword(bCryptPasswordEncoder.encode(requestChangePWD.getNew_password()));
+            user.changePWD(bCryptPasswordEncoder.encode(requestChangePWD.getNew_password()));
             userRepository.save(user);
             return true;
         }
@@ -104,7 +107,8 @@ public class UserServiceImpl implements UserService {
         User user = userRepository.findByUsername(username);
         if(user == null) {return false;}
 
-        user.setAuthority("ROLE_REGISTER");
+        user.upgradeAuth("ROLE_REGISTER");
+
         User modified_user = userRepository.save(user);
 
         return !modified_user.getUsername().isEmpty();

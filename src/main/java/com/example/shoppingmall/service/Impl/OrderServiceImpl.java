@@ -1,6 +1,6 @@
 package com.example.shoppingmall.service.Impl;
 
-import com.example.shoppingmall.data.dto.queryselect.RequestOrderProduct;
+import com.example.shoppingmall.data.dto.queryselect.QueryOrderProduct;
 import com.example.shoppingmall.data.dto.request.RequestOrder;
 import com.example.shoppingmall.data.dto.response.ResponseOrder;
 import com.example.shoppingmall.data.entity.Order;
@@ -19,6 +19,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @Service
 public class OrderServiceImpl implements OrderService {
@@ -74,32 +75,35 @@ public class OrderServiceImpl implements OrderService {
         User userPersisted = entityManager.find(User.class, user.getId());
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss");
 
-        if (userPersisted == null || requestOrder.getRequestOrderProductList().isEmpty()) {
+        if (userPersisted == null || requestOrder.getQueryOrderProductList().isEmpty()) {
             return null;
         }
 
-        Order order = new Order(null,
-                LocalDateTime.parse(requestOrder.getOrder_date(), formatter),
-                requestOrder.getOrder_status(),
-                null, new ArrayList<>());
+        Order order = Order.builder()
+                .id(null)
+                .orderDate(LocalDateTime.parse(requestOrder.getOrder_date(), formatter))
+                .orderStatus(requestOrder.getOrder_status())
+                .user(null)
+                .build();
 
         Order savedOrder = orderRepository.save(order);
         userPersisted.addOrder(savedOrder);
 
-        List<OrderProduct> orderProductList = productRepository.findByIdList(requestOrder.getRequestOrderProductList()
-                .stream().map(RequestOrderProduct::getProduct_id).toList())
-                .stream().map(product -> new OrderProduct(
-                        null,
-                        1,
-                        null,
-                        product
-                )).toList();
+        List<OrderProduct> orderProductList = productRepository.findByIdList(requestOrder.getQueryOrderProductList()
+                .stream().map(QueryOrderProduct::getProduct_id).toList())
+                .stream().map(product -> OrderProduct.builder()
+                        .id(null)
+                        .count(1)
+                        .order(null)
+                        .product(product)
+                        .build()
+                ).toList();
 
-        /** 추후 로직 개선 **/
+        // 추후 로직 개선
         for(OrderProduct orderProduct : orderProductList) {
-            for(RequestOrderProduct requestOrderProduct : requestOrder.getRequestOrderProductList()){
-                if(orderProduct.getProduct().getId() == requestOrderProduct.getProduct_id()) {
-                    orderProduct.setCount(requestOrderProduct.getCount());
+            for(QueryOrderProduct queryOrderProduct : requestOrder.getQueryOrderProductList()){
+                if(Objects.equals(orderProduct.getProduct().getId(), queryOrderProduct.getProduct_id())) {
+                    orderProduct.setCount(queryOrderProduct.getCount());
                     break;
                 }
             }

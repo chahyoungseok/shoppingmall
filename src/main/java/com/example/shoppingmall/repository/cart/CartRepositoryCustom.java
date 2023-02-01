@@ -1,7 +1,7 @@
 package com.example.shoppingmall.repository.cart;
 
+import com.example.shoppingmall.data.dto.queryselect.SelectCart;
 import com.example.shoppingmall.data.dto.response.ResponseCart;
-import com.example.shoppingmall.data.entity.Cart;
 import com.querydsl.core.types.dsl.BooleanExpression;
 
 import java.util.List;
@@ -24,7 +24,7 @@ public interface CartRepositoryCustom {
 
     void deleteCartID(Long id);
 
-    Cart selectFromUserID_N_ProductID(Long user_id, Long product_id);
+    SelectCart selectFromUserID_N_ProductID(Long user_id, Long product_id);
 
     void updateCartID(Long id, int updated_value);
 }

@@ -1,6 +1,6 @@
 package com.example.shoppingmall.data.dto.request;
 
-import com.example.shoppingmall.data.dto.queryselect.RequestOrderProduct;
+import com.example.shoppingmall.data.dto.queryselect.QueryOrderProduct;
 import lombok.*;
 
 import java.util.List;
@@ -15,5 +15,5 @@ public class RequestOrder {
 
     private String order_status;
 
-    private List<RequestOrderProduct> requestOrderProductList;
+    private List<QueryOrderProduct> queryOrderProductList;
 }

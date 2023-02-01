@@ -11,9 +11,7 @@ import java.util.List;
 @ToString
 @Table(name="orders")
 @Getter
-@Setter
-@NoArgsConstructor
-@AllArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Order {
 
     @Id
@@ -31,6 +29,18 @@ public class Order {
     @ToString.Exclude
     private User user;
 
+    @OneToMany(mappedBy = "order")
+    @ToString.Exclude
+    private List<OrderProduct> orderProductList = new ArrayList<>();
+
+    @Builder
+    public Order(Long id, LocalDateTime orderDate, String orderStatus, User user) {
+        this.id = id;
+        this.orderDate = orderDate;
+        this.orderStatus = orderStatus;
+        this.user = user;
+    }
+
     public void setUser(User user){
         if (this.user != null){
             this.user.getOrderList().remove(this);
@@ -38,10 +48,6 @@ public class Order {
 
         this.user = user;
     }
-
-    @OneToMany(mappedBy = "order")
-    @ToString.Exclude
-    private List<OrderProduct> orderProductList = new ArrayList<>();
 
     public void addAllOrderProduct(List<OrderProduct> orderProductList) {
         orderProductList.forEach(orderProduct -> orderProduct.setOrder(this));

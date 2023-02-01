@@ -9,9 +9,7 @@ import javax.persistence.*;
 @ToString
 @Table(name="cart")
 @Getter
-@Setter
-@NoArgsConstructor
-@AllArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Cart {
 
     @Id
@@ -31,4 +29,12 @@ public class Cart {
     @JoinColumn(name = "product_id")
     @ToString.Exclude
     private Product product;
+
+    @Builder
+    public Cart(Long id, int count, User user, Product product) {
+        this.id = id;
+        this.count = count;
+        this.user = user;
+        this.product = product;
+    }
 }

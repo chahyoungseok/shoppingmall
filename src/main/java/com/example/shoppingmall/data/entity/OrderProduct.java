@@ -8,9 +8,7 @@ import javax.persistence.*;
 @ToString
 @Table(name="order_product")
 @Getter
-@Setter
-@NoArgsConstructor
-@AllArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class OrderProduct {
 
     @Id
@@ -26,6 +24,19 @@ public class OrderProduct {
     @ToString.Exclude
     private Order order;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "product_id")
+    @ToString.Exclude
+    private Product product;
+
+    @Builder
+    public OrderProduct(Long id, int count, Order order, Product product) {
+        this.id = id;
+        this.count = count;
+        this.order = order;
+        this.product = product;
+    }
+
     public void setOrder(Order order){
         if (this.order != null){
             this.order.getOrderProductList().remove(this);
@@ -34,9 +45,7 @@ public class OrderProduct {
         this.order = order;
     }
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "product_id")
-    @ToString.Exclude
-    private Product product;
-
+    public void setCount(int count) {
+        this.count = count;
+    }
 }
