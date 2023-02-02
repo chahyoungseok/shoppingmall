@@ -3,6 +3,7 @@ package com.example.shoppingmall.data.dto.request;
 import com.example.shoppingmall.data.dto.queryselect.QueryOrderProduct;
 import lombok.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Getter
@@ -15,5 +16,5 @@ public class RequestOrder {
 
     private String order_status;
 
-    private List<QueryOrderProduct> queryOrderProductList;
+    private List<QueryOrderProduct> queryOrderProductList = new ArrayList<>();
 }

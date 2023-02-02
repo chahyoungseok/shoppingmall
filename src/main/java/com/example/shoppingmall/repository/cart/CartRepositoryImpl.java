@@ -24,6 +24,12 @@ public class CartRepositoryImpl implements CartRepositoryCustom{
 
     @Override
     public List<ResponseCart> findAllCart(String username) {
+        BooleanExpression status_user = eqUsername(username);
+
+        if (status_user == null) {
+            return null;
+        }
+
         return queryFactory.select(Projections.fields(ResponseCart.class,
                     product.id,
                     product.name,
@@ -33,6 +39,7 @@ public class CartRepositoryImpl implements CartRepositoryCustom{
                     cart.count
                 ))
                 .from(cart)
+                .where(status_user)
                 .fetch();
     }
 
@@ -66,6 +73,14 @@ public class CartRepositoryImpl implements CartRepositoryCustom{
             return null;
         }
         return cart.user.id.eq(id);
+    }
+
+    @Override
+    public BooleanExpression eqUsername(String username){
+        if (username == null) {
+            return null;
+        }
+        return cart.user.username.eq(username);
     }
 
     public BooleanExpression eqProductIDList(List<Long> IDList){

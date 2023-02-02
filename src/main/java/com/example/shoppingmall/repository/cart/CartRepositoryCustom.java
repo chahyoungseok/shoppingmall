@@ -14,6 +14,8 @@ public interface CartRepositoryCustom {
 
     BooleanExpression eqUserID(Long id);
 
+    BooleanExpression eqUsername(String username);
+
     BooleanExpression eqProductID(Long id);
 
     BooleanExpression eqSize(String size);
