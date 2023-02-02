@@ -96,6 +96,7 @@ public class OrderServiceImpl implements OrderService {
                         .count(1)
                         .order(null)
                         .product(product)
+                        .size("M")
                         .build()
                 ).toList();
 
@@ -103,7 +104,7 @@ public class OrderServiceImpl implements OrderService {
         for(OrderProduct orderProduct : orderProductList) {
             for(QueryOrderProduct queryOrderProduct : requestOrder.getQueryOrderProductList()){
                 if(Objects.equals(orderProduct.getProduct().getId(), queryOrderProduct.getProduct_id())) {
-                    orderProduct.setCount(queryOrderProduct.getCount());
+                    orderProduct.setOption(queryOrderProduct.getCount(), queryOrderProduct.getSize());
                     break;
                 }
             }

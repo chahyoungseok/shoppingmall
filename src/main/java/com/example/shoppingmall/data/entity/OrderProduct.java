@@ -18,6 +18,9 @@ public class OrderProduct {
     @Column(nullable = false)
     private int count; // 수량
 
+    @Column(nullable = false)
+    private String size;
+
     /** ManyToOne의 기본 Fetch는 EAGER */
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "order_id")
@@ -30,11 +33,12 @@ public class OrderProduct {
     private Product product;
 
     @Builder
-    public OrderProduct(Long id, int count, Order order, Product product) {
+    public OrderProduct(Long id, int count, Order order, Product product, String size) {
         this.id = id;
         this.count = count;
         this.order = order;
         this.product = product;
+        this.size = size;
     }
 
     public void setOrder(Order order){
@@ -45,7 +49,8 @@ public class OrderProduct {
         this.order = order;
     }
 
-    public void setCount(int count) {
+    public void setOption(int count, String size) {
         this.count = count;
+        this.size = size;
     }
 }

@@ -47,7 +47,7 @@ public class OrderProductRepositoryImpl implements OrderProductRepositoryCustom{
                 Projections.fields(ReadOrderQuery.class,
                     orderProduct.count,
                     orderProduct.product.price,
-                    orderProduct.product.size,
+                    orderProduct.size,
                     orderProduct.product.imgKey))
                 .from(orderProduct)
                 .where(orderProduct.in(orderProductList))

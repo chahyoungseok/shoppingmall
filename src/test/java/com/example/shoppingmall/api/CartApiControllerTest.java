@@ -1,6 +1,7 @@
 package com.example.shoppingmall.api;
 
 import com.example.shoppingmall.config.auth.PrincipalDetails;
+import com.example.shoppingmall.data.dto.request.RequestSize;
 import com.example.shoppingmall.service.CartService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -8,6 +9,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.http.MediaType;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.test.context.support.WithUserDetails;
@@ -60,13 +62,20 @@ class CartApiControllerTest extends BaseControllerTest{
         @Transactional
         @Test
         void success() throws Exception{
+            String content = objectMapper.writeValueAsString(new RequestSize(
+                    "M"));
+
             String url = "/user/cart/1";
             Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
             PrincipalDetails principalDetails = (PrincipalDetails) authentication.getPrincipal();
 
             RequestBuilder requestBuilder = MockMvcRequestBuilders
                     .post(url)
-                    .requestAttr("user", principalDetails.getUser());
+                    .requestAttr("user", principalDetails.getUser())
+                    .content(content)
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .accept(MediaType.APPLICATION_JSON);
+
             ResultActions resultActions = mockMvc
                     .perform(requestBuilder);
             // then

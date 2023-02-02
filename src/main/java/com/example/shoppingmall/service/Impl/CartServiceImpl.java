@@ -28,26 +28,25 @@ public class CartServiceImpl implements CartService {
 
     @Override
     public List<ResponseCart> readCart(User user) {
-        List<ResponseCart> responseCartList = cartRepository.findAllCart(user.getUsername());
-
-        return responseCartList;
+        return cartRepository.findAllCart(user.getUsername());
     }
 
     @Override
-    public List<ResponseCart> createCart(User user, Long product_id) {
+    public List<ResponseCart> createCart(User user, Long product_id, String size) {
         Product product = productRepository.findById(product_id).orElse(null);
 
         if(user == null || product == null) {
             return null;
         }
 
-        Boolean check_same = cartRepository.findSameCart(user.getId(), product_id, ADD);
+        Boolean check_same = cartRepository.findSameCart(user.getId(), product_id, size, ADD);
         if(!check_same) {
             Cart cart = Cart.builder()
                     .id(null)
                     .count(1)
                     .user(user)
                     .product(product)
+                    .size(size)
                     .build();
             cartRepository.save(cart);
         }
@@ -56,13 +55,13 @@ public class CartServiceImpl implements CartService {
     }
 
     @Override
-    public List<ResponseCart> deleteCart(User user, Long product_id) {
+    public List<ResponseCart> deleteCart(User user, Long product_id, String size) {
         Product product = productRepository.findById(product_id).orElse(null);
 
         if(user == null || product == null) {
             return null;
         }
-        Boolean check_same = cartRepository.findSameCart(user.getId(), product_id, DELETE);
+        Boolean check_same = cartRepository.findSameCart(user.getId(), product_id, size, DELETE);
 
         if(!check_same) {
             return null;

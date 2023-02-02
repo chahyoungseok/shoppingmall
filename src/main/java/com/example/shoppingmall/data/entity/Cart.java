@@ -19,6 +19,9 @@ public class Cart {
     @Column(nullable = false)
     private int count; // 수량
 
+    @Column(nullable = false)
+    private String size;
+
     /** ManyToOne의 기본 Fetch는 EAGER */
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
@@ -31,10 +34,11 @@ public class Cart {
     private Product product;
 
     @Builder
-    public Cart(Long id, int count, User user, Product product) {
+    public Cart(Long id, int count, User user, Product product, String size) {
         this.id = id;
         this.count = count;
         this.user = user;
         this.product = product;
+        this.size = size;
     }
 }

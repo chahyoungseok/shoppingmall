@@ -28,6 +28,8 @@ public class QCart extends EntityPathBase<Cart> {
 
     public final QProduct product;
 
+    public final StringPath size = createString("size");
+
     public final QUser user;
 
     public QCart(String variable) {

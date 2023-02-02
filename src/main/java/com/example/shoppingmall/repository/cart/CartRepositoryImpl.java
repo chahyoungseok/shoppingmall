@@ -28,7 +28,7 @@ public class CartRepositoryImpl implements CartRepositoryCustom{
                     product.id,
                     product.name,
                     product.price,
-                    product.size,
+                    cart.size,
                     product.imgKey,
                     cart.count
                 ))
@@ -38,8 +38,8 @@ public class CartRepositoryImpl implements CartRepositoryCustom{
 
     @Override
     @Transactional
-    public Boolean findSameCart(Long user_id, Long product_id, int state) {
-        SelectCart selectCart = selectFromUserID_N_ProductID(user_id, product_id);
+    public Boolean findSameCart(Long user_id, Long product_id, String size, int state) {
+        SelectCart selectCart = selectFromUserID_N_ProductID(user_id, product_id, size);
 
         if(selectCart == null) {
             return false;
@@ -84,6 +84,14 @@ public class CartRepositoryImpl implements CartRepositoryCustom{
     }
 
     @Override
+    public BooleanExpression eqSize(String size){
+        if (size == null) {
+            return null;
+        }
+        return cart.size.eq(size);
+    }
+
+    @Override
     public BooleanExpression eqCartID(Long id){
         if (id == null) {
             return null;
@@ -92,9 +100,10 @@ public class CartRepositoryImpl implements CartRepositoryCustom{
     }
 
     @Override
-    public SelectCart selectFromUserID_N_ProductID(Long user_id, Long product_id){
+    public SelectCart selectFromUserID_N_ProductID(Long user_id, Long product_id, String size){
         BooleanExpression status_user = eqUserID(user_id);
         BooleanExpression status_product = eqProductID(product_id);
+        BooleanExpression status_size = eqSize(size);
 
         if (status_user == null && status_product == null) {
             return null;
@@ -103,10 +112,11 @@ public class CartRepositoryImpl implements CartRepositoryCustom{
         return queryFactory.select(Projections.fields(SelectCart.class,
                         cart.id,
                         cart.count,
+                        Expressions.asString(size).as("size"),
                         Expressions.asNumber(user_id).as("user_id"),
                         Expressions.asNumber(product_id).as("product_id")))
                 .from(cart)
-                .where(status_user, status_product)
+                .where(status_user, status_product, status_size)
                 .fetchOne();
     }
 

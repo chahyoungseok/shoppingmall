@@ -10,11 +10,13 @@ public interface CartRepositoryCustom {
 
     List<ResponseCart> findAllCart(String username);
 
-    Boolean findSameCart(Long user_id, Long product_id, int state);
+    Boolean findSameCart(Long user_id, Long product_id, String size, int state);
 
     BooleanExpression eqUserID(Long id);
 
     BooleanExpression eqProductID(Long id);
+
+    BooleanExpression eqSize(String size);
 
     BooleanExpression eqCartID(Long id);
 
@@ -24,7 +26,7 @@ public interface CartRepositoryCustom {
 
     void deleteCartID(Long id);
 
-    SelectCart selectFromUserID_N_ProductID(Long user_id, Long product_id);
+    SelectCart selectFromUserID_N_ProductID(Long user_id, Long product_id, String size);
 
     void updateCartID(Long id, int updated_value);
 }

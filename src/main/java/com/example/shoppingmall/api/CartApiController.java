@@ -1,5 +1,6 @@
 package com.example.shoppingmall.api;
 
+import com.example.shoppingmall.data.dto.request.RequestSize;
 import com.example.shoppingmall.data.dto.response.ResponseCart;
 import com.example.shoppingmall.data.entity.User;
 import com.example.shoppingmall.service.CartService;
@@ -31,8 +32,8 @@ public class CartApiController {
 
     /** 장바구니 상품 추가 */
     @PostMapping("/user/cart/{id}")
-    public ResponseEntity<List<ResponseCart>> createCart(HttpServletRequest request, @PathVariable Long id) {
-        List<ResponseCart> cartList = cartService.createCart((User) request.getAttribute("user"), id);
+    public ResponseEntity<List<ResponseCart>> createCart(HttpServletRequest request, @PathVariable Long id, @RequestBody RequestSize requestSize) {
+        List<ResponseCart> cartList = cartService.createCart((User) request.getAttribute("user"), id, requestSize.getSize());
         return (cartList != null) ?
                 ResponseEntity.status(HttpStatus.OK).body(cartList) :
                 ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
@@ -40,8 +41,8 @@ public class CartApiController {
 
     /** 장바구니 상품 삭제 */
     @DeleteMapping("/user/cart/{id}")
-    public ResponseEntity<List<ResponseCart>> deleteCart(HttpServletRequest request, @PathVariable Long id) {
-        List<ResponseCart> cartList = cartService.deleteCart((User) request.getAttribute("user"), id);
+    public ResponseEntity<List<ResponseCart>> deleteCart(HttpServletRequest request, @PathVariable Long id, @RequestBody RequestSize requestSize) {
+        List<ResponseCart> cartList = cartService.deleteCart((User) request.getAttribute("user"), id, requestSize.getSize());
         return (cartList != null) ?
                 ResponseEntity.status(HttpStatus.OK).body(cartList) :
                 ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);

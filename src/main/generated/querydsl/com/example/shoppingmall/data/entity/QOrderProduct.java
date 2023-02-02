@@ -30,6 +30,8 @@ public class QOrderProduct extends EntityPathBase<OrderProduct> {
 
     public final QProduct product;
 
+    public final StringPath size = createString("size");
+
     public QOrderProduct(String variable) {
         this(OrderProduct.class, forVariable(variable), INITS);
     }

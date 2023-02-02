@@ -63,7 +63,7 @@ class OrderApiControllerTest extends BaseControllerTest {
             String content = objectMapper.writeValueAsString(new RequestOrder(
                     LocalDateTime.now().withNano(0).toString(),
                     "배송완료",
-                    Arrays.asList(new QueryOrderProduct(1L, 2), new QueryOrderProduct(2L, 2))));
+                    Arrays.asList(new QueryOrderProduct(1L, 2, "M"), new QueryOrderProduct(2L, 2, "L"))));
 
             Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
             PrincipalDetails principalDetails = (PrincipalDetails) authentication.getPrincipal();
