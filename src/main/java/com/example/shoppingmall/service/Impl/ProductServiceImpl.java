@@ -181,30 +181,24 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public boolean CreateProduct(RequestProduct requestProduct, User user){
-        String[] parsedSize = requestProduct.getSize().split(",");
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss");
 
-        // Dto -> Entity
-        List<Product> productList = new ArrayList<>();
-        for(String size : parsedSize){
-            Product product = Product.builder()
-                    .id(null)
-                    .name(requestProduct.getName())
-                    .price(requestProduct.getPrice())
-                    .category(requestProduct.getCategory())
-                    .description(requestProduct.getDescription())
-                    .size(size)
-                    .imgKey(requestProduct.getImgKey())
-                    .date(LocalDateTime.parse(requestProduct.getDate(), formatter))
-                    .hits(0)
-                    .user(user)
-                    .build();
+        Product product = Product.builder()
+                .id(null)
+                .name(requestProduct.getName())
+                .price(requestProduct.getPrice())
+                .category(requestProduct.getCategory())
+                .description(requestProduct.getDescription())
+                .size(requestProduct.getSize())
+                .imgKey(requestProduct.getImgKey())
+                .date(LocalDateTime.parse(requestProduct.getDate(), formatter))
+                .hits(0)
+                .user(user)
+                .build();
 
-            productList.add(product);
-        }
-        List<Product> createdProductList = productRepository.saveAll(productList);
+        Product createdProduct = productRepository.save(product);
 
-        return createdProductList.size() == parsedSize.length;
+        return !createdProduct.getName().isEmpty();
     }
 
     @Override

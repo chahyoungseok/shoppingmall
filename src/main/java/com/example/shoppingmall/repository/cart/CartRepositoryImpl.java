@@ -95,8 +95,7 @@ public class CartRepositoryImpl implements CartRepositoryCustom{
     public SelectCart selectFromUserID_N_ProductID(Long user_id, Long product_id){
         BooleanExpression status_user = eqUserID(user_id);
         BooleanExpression status_product = eqProductID(product_id);
-        System.out.println(status_product);
-        System.out.println(status_user);
+
         if (status_user == null && status_product == null) {
             return null;
         }
