@@ -42,4 +42,7 @@ public interface ProductService {
 
     void increaseHits(Long id);
 
+    void increaseFavorite(Long id);
+
+    void decreaseFavorite(Long id);
 }

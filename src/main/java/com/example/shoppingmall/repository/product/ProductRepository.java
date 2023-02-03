@@ -34,4 +34,14 @@ public interface ProductRepository extends JpaRepository<Product, Long>, Product
     @Modifying(clearAutomatically = true)
     @Query("update Product o set o.hits=o.hits+1 where o.id=:id")
     void increaseHits(@Param("id") Long id);
+
+    @Transactional
+    @Modifying(clearAutomatically = true)
+    @Query("update Product o set o.favorite=o.favorite+1 where o.id=:id")
+    void increaseFavorite(@Param("id") Long id);
+
+    @Transactional
+    @Modifying(clearAutomatically = true)
+    @Query("update Product o set o.favorite=o.favorite-1 where o.id=:id")
+    void decreaseFavorite(@Param("id") Long id);
 }

@@ -28,6 +28,8 @@ public class QProduct extends EntityPathBase<Product> {
 
     public final StringPath description = createString("description");
 
+    public final NumberPath<Integer> favorite = createNumber("favorite", Integer.class);
+
     public final NumberPath<Integer> hits = createNumber("hits", Integer.class);
 
     public final NumberPath<Long> id = createNumber("id", Long.class);

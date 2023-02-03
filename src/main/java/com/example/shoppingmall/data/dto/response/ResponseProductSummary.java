@@ -14,5 +14,7 @@ public class ResponseProductSummary {
 
     private int price;
 
+    private int favorite;
+
     private String imgKey;
 }

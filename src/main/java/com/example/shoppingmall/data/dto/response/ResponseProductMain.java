@@ -7,20 +7,12 @@ import lombok.*;
 @ToString
 @AllArgsConstructor
 @NoArgsConstructor
-public class ResponseProduct {
+public class ResponseProductMain {
     private Long id;
 
     private String name;
 
     private int price;
-
-    private String category;
-
-    private String description;
-
-    private String size;
-
-    private int favorite;
 
     private String imgKey;
 }

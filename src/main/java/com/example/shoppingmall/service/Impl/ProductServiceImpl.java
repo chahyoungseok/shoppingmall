@@ -4,6 +4,7 @@ import com.example.shoppingmall.data.dto.request.RequestProduct;
 import com.example.shoppingmall.data.dto.request.RequestProductModify;
 import com.example.shoppingmall.data.dto.response.ResponseBanner;
 import com.example.shoppingmall.data.dto.response.ResponseProduct;
+import com.example.shoppingmall.data.dto.response.ResponseProductMain;
 import com.example.shoppingmall.data.dto.response.ResponseProductSummary;
 import com.example.shoppingmall.data.entity.Banner;
 import com.example.shoppingmall.data.entity.Product;
@@ -38,13 +39,13 @@ public class ProductServiceImpl implements ProductService {
         List<Banner> bannerList = bannerRepository.findAll();
 
         // Entity -> Dto
-        List<ResponseProductSummary> responseProductList = new ArrayList<>();
+        List<ResponseProductMain> responseProductList = new ArrayList<>();
         List<ResponseBanner> responseBannerList = new ArrayList<>();
         List<List<?>> returnList = new ArrayList<>();
 
         if (!productList.isEmpty() && !bannerList.isEmpty()) {
             for(Product product : productList){
-                ResponseProductSummary newDto = new ResponseProductSummary();
+                ResponseProductMain newDto = new ResponseProductMain();
                 newDto.setId(product.getId());
                 newDto.setName(product.getName());
                 newDto.setPrice(product.getPrice());
@@ -79,6 +80,7 @@ public class ProductServiceImpl implements ProductService {
                 newDto.setName(product.getName());
                 newDto.setPrice(product.getPrice());
                 newDto.setImgKey(product.getImgKey());
+                newDto.setFavorite(product.getFavorite());
 
                 responseProductList.add(newDto);
             }
@@ -107,6 +109,7 @@ public class ProductServiceImpl implements ProductService {
                 newDto.setName(product.getName());
                 newDto.setPrice(product.getPrice());
                 newDto.setImgKey(product.getImgKey());
+                newDto.setFavorite(product.getFavorite());
 
                 responseProductList.add(newDto);
             }
@@ -129,6 +132,7 @@ public class ProductServiceImpl implements ProductService {
                 newDto.setName(product.getName());
                 newDto.setPrice(product.getPrice());
                 newDto.setImgKey(product.getImgKey());
+                newDto.setFavorite(product.getFavorite());
 
                 responseProductList.add(newDto);
             }
@@ -153,6 +157,7 @@ public class ProductServiceImpl implements ProductService {
         responseProduct.setCategory(product.getCategory());
         responseProduct.setDescription(product.getDescription());
         responseProduct.setSize(product.getSize());
+        responseProduct.setFavorite(product.getFavorite());
         responseProduct.setImgKey(product.getImgKey());
         return responseProduct;
     }
@@ -171,6 +176,7 @@ public class ProductServiceImpl implements ProductService {
                 newDto.setName(product.getName());
                 newDto.setPrice(product.getPrice());
                 newDto.setImgKey(product.getImgKey());
+                newDto.setFavorite(product.getFavorite());
 
                 responseProductList.add(newDto);
             }
@@ -193,6 +199,7 @@ public class ProductServiceImpl implements ProductService {
                 .imgKey(requestProduct.getImgKey())
                 .date(LocalDateTime.parse(requestProduct.getDate(), formatter))
                 .hits(0)
+                .favorite(0)
                 .user(user)
                 .build();
 
@@ -286,4 +293,13 @@ public class ProductServiceImpl implements ProductService {
         productRepository.increaseHits(id);
     }
 
+    @Override
+    public void increaseFavorite(Long id) {
+        productRepository.increaseFavorite(id);
+    }
+
+    @Override
+    public void decreaseFavorite(Long id) {
+        productRepository.decreaseFavorite(id);
+    }
 }

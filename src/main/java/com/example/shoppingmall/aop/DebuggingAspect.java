@@ -63,7 +63,7 @@ public class DebuggingAspect {
             log.error("LoggerAspect error", e);
         }
         log.info("{}", params);
-        log.info("'{}' total running time : {} sec", methodName, stopWatch.getTotalTimeSeconds());
+        log.info("'{}' total running time : {} sec\n\n", methodName, stopWatch.getTotalTimeSeconds());
 
         return returningObh;
     }
