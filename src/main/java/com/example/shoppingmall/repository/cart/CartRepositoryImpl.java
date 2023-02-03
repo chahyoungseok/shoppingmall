@@ -13,6 +13,7 @@ import org.springframework.stereotype.Repository;
 import javax.transaction.Transactional;
 import java.util.List;
 
+import static com.example.shoppingmall.data.entity.QUser.user;
 import static com.example.shoppingmall.data.entity.QCart.cart;
 import static com.example.shoppingmall.data.entity.QProduct.product;
 
@@ -39,6 +40,8 @@ public class CartRepositoryImpl implements CartRepositoryCustom{
                     cart.count
                 ))
                 .from(cart)
+                .innerJoin(cart.product, product)
+                .innerJoin(cart.user, user)
                 .where(status_user)
                 .fetch();
     }
