@@ -73,6 +73,12 @@ public class UserApiController {
     @DeleteMapping("/user")
     public ResponseEntity<Void> delete(HttpServletRequest request) {
         User user = (User) request.getAttribute("user");
+
+        /** 관리자는 일반적인 유저 삭제 Api로 삭제 불가능*/
+        if(user.getAuthority().equals("ROLE_ADMIN")) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+        }
+
         boolean check_delete = userService.deleteUser(user.getUsername());
 
         return (check_delete) ?
