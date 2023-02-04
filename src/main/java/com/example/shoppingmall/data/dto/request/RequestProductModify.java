@@ -1,5 +1,6 @@
 package com.example.shoppingmall.data.dto.request;
 
+import com.example.shoppingmall.data.entity.Product;
 import lombok.*;
 
 import javax.validation.constraints.NotEmpty;
@@ -34,4 +35,8 @@ public class RequestProductModify {
 
     @NotEmpty(message = "이미지 키 입력은 필수 입니다.")
     private String imgKey;
+
+    public void toEntity(Product product) {
+        product.updateProduct(name,price,category,description,size,imgKey);
+    }
 }
