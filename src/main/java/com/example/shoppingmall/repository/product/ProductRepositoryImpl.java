@@ -1,9 +1,13 @@
 package com.example.shoppingmall.repository.product;
 
 import com.example.shoppingmall.data.dto.queryselect.SelectIDQuery;
+import com.example.shoppingmall.data.dto.response.ResponseProductPurchase;
 import com.example.shoppingmall.data.entity.Product;
+import com.example.shoppingmall.repository.OrderByNull;
+import com.querydsl.core.types.ExpressionUtils;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
+import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
@@ -11,6 +15,7 @@ import org.springframework.util.StringUtils;
 
 import java.util.List;
 
+import static com.example.shoppingmall.data.entity.QOrderProduct.orderProduct;
 import static com.example.shoppingmall.data.entity.QProduct.product;
 
 @Repository
@@ -77,6 +82,26 @@ public class ProductRepositoryImpl implements ProductRepositoryCustom{
 
         return queryFactory.selectFrom(product)
                 .where(status)
+                .fetch();
+    }
+
+    @Override
+    public List<ResponseProductPurchase> findAllProductPurchase() {
+
+        return queryFactory.select(Projections.fields(ResponseProductPurchase.class,
+                        product.id,
+                        product.name,
+                        product.price,
+                        product.favorite,
+                        product.imgKey,
+                        ExpressionUtils.as(
+                                JPAExpressions.select(orderProduct.count.sum())
+                                        .from(orderProduct)
+                                        .groupBy(orderProduct.product.id)
+                                        .orderBy(OrderByNull.DEFAULT)
+                                        .where(orderProduct.product.eq(product)), "count"
+                        )))
+                .from(product)
                 .fetch();
     }
 }

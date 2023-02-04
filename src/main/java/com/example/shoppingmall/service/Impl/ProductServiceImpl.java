@@ -2,14 +2,12 @@ package com.example.shoppingmall.service.Impl;
 
 import com.example.shoppingmall.data.dto.request.RequestProduct;
 import com.example.shoppingmall.data.dto.request.RequestProductModify;
-import com.example.shoppingmall.data.dto.response.ResponseBanner;
-import com.example.shoppingmall.data.dto.response.ResponseProduct;
-import com.example.shoppingmall.data.dto.response.ResponseProductMain;
-import com.example.shoppingmall.data.dto.response.ResponseProductSummary;
+import com.example.shoppingmall.data.dto.response.*;
 import com.example.shoppingmall.data.entity.Banner;
 import com.example.shoppingmall.data.entity.Product;
 import com.example.shoppingmall.data.entity.User;
 import com.example.shoppingmall.repository.banner.BannerRepository;
+import com.example.shoppingmall.repository.order.OrderProductRepository;
 import com.example.shoppingmall.repository.product.ProductRepository;
 import com.example.shoppingmall.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +16,7 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 @Service
@@ -26,10 +25,14 @@ public class ProductServiceImpl implements ProductService {
     private final ProductRepository productRepository;
     private final BannerRepository bannerRepository;
 
+    private final OrderProductRepository orderProductRepository;
+
+
     @Autowired
-    public ProductServiceImpl(ProductRepository productRepository, BannerRepository bannerRepository){
+    public ProductServiceImpl(ProductRepository productRepository, BannerRepository bannerRepository, OrderProductRepository orderProductRepository){
         this.productRepository = productRepository;
         this.bannerRepository = bannerRepository;
+        this.orderProductRepository = orderProductRepository;
     }
 
     @Override
@@ -97,7 +100,20 @@ public class ProductServiceImpl implements ProductService {
             case "hits" -> productList = productRepository.findAllByOrderByHitsDesc();
             case "latest" -> productList = productRepository.findAllByOrderByDateDesc();
 //            case "popular"-> productList = productRepository.findAll();
-//            case "purchase"-> productList = productRepository.findAll();
+            case "purchase"-> {
+                List<ResponseProductPurchase> productPurchaseList = productRepository.findAllProductPurchase();
+
+                /** 서브쿼리로 받아온 count로 order by 문법이 적용안되므로 WAS 단에서 정렬수행*/
+                Collections.sort(productPurchaseList);
+
+                return productPurchaseList.stream().map(productPurchase -> new ResponseProductSummary(
+                        productPurchase.getId(),
+                        productPurchase.getName(),
+                        productPurchase.getPrice(),
+                        productPurchase.getFavorite(),
+                        productPurchase.getImgKey()
+                )).toList();
+            }
         }
 
         // Entity -> Dto

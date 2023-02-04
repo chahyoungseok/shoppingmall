@@ -46,8 +46,12 @@ INSERT INTO orders(id, user_id, orderdate, orderstatus) values (null, 2, '2022-0
 
 --------------- 주문상품 데이터 ---------------
 INSERT INTO order_product(id, product_id, order_id, count, size) values (null, 2, 1, 1, 'S')
-INSERT INTO order_product(id, product_id, order_id, count, size) values (null, 1, 1, 1, 'M')
+INSERT INTO order_product(id, product_id, order_id, count, size) values (null, 1, 1, 8, 'M')
 INSERT INTO order_product(id, product_id, order_id, count, size) values (null, 4, 2, 2, 'L')
+INSERT INTO order_product(id, product_id, order_id, count, size) values (null, 3, 2, 2, 'L')
+INSERT INTO order_product(id, product_id, order_id, count, size) values (null, 7, 2, 2, 'L')
+INSERT INTO order_product(id, product_id, order_id, count, size) values (null, 7, 1, 2, 'L')
+INSERT INTO order_product(id, product_id, order_id, count, size) values (null, 7, 1, 2, 'S')
 
 INSERT INTO  banner(id, imgKey) values (null, 'A')
 INSERT INTO  banner(id, imgKey) values (null, 'B')
