@@ -19,4 +19,8 @@ public interface ProductRepositoryCustom {
     List<Product> findByIdList(List<Long> IDList);
 
     List<ResponseProductPurchase> findAllProductPurchase();
+
+    List<ResponseProductPurchase> findSearchProductPurchase(String keyword);
+
+    List<ResponseProductPurchase> findCategoryProductPurchase(String category);
 }

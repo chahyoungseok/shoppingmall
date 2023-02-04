@@ -104,4 +104,47 @@ public class ProductRepositoryImpl implements ProductRepositoryCustom{
                 .from(product)
                 .fetch();
     }
+
+    @Override
+    public List<ResponseProductPurchase> findSearchProductPurchase(String keyword) {
+
+        return queryFactory.select(Projections.fields(ResponseProductPurchase.class,
+                        product.id,
+                        product.name,
+                        product.price,
+                        product.favorite,
+                        product.imgKey,
+                        ExpressionUtils.as(
+                                JPAExpressions.select(orderProduct.count.sum())
+                                        .from(orderProduct)
+                                        .groupBy(orderProduct.product.id)
+                                        .orderBy(OrderByNull.DEFAULT)
+                                        .where(orderProduct.product.eq(product)), "count"
+                        )))
+                .from(product)
+                .where(product.name.contains(keyword))
+                .fetch();
+    }
+
+    @Override
+    public List<ResponseProductPurchase> findCategoryProductPurchase(String category) {
+
+        return queryFactory.select(Projections.fields(ResponseProductPurchase.class,
+                        product.id,
+                        product.name,
+                        product.price,
+                        product.favorite,
+                        product.imgKey,
+                        ExpressionUtils.as(
+                                JPAExpressions.select(orderProduct.count.sum())
+                                        .from(orderProduct)
+                                        .groupBy(orderProduct.product.id)
+                                        .orderBy(OrderByNull.DEFAULT)
+                                        .where(orderProduct.product.eq(product)), "count"
+                        )))
+                .from(product)
+                .where(product.category.eq(category))
+                .fetch();
+    }
+
 }

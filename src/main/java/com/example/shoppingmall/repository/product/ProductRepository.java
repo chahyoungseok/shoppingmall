@@ -12,20 +12,37 @@ import java.util.List;
 public interface ProductRepository extends JpaRepository<Product, Long>, ProductRepositoryCustom {
 
     /** 메인 페이지 상품 조회 */
-    List<Product> findTop2ByOrderByIdDesc();
+    List<Product> findTop8ByOrderByIdDesc();
 
-    /** 상품 전체 조회수 높은순으로 조회 */
+    // =================================================================
+    // Containing 으로 포함 결과 검색
+    /** 상품명으로 검색 조회수높은순으로 조회 */
+    List<Product> findByNameContainingOrderByHitsDesc(String name);
+
+    /** 상품명으로 검색 최신순으로 조회 */
+    List<Product> findByNameContainingOrderByDateDesc(String name);
+
+    /** 상품명으로 검색 좋아요순으로 조회*/
+    List<Product> findByNameContainingOrderByFavoriteDesc(String name);
+    // =================================================================
+    /** 상품 전체 조회수높은순으로 조회 */
     List<Product> findAllByOrderByHitsDesc();
 
-    /** 상품 전체 조회수 최신순으로 조회 */
+    /** 상품 전체 최신순으로 조회 */
     List<Product> findAllByOrderByDateDesc();
 
-    // Containing 으로 포함 결과 검색
-    /** 상품명으로 검색 */
-    List<Product> findByNameContaining(String name);
+    /** 상품 전체 좋아요순으로 조회 */
+    List<Product> findAllByOrderByFavoriteDesc();
+    // =================================================================
+    /** 상품 카테고리별 조회수높은순으로 조회 */
+    List<Product> findByCategoryOrderByHitsDesc(String category);
 
-    /** 상품 카테고리별 조회 */
-    List<Product> findByCategory(String category);
+    /** 상품 카테고리별 최신순으로 조회 */
+    List<Product> findByCategoryOrderByDateDesc(String category);
+
+    /** 상품 카테고리별 좋아요순으로 조회 */
+    List<Product> findByCategoryOrderByFavoriteDesc(String category);
+    // =================================================================
 
     /** 판매등록한 상품 목록 조회 */
     List<Product> findByUserId(Long userId);

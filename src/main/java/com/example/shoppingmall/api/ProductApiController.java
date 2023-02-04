@@ -36,8 +36,8 @@ public class ProductApiController {
 
     /** 상품명으로 검색 */
     @GetMapping("/shop/search/{keyword}")
-    public ResponseEntity<List<ResponseProductSummary>> findByProductName(@PathVariable String keyword){
-        List<ResponseProductSummary> productList = productService.findByProductName(keyword);
+    public ResponseEntity<List<ResponseProductSummary>> findByProductName(@PathVariable String keyword, @RequestParam(value = "sort", defaultValue = "hits") String sort){
+        List<ResponseProductSummary> productList = productService.findByProductName(keyword, sort);
         return (!productList.isEmpty()) ?
                 ResponseEntity.status(HttpStatus.OK).body(productList) :
                 ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
@@ -54,8 +54,8 @@ public class ProductApiController {
 
     /** 상품 카테고리별 조회 */
     @GetMapping("/shop/category/{category}")
-    public ResponseEntity<List<ResponseProductSummary>> findByCategory(@PathVariable String category){
-        List<ResponseProductSummary>productList = productService.findByCategory(category);
+    public ResponseEntity<List<ResponseProductSummary>> findByCategory(@PathVariable String category, @RequestParam(value = "sort", defaultValue = "hits") String sort){
+        List<ResponseProductSummary>productList = productService.findByCategory(category, sort);
         return (!productList.isEmpty()) ?
                 ResponseEntity.status(HttpStatus.OK).body(productList) :
                 ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);

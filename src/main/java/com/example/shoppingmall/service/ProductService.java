@@ -14,13 +14,13 @@ public interface ProductService {
     List<List<?>>  mainPageProductList();
 
     /** 상품명으로 검색 */
-    List<ResponseProductSummary> findByProductName(String keyword);
+    List<ResponseProductSummary> findByProductName(String keyword, String sort);
 
     /** 상품 전체 조회 */
     List<ResponseProductSummary> findAllProduct(String sort);
 
     /** 상품 카테고리별 조회 */
-    List<ResponseProductSummary> findByCategory(String category);
+    List<ResponseProductSummary> findByCategory(String category, String sort);
 
     /** 상품 상세 페이지 조회 */
     ResponseProduct findById(Long id);

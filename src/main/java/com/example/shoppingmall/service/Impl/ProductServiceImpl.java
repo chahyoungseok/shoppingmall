@@ -7,7 +7,6 @@ import com.example.shoppingmall.data.entity.Banner;
 import com.example.shoppingmall.data.entity.Product;
 import com.example.shoppingmall.data.entity.User;
 import com.example.shoppingmall.repository.banner.BannerRepository;
-import com.example.shoppingmall.repository.order.OrderProductRepository;
 import com.example.shoppingmall.repository.product.ProductRepository;
 import com.example.shoppingmall.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,20 +24,16 @@ public class ProductServiceImpl implements ProductService {
     private final ProductRepository productRepository;
     private final BannerRepository bannerRepository;
 
-    private final OrderProductRepository orderProductRepository;
-
-
     @Autowired
-    public ProductServiceImpl(ProductRepository productRepository, BannerRepository bannerRepository, OrderProductRepository orderProductRepository){
+    public ProductServiceImpl(ProductRepository productRepository, BannerRepository bannerRepository){
         this.productRepository = productRepository;
         this.bannerRepository = bannerRepository;
-        this.orderProductRepository = orderProductRepository;
     }
 
     @Override
     public List<List<?>>  mainPageProductList() {
         // Dto -> Entity
-        List<Product> productList = productRepository.findTop2ByOrderByIdDesc();
+        List<Product> productList = productRepository.findTop8ByOrderByIdDesc();
         List<Banner> bannerList = bannerRepository.findAll();
 
         // Entity -> Dto
@@ -70,9 +65,28 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public List<ResponseProductSummary> findByProductName(String keyword) {
+    public List<ResponseProductSummary> findByProductName(String keyword, String sort) {
         // Dto -> Entity
-        List<Product> productList = productRepository.findByNameContaining(keyword);
+        List<Product> productList = new ArrayList<>();
+        switch (sort) {
+            case "hits" -> productList = productRepository.findByNameContainingOrderByHitsDesc(keyword);
+            case "date" -> productList = productRepository.findByNameContainingOrderByDateDesc(keyword);
+            case "favorite"-> productList = productRepository.findByNameContainingOrderByFavoriteDesc(keyword);
+            case "purchase"-> {
+                List<ResponseProductPurchase> productPurchaseList = productRepository.findSearchProductPurchase(keyword);
+
+                // 서브쿼리로 받아온 count 로 order by 문법이 적용안되므로 WAS 단에서 정렬수행
+                Collections.sort(productPurchaseList);
+
+                return productPurchaseList.stream().map(productPurchase -> new ResponseProductSummary(
+                        productPurchase.getId(),
+                        productPurchase.getName(),
+                        productPurchase.getPrice(),
+                        productPurchase.getFavorite(),
+                        productPurchase.getImgKey()
+                )).toList();
+            }
+        }
 
         // Entity -> Dto
         List<ResponseProductSummary> responseProductList = new ArrayList<>();
@@ -98,12 +112,12 @@ public class ProductServiceImpl implements ProductService {
         List<Product> productList = new ArrayList<>();
         switch (sort) {
             case "hits" -> productList = productRepository.findAllByOrderByHitsDesc();
-            case "latest" -> productList = productRepository.findAllByOrderByDateDesc();
-//            case "popular"-> productList = productRepository.findAll();
+            case "date" -> productList = productRepository.findAllByOrderByDateDesc();
+            case "favorite"-> productList = productRepository.findAllByOrderByFavoriteDesc();
             case "purchase"-> {
                 List<ResponseProductPurchase> productPurchaseList = productRepository.findAllProductPurchase();
 
-                /** 서브쿼리로 받아온 count로 order by 문법이 적용안되므로 WAS 단에서 정렬수행*/
+                // 서브쿼리로 받아온 count 로 order by 문법이 적용안되므로 WAS 단에서 정렬수행
                 Collections.sort(productPurchaseList);
 
                 return productPurchaseList.stream().map(productPurchase -> new ResponseProductSummary(
@@ -135,9 +149,28 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public List<ResponseProductSummary> findByCategory(String category) {
+    public List<ResponseProductSummary> findByCategory(String category, String sort) {
         // Dto -> Entity
-        List<Product> productList = productRepository.findByCategory(category);
+        List<Product> productList = new ArrayList<>();
+        switch (sort) {
+            case "hits" -> productList = productRepository.findByCategoryOrderByHitsDesc(category);
+            case "date" -> productList = productRepository.findByCategoryOrderByDateDesc(category);
+            case "favorite"-> productList = productRepository.findByCategoryOrderByFavoriteDesc(category);
+            case "purchase"-> {
+                List<ResponseProductPurchase> productPurchaseList = productRepository.findCategoryProductPurchase(category);
+
+                // 서브쿼리로 받아온 count 로 order by 문법이 적용안되므로 WAS 단에서 정렬수행
+                Collections.sort(productPurchaseList);
+
+                return productPurchaseList.stream().map(productPurchase -> new ResponseProductSummary(
+                        productPurchase.getId(),
+                        productPurchase.getName(),
+                        productPurchase.getPrice(),
+                        productPurchase.getFavorite(),
+                        productPurchase.getImgKey()
+                )).toList();
+            }
+        }
 
         // Entity -> Dto
         List<ResponseProductSummary> responseProductList = new ArrayList<>();
