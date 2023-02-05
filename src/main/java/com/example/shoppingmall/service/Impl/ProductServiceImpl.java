@@ -1,5 +1,9 @@
 package com.example.shoppingmall.service.Impl;
 
+import com.example.shoppingmall.data.dto.queryselect.ChangeStockQuery;
+import com.example.shoppingmall.data.dto.queryselect.QueryOrderProduct;
+import com.example.shoppingmall.data.dto.queryselect.SelectProductStockQuery;
+import com.example.shoppingmall.data.dto.request.RequestOrder;
 import com.example.shoppingmall.data.dto.request.RequestProduct;
 import com.example.shoppingmall.data.dto.request.RequestProductModify;
 import com.example.shoppingmall.data.dto.response.*;
@@ -12,12 +16,19 @@ import com.example.shoppingmall.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 
 @Service
 public class ProductServiceImpl implements ProductService {
+
+    @PersistenceContext
+    private EntityManager entityManager;
 
     private final ProductRepository productRepository;
     private final BannerRepository bannerRepository;
@@ -108,14 +119,15 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public ResponseProduct editProduct(Long id, String username) {
+    @Transactional
+    public ResponseProduct editProduct(Long id, User user) {
         Product product = productRepository.findById(id).orElse(null);
         if(product == null) {
             return null;
         }
 
         // product 를 등록한 유저아이디와 받은 jwt 의 유저 아이디가 같은지 확인
-        if (product.getUser().getUsername().equals(username)) {
+        if (product.getUser().getUsername().equals(user.getUsername())) {
             return ResponseProduct.builder().product(product).build();
         } else {
             return null;
@@ -123,6 +135,7 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
+    @Transactional
     public ResponseProduct updateProduct(RequestProductModify requestProductModify) {
         Product product = productRepository.findById(requestProductModify.getId()).orElse(null);
         if(product == null) {
@@ -141,15 +154,16 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public boolean deleteProduct(Long id, String username) {
+    @Transactional
+    public boolean deleteProduct(Long id, User user) {
         Product product = productRepository.findById(id).orElse(null);
         if(product == null) {
             return false;
         }
-
+        System.out.println(product.getUser());
         // product 를 등록한 유저아이디와 받은 jwt 의 유저 아이디가 같은지 확인
-        if (product.getUser().getUsername().equals(username)) {
-            productRepository.delete(product);
+        if (product.getUser().getUsername().equals(user.getUsername())) {
+            productRepository.deleteProductID(product.getId());
             return true;
         } else {
             return false;
@@ -171,13 +185,69 @@ public class ProductServiceImpl implements ProductService {
         productRepository.decreaseFavorite(id);
     }
 
+    @Override
+    public Boolean purchaseProduct(RequestOrder requestOrder) {
+        int value = 0;
+        List<ChangeStockQuery> changeStockList =
+                productRepository.findRemoveByProductIDList(requestOrder.getQueryOrderProductList().stream().map(QueryOrderProduct::getProduct_id).toList());
+
+        HashMap<Long, Integer> productMap = new HashMap<>();
+        for(ChangeStockQuery changeStockQuery : changeStockList){
+            productMap.put(changeStockQuery.getId(), changeStockQuery.getStock());
+        }
+
+        for(QueryOrderProduct queryOrderProduct : requestOrder.getQueryOrderProductList()){
+            value = productMap.get(queryOrderProduct.getProduct_id()) - queryOrderProduct.getCount();
+
+            if(value < 0) {
+                return false;
+            }
+
+            productMap.put(queryOrderProduct.getProduct_id(), value);
+        }
+
+
+        return productRepository.updateProductListStock(productMap) != 0;
+    }
+
+    @Override
+    @Transactional
+    public Boolean stockUpProduct(User user, List<ChangeStockQuery> changeStockQueryList) {
+        Long register_id = user.getId();
+        int value = 0;
+
+        List<SelectProductStockQuery> selectProductStockQueryList =
+                productRepository.findAddStockByProductIDList(changeStockQueryList.stream().map(ChangeStockQuery::getId).toList());
+
+        HashMap<Long, Integer> productMap = new HashMap<>();
+        for(SelectProductStockQuery selectProductStockQuery : selectProductStockQueryList) {
+            if(selectProductStockQuery.getUser_id() != register_id){
+                return false;
+            }
+            productMap.put(selectProductStockQuery.getProduct_id(), selectProductStockQuery.getStock());
+        }
+
+        for(ChangeStockQuery changeStockQuery : changeStockQueryList){
+            value = productMap.get(changeStockQuery.getId()) + changeStockQuery.getStock();
+
+            if(value < 0) {
+                System.out.println("false2");
+                return false;
+            }
+
+            productMap.put(changeStockQuery.getId(), value);
+        }
+
+        return productRepository.updateProductListStock(productMap) != 0;
+    }
+
     public List<ResponseProductSummary> purchaseSort(List<ResponseProductPurchase> productPurchaseList) {
         Collections.sort(productPurchaseList);
 
         return productPurchaseList.stream().map(productPurchase -> ResponseProductSummary
                 .dtoBuilder()
                 .responseProductPurchase(productPurchase)
-                .build()).toList();
+                .dtoBuild()).toList();
     }
 
     /** Entity to Dto */

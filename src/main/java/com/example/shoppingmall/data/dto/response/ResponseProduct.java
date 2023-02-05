@@ -24,6 +24,8 @@ public class ResponseProduct {
 
     private String imgKey;
 
+    private int stock;
+
     @Builder
     public ResponseProduct(Product product) {
         this.id = product.getId();
@@ -34,5 +36,6 @@ public class ResponseProduct {
         this.size = product.getSize();
         this.favorite = product.getFavorite();
         this.imgKey = product.getImgKey();
+        this.stock = (product.getStock() >= 10) ? -1 : product.getStock();
     }
 }

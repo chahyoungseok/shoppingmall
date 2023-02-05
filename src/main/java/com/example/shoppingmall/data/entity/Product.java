@@ -43,6 +43,10 @@ public class Product {
     @Column(nullable = false)
     private int favorite; // 좋아요 수
 
+    @Column(nullable = false)
+    private int stock;
+
+
     /** ManyToOne의 기본 Fetch는 EAGER */
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id") // 다대일 매핑에서 일 쪽의 엔티티에서 참조하는 fk 이름을 적는다
@@ -51,7 +55,7 @@ public class Product {
 
 
     @Builder
-    public Product(Long id, String name, int price, String category, String description, String size, String imgKey, LocalDateTime date, int hits, int favorite, User user) {
+    public Product(Long id, String name, int price, String category, String description, String size, String imgKey, LocalDateTime date, int hits, int favorite, User user, int stock) {
         this.id = id;
         this.name = name;
         this.price = price;
@@ -63,6 +67,7 @@ public class Product {
         this.hits = hits;
         this.favorite = favorite;
         this.user = user;
+        this.stock = stock;
     }
 
     public void updateProduct(String name, int price, String category, String description, String size, String imgKey) {

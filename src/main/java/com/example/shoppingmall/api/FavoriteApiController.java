@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.transaction.Transactional;
 import java.util.List;
 
 @RestController
@@ -33,7 +34,7 @@ public class FavoriteApiController {
                 ResponseEntity.status(HttpStatus.OK).body(productList) :
                 ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
     }
-
+    @Transactional
     @PostMapping("/user/favorite/{id}")
     public ResponseEntity<Void> addFavorite(@PathVariable Long id, HttpServletRequest request) {
         productService.increaseFavorite(id);
@@ -43,7 +44,7 @@ public class FavoriteApiController {
                 ResponseEntity.status(HttpStatus.OK).body(null) :
                 ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
     }
-
+    @Transactional
     @DeleteMapping("/user/favorite/{id}")
     public ResponseEntity<Void> deleteFavorite(@PathVariable Long id, HttpServletRequest request) {
         productService.decreaseFavorite(id);

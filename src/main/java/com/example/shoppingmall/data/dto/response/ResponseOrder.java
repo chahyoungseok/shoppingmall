@@ -21,4 +21,6 @@ public class ResponseOrder {
     private String size;
 
     private String imgKey;
+
+    private boolean stock_zero;
 }

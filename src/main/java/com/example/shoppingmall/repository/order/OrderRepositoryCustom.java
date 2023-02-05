@@ -10,7 +10,7 @@ public interface OrderRepositoryCustom {
 
     List<SelectIDQuery> selectIDFromUsername(String username);
 
-    void deleteOrderID(List<Long> IDList);
+    void deleteOrderIDList(List<Long> IDList);
 
     BooleanExpression eqOrderIDList(List<Long> IDList);
 }

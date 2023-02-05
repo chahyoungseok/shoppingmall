@@ -1,10 +1,13 @@
 package com.example.shoppingmall.repository.product;
 
+import com.example.shoppingmall.data.dto.queryselect.ChangeStockQuery;
 import com.example.shoppingmall.data.dto.queryselect.SelectIDQuery;
+import com.example.shoppingmall.data.dto.queryselect.SelectProductStockQuery;
 import com.example.shoppingmall.data.dto.response.ResponseProductPurchase;
 import com.example.shoppingmall.data.entity.Product;
 import com.querydsl.core.types.dsl.BooleanExpression;
 
+import java.util.HashMap;
 import java.util.List;
 
 public interface ProductRepositoryCustom {
@@ -14,7 +17,11 @@ public interface ProductRepositoryCustom {
 
     BooleanExpression eqProductIDList(List<Long> IDList);
 
-    void deleteProductID(List<Long> IDList);
+    BooleanExpression eqProductID(Long id);
+
+    void deleteProductIDList(List<Long> IDList);
+
+    void deleteProductID(Long id);
 
     List<Product> findByIdList(List<Long> IDList);
 
@@ -23,4 +30,14 @@ public interface ProductRepositoryCustom {
     List<ResponseProductPurchase> findSearchProductPurchase(String keyword);
 
     List<ResponseProductPurchase> findCategoryProductPurchase(String category);
+
+    BooleanExpression containKeyword(String keyword);
+
+    BooleanExpression eqCategory(String category);
+
+    Integer updateProductListStock(HashMap<Long, Integer> productMap);
+
+    List<ChangeStockQuery> findRemoveByProductIDList(List<Long> IDList);
+
+    List<SelectProductStockQuery> findAddStockByProductIDList(List<Long> IDList);
 }

@@ -1,9 +1,6 @@
 package com.example.shoppingmall.repository.user;
 
 import com.example.shoppingmall.data.entity.User;
-import com.example.shoppingmall.repository.cart.CartRepository;
-import com.example.shoppingmall.repository.order.OrderProductRepository;
-import com.example.shoppingmall.repository.order.OrderRepository;
 import com.example.shoppingmall.repository.product.ProductRepository;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -26,28 +23,13 @@ public class UserRepositoryImpl implements UserRepositoryCustom{
     @Autowired
     private ProductRepository productRepository;
 
-    @Autowired
-    private CartRepository cartRepository;
-
-    @Autowired
-    private OrderRepository orderRepository;
-
-    @Autowired
-    private OrderProductRepository orderProductRepository;
-
     @Override
     @Transactional
     public void deleteByUser(String username) {
         List<Long> productIDList = productRepository.selectIDFromUsername(username)
                 .stream().map(selectID -> selectID.getId()).toList();
-        List<Long> orderIDList = orderRepository.selectIDFromUsername(username)
-                .stream().map(selectID -> selectID.getId()).toList();
 
-        orderProductRepository.deleteOrderID(orderIDList);
-        orderRepository.deleteOrderID(orderIDList);
-
-        cartRepository.deleteProductID(productIDList);
-        productRepository.deleteProductID(productIDList);
+        productRepository.deleteProductIDList(productIDList);
 
         deleteUsername(username);
     }

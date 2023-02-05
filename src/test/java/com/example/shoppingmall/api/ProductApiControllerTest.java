@@ -1,6 +1,8 @@
 package com.example.shoppingmall.api;
 
 import com.example.shoppingmall.config.auth.PrincipalDetails;
+import com.example.shoppingmall.data.dto.queryselect.ChangeStockQuery;
+import com.example.shoppingmall.data.dto.request.RequestChangeStock;
 import com.example.shoppingmall.data.dto.request.RequestProduct;
 import com.example.shoppingmall.data.dto.request.RequestProductModify;
 import org.junit.jupiter.api.DisplayName;
@@ -15,10 +17,12 @@ import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 import java.time.LocalDateTime;
+import java.util.Arrays;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 class ProductApiControllerTest extends BaseControllerTest{
 
@@ -145,6 +149,7 @@ class ProductApiControllerTest extends BaseControllerTest{
         // given
         String url = "/register/product";
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        PrincipalDetails principalDetails = (PrincipalDetails) authentication.getPrincipal();
 
         String content = objectMapper.writeValueAsString(new RequestProduct(
                 "nike",
@@ -158,7 +163,7 @@ class ProductApiControllerTest extends BaseControllerTest{
         // when
         RequestBuilder requestBuilder = MockMvcRequestBuilders
                 .post(url)
-                .requestAttr("username", authentication.getName())
+                .requestAttr("user", principalDetails.getUser())
                 .content(content)
                 .contentType(MediaType.APPLICATION_JSON);
         ResultActions resultActions = mockMvc
@@ -176,11 +181,12 @@ class ProductApiControllerTest extends BaseControllerTest{
         // given
         String url = "/register/product/1";
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        PrincipalDetails principalDetails = (PrincipalDetails) authentication.getPrincipal();
 
         // when
         RequestBuilder requestBuilder = MockMvcRequestBuilders
                 .get(url)
-                .requestAttr("username", authentication.getName());
+                .requestAttr("user", principalDetails.getUser());
         ResultActions resultActions = mockMvc
                 .perform(requestBuilder);
         // then
@@ -196,6 +202,8 @@ class ProductApiControllerTest extends BaseControllerTest{
         // given
         String url = "/register/product/1";
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        PrincipalDetails principalDetails = (PrincipalDetails) authentication.getPrincipal();
+
         String content = objectMapper.writeValueAsString(new RequestProductModify(
                 null,
                 null,
@@ -208,9 +216,10 @@ class ProductApiControllerTest extends BaseControllerTest{
         // when
         RequestBuilder requestBuilder = MockMvcRequestBuilders
                 .put(url)
-                .requestAttr("username", authentication.getName())
+                .requestAttr("user", principalDetails.getUser())
                 .content(content)
                 .contentType(MediaType.APPLICATION_JSON);
+
         ResultActions resultActions = mockMvc
                 .perform(requestBuilder);
         // then
@@ -219,6 +228,72 @@ class ProductApiControllerTest extends BaseControllerTest{
                 .andDo(print());
     }
 
+    @Nested
+    @DisplayName("상품 재고 추가")
+    public class add_stock{
+        @Test
+        @WithUserDetails("jin")
+        @DisplayName("성공")
+        void success() throws Exception{
+            // given
+            String url = "/register/product/add_stock";
+            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+            PrincipalDetails principalDetails = (PrincipalDetails) authentication.getPrincipal();
+
+            String content = objectMapper.writeValueAsString(new RequestChangeStock(
+                    Arrays.asList(
+                            new ChangeStockQuery(2L, 3),
+                            new ChangeStockQuery(4L, 1)
+                    )));
+
+            // when
+            RequestBuilder requestBuilder = MockMvcRequestBuilders
+                    .put(url)
+                    .requestAttr("user", principalDetails.getUser())
+                    .content(content)
+                    .contentType(MediaType.APPLICATION_JSON);
+
+            ResultActions resultActions = mockMvc
+                    .perform(requestBuilder);
+            // then
+            resultActions
+                    .andExpect(status().isOk())
+                    .andDo(print());
+        }
+
+        @Test
+        @WithUserDetails("jin")
+        @DisplayName("실패")
+        void fail() throws Exception{
+            // given
+            String url = "/register/product/add_stock";
+            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+            PrincipalDetails principalDetails = (PrincipalDetails) authentication.getPrincipal();
+
+            // 실패의 경우는 내가 등록하지 않은 상품의 재고를 채우려할 때 발생한다.
+            String content = objectMapper.writeValueAsString(new RequestChangeStock(
+                    Arrays.asList(
+                            new ChangeStockQuery(1L, 3),
+                            new ChangeStockQuery(4L, 1)
+                    )));
+
+            // when
+            RequestBuilder requestBuilder = MockMvcRequestBuilders
+                    .put(url)
+                    .requestAttr("user", principalDetails.getUser())
+                    .content(content)
+                    .contentType(MediaType.APPLICATION_JSON);
+
+            ResultActions resultActions = mockMvc
+                    .perform(requestBuilder);
+            // then
+            resultActions
+                    .andExpect(status().isBadRequest())
+                    .andDo(print());
+        }
+    }
+
+
     @Test
     @DisplayName("상품 삭제")
     @WithUserDetails(value = "hwang")
@@ -226,10 +301,11 @@ class ProductApiControllerTest extends BaseControllerTest{
         // given
         String url = "/register/product/1";
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        PrincipalDetails principalDetails = (PrincipalDetails) authentication.getPrincipal();
         // when
         RequestBuilder requestBuilder = MockMvcRequestBuilders
                 .delete(url)
-                .requestAttr("username", authentication.getName());
+                .requestAttr("user", principalDetails.getUser());
         ResultActions resultActions = mockMvc
                 .perform(requestBuilder);
         // then

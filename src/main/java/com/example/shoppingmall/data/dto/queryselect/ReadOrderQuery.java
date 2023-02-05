@@ -15,4 +15,6 @@ public class ReadOrderQuery {
     private String size;
 
     private String imgKey;
+
+    private boolean stock_zero;
 }

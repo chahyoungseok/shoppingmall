@@ -1,5 +1,6 @@
 package com.example.shoppingmall.api;
 
+import com.example.shoppingmall.data.dto.request.RequestChangeStock;
 import com.example.shoppingmall.data.dto.request.RequestProduct;
 import com.example.shoppingmall.data.dto.request.RequestProductModify;
 import com.example.shoppingmall.data.dto.response.ResponseProduct;
@@ -13,6 +14,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.transaction.Transactional;
 import java.util.List;
 
 @RestController
@@ -62,6 +64,7 @@ public class ProductApiController {
     }
 
     /** 상품 상세 페이지 조회 */
+    @Transactional
     @GetMapping("/shop/detail/{id}")
     public ResponseEntity<ResponseProduct> findById(@PathVariable Long id){
         productService.increaseHits(id);
@@ -94,7 +97,8 @@ public class ProductApiController {
     /** 상품 정보 수정 페이지 */
     @GetMapping("/register/product/{id}")
     public ResponseEntity<ResponseProduct> editProduct(@PathVariable Long id, HttpServletRequest request){
-        ResponseProduct product = productService.editProduct(id, request.getAttribute("username").toString());
+        User user = (User) request.getAttribute("user");
+        ResponseProduct product = productService.editProduct(id, user);
         return (product != null) ?
                 ResponseEntity.status(HttpStatus.OK).body(product) :
                 ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
@@ -103,21 +107,33 @@ public class ProductApiController {
     /** 상품 정보 수정 */
     @PutMapping("/register/product/{id}")
     public ResponseEntity<ResponseProduct> updateProduct(@PathVariable Long id, @RequestBody RequestProductModify requestProductModify, HttpServletRequest request) {
+        User user = (User) request.getAttribute("user");
+
         requestProductModify.setId(id);
-        requestProductModify.setUsername(request.getAttribute("username").toString());
+        requestProductModify.setUsername(user.getUsername());
         ResponseProduct product = productService.updateProduct(requestProductModify);
         return (product != null) ?
                 ResponseEntity.status(HttpStatus.OK).body(product) :
                 ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
     }
 
-    /** 상품 삭제 */
-    @DeleteMapping("/register/product/{id}")
-    public ResponseEntity<Void> deleteProduct(@PathVariable Long id, HttpServletRequest request) {
-        boolean check = productService.deleteProduct(id, request.getAttribute("username").toString());
-        return (check) ?
+    /** 상품 재고 추가 */
+    @PutMapping("/register/product/add_stock")
+    public ResponseEntity<Void> add_stock(HttpServletRequest request, @RequestBody RequestChangeStock requestChangeStock){
+        boolean status = productService.stockUpProduct((User) request.getAttribute("user"), requestChangeStock.getChangeStockQueryList());
+        return (status) ?
                 ResponseEntity.status(HttpStatus.OK).body(null) :
                 ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
     }
 
+    /** 상품 삭제 */
+    @DeleteMapping("/register/product/{id}")
+    public ResponseEntity<Void> deleteProduct(@PathVariable Long id, HttpServletRequest request) {
+        User user = (User) request.getAttribute("user");
+
+        boolean check = productService.deleteProduct(id, user);
+        return (check) ?
+                ResponseEntity.status(HttpStatus.OK).body(null) :
+                ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+    }
 }

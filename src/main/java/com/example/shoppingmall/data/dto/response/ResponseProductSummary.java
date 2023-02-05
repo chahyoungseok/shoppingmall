@@ -6,7 +6,8 @@ import lombok.*;
 @Getter
 @Setter
 @ToString
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor
+@NoArgsConstructor
 public class ResponseProductSummary {
     private Long id;
 
@@ -27,7 +28,7 @@ public class ResponseProductSummary {
         this.imgKey = product.getImgKey();
     }
 
-    @Builder(builderMethodName = "dtoBuilder")
+    @Builder(builderMethodName = "dtoBuilder", buildMethodName = "dtoBuild")
     public ResponseProductSummary(ResponseProductPurchase responseProductPurchase) {
         this.id = responseProductPurchase.getId();
         this.name = responseProductPurchase.getName();

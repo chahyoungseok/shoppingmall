@@ -31,13 +31,13 @@ public class FavoriteRepositoryImpl implements FavoriteRepositoryCustom{
                         favorite.product.id,
                         favorite.product.name,
                         favorite.product.price,
-                        favorite.product.imgKey,
-                        favorite.product.favorite
+                        favorite.product.favorite,
+                        favorite.product.imgKey
                 ))
                 .from(favorite)
                 .innerJoin(favorite.product, product)
                 .innerJoin(favorite.user, user)
-                .where(status_user)
+                .where(status_user, favorite.product.stock.gt(0))
                 .fetch();
     }
 

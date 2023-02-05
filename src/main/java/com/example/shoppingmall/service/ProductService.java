@@ -1,5 +1,7 @@
 package com.example.shoppingmall.service;
 
+import com.example.shoppingmall.data.dto.queryselect.ChangeStockQuery;
+import com.example.shoppingmall.data.dto.request.RequestOrder;
 import com.example.shoppingmall.data.dto.request.RequestProduct;
 import com.example.shoppingmall.data.dto.request.RequestProductModify;
 import com.example.shoppingmall.data.dto.response.ResponseProduct;
@@ -32,17 +34,21 @@ public interface ProductService {
     boolean CreateProduct(RequestProduct requestProduct, User user);
 
     /** 상품 정보 수정 페이지 */
-    ResponseProduct editProduct(Long id, String username);
+    ResponseProduct editProduct(Long id, User user);
 
     /** 상품 정보 수정 */
     ResponseProduct updateProduct(RequestProductModify requestProductModify);
 
     /** 상품 삭제 */
-    boolean deleteProduct(Long id, String username);
+    boolean deleteProduct(Long id, User user);
 
     void increaseHits(Long id);
 
     void increaseFavorite(Long id);
 
     void decreaseFavorite(Long id);
+
+    Boolean purchaseProduct(RequestOrder requestOrder);
+
+    Boolean stockUpProduct(User user, List<ChangeStockQuery> changeStockQueryList);
 }

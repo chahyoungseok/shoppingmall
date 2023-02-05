@@ -4,6 +4,7 @@ import com.example.shoppingmall.data.dto.queryselect.ReadOrderQuery;
 import com.example.shoppingmall.data.entity.OrderProduct;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
+import com.querydsl.core.types.dsl.CaseBuilder;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
@@ -22,11 +23,11 @@ public class OrderProductRepositoryImpl implements OrderProductRepositoryCustom{
         if (orderIDList == null){
             return null;
         }
-        return orderProduct.order.id.in(orderIDList);
+        return orderProduct.id.in(orderIDList);
     }
 
     @Override
-    public void deleteOrderID(List<Long> orderIDList){
+    public void deleteOrderIDList(List<Long> orderIDList){
         BooleanExpression status = null;
         status = eqOrderIDList(orderIDList);
 
@@ -51,10 +52,15 @@ public class OrderProductRepositoryImpl implements OrderProductRepositoryCustom{
 
         return queryFactory.select(
                 Projections.fields(ReadOrderQuery.class,
-                    orderProduct.count,
-                    orderProduct.product.price,
-                    orderProduct.size,
-                    orderProduct.product.imgKey))
+                        orderProduct.count,
+                        orderProduct.product.price,
+                        orderProduct.size,
+                        orderProduct.product.imgKey,
+                        new CaseBuilder()
+                                .when(orderProduct.product.stock.gt(0))
+                                .then(true)
+                                .otherwise(false).as("stock_zero")
+                ))
                 .from(orderProduct)
                 .where(status)
                 .fetch();

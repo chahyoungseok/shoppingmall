@@ -62,7 +62,8 @@ public class OrderServiceImpl implements OrderService {
                             readOrderQuery.getCount(),
                             readOrderQuery.getPrice(),
                             readOrderQuery.getSize(),
-                            readOrderQuery.getImgKey()
+                            readOrderQuery.getImgKey(),
+                            readOrderQuery.isStock_zero()
                     )).toList());
         }
 
@@ -74,7 +75,7 @@ public class OrderServiceImpl implements OrderService {
     public List<ResponseOrder> create_order(User user, RequestOrder requestOrder) {
         User userPersisted = entityManager.find(User.class, user.getId());
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss");
-        System.out.println(requestOrder.getQueryOrderProductList());
+
         if (userPersisted == null || requestOrder.getQueryOrderProductList().isEmpty()) {
             return null;
         }
@@ -111,9 +112,7 @@ public class OrderServiceImpl implements OrderService {
         }
 
         List<OrderProduct> savedOrderProductList = orderProductRepository.saveAll(orderProductList);
-        System.out.println(savedOrderProductList);
         savedOrder.addAllOrderProduct(savedOrderProductList);
-
 
         return read_order(userPersisted);
     }

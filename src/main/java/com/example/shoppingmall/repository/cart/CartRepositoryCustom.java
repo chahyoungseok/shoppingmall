@@ -24,7 +24,7 @@ public interface CartRepositoryCustom {
 
     BooleanExpression eqProductIDList(List<Long> IDList);
 
-    void deleteProductID(List<Long> IDList);
+    void deleteProductIDList(List<Long> IDList);
 
     void deleteCartID(Long id);
 

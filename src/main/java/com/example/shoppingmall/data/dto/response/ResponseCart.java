@@ -18,4 +18,6 @@ public class ResponseCart {
     private String imgKey;
 
     private int count;
+
+    private boolean stock_zero;
 }

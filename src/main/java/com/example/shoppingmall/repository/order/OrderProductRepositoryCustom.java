@@ -9,7 +9,7 @@ import java.util.List;
 public interface OrderProductRepositoryCustom {
     BooleanExpression eqOrderIDList(List<Long> orderIDList);
 
-    void deleteOrderID(List<Long> IDList);
+    void deleteOrderIDList(List<Long> IDList);
 
     List<ReadOrderQuery> findResponseOrder(List<OrderProduct> orderProductList);
 }

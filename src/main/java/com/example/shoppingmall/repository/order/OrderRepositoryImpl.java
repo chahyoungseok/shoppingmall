@@ -49,7 +49,7 @@ public class OrderRepositoryImpl implements OrderRepositoryCustom{
     }
 
     @Override
-    public void deleteOrderID(List<Long> IDList){
+    public void deleteOrderIDList(List<Long> IDList){
         BooleanExpression status = null;
         status = eqOrderIDList(IDList);
 
