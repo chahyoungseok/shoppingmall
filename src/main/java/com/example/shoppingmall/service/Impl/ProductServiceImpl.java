@@ -51,9 +51,9 @@ public class ProductServiceImpl implements ProductService {
     public List<ResponseProductSummary> findByProductName(String keyword, String sort) {
         List<Product> productList = new ArrayList<>();
         switch (sort) {
-            case "hits" -> productList = productRepository.findByNameContainingOrderByHitsDesc(keyword);
-            case "date" -> productList = productRepository.findByNameContainingOrderByDateDesc(keyword);
-            case "favorite"-> productList = productRepository.findByNameContainingOrderByFavoriteDesc(keyword);
+            case "hits" -> productList = productRepository.findByNameContainingAndStockGreaterThanOrderByHitsDesc(keyword, 0);
+            case "date" -> productList = productRepository.findByNameContainingAndStockGreaterThanOrderByDateDesc(keyword, 0);
+            case "favorite"-> productList = productRepository.findByNameContainingAndStockGreaterThanOrderByFavoriteDesc(keyword, 0);
             case "purchase" -> {
                 return purchaseSort(productRepository.findSearchProductPurchase(keyword));
             }
@@ -66,9 +66,9 @@ public class ProductServiceImpl implements ProductService {
     public List<ResponseProductSummary> findAllProduct(String sort) {
         List<Product> productList = new ArrayList<>();
         switch (sort) {
-            case "hits" -> productList = productRepository.findAllByOrderByHitsDesc();
-            case "date" -> productList = productRepository.findAllByOrderByDateDesc();
-            case "favorite"-> productList = productRepository.findAllByOrderByFavoriteDesc();
+            case "hits" -> productList = productRepository.findByStockGreaterThanOrderByHitsDesc(0);
+            case "date" -> productList = productRepository.findByStockGreaterThanOrderByDateDesc(0);
+            case "favorite"-> productList = productRepository.findByStockGreaterThanOrderByFavoriteDesc(0);
             case "purchase" -> {
                 return purchaseSort(productRepository.findAllProductPurchase());
             }
@@ -81,9 +81,9 @@ public class ProductServiceImpl implements ProductService {
     public List<ResponseProductSummary> findByCategory(String category, String sort) {
         List<Product> productList = new ArrayList<>();
         switch (sort) {
-            case "hits" -> productList = productRepository.findByCategoryOrderByHitsDesc(category);
-            case "date" -> productList = productRepository.findByCategoryOrderByDateDesc(category);
-            case "favorite"-> productList = productRepository.findByCategoryOrderByFavoriteDesc(category);
+            case "hits" -> productList = productRepository.findByCategoryAndStockGreaterThanOrderByHitsDesc(category, 0);
+            case "date" -> productList = productRepository.findByCategoryAndStockGreaterThanOrderByDateDesc(category, 0);
+            case "favorite"-> productList = productRepository.findByCategoryAndStockGreaterThanOrderByFavoriteDesc(category, 0);
             case "purchase" -> {
                 return purchaseSort(productRepository.findCategoryProductPurchase(category));
             }

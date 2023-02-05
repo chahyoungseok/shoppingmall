@@ -17,31 +17,31 @@ public interface ProductRepository extends JpaRepository<Product, Long>, Product
     // =================================================================
     // Containing 으로 포함 결과 검색
     /** 상품명으로 검색 조회수높은순으로 조회 */
-    List<Product> findByNameContainingOrderByHitsDesc(String name);
+    List<Product> findByNameContainingAndStockGreaterThanOrderByHitsDesc(String name, int stock);
 
     /** 상품명으로 검색 최신순으로 조회 */
-    List<Product> findByNameContainingOrderByDateDesc(String name);
+    List<Product> findByNameContainingAndStockGreaterThanOrderByDateDesc(String name, int stock);
 
     /** 상품명으로 검색 좋아요순으로 조회*/
-    List<Product> findByNameContainingOrderByFavoriteDesc(String name);
+    List<Product> findByNameContainingAndStockGreaterThanOrderByFavoriteDesc(String name, int stock);
     // =================================================================
     /** 상품 전체 조회수높은순으로 조회 */
-    List<Product> findAllByOrderByHitsDesc();
+    List<Product> findByStockGreaterThanOrderByHitsDesc(int stock);
 
     /** 상품 전체 최신순으로 조회 */
-    List<Product> findAllByOrderByDateDesc();
+    List<Product> findByStockGreaterThanOrderByDateDesc(int stock);
 
     /** 상품 전체 좋아요순으로 조회 */
-    List<Product> findAllByOrderByFavoriteDesc();
+    List<Product> findByStockGreaterThanOrderByFavoriteDesc(int stock);
     // =================================================================
     /** 상품 카테고리별 조회수높은순으로 조회 */
-    List<Product> findByCategoryOrderByHitsDesc(String category);
+    List<Product> findByCategoryAndStockGreaterThanOrderByHitsDesc(String category, int stock);
 
     /** 상품 카테고리별 최신순으로 조회 */
-    List<Product> findByCategoryOrderByDateDesc(String category);
+    List<Product> findByCategoryAndStockGreaterThanOrderByDateDesc(String category, int stock);
 
     /** 상품 카테고리별 좋아요순으로 조회 */
-    List<Product> findByCategoryOrderByFavoriteDesc(String category);
+    List<Product> findByCategoryAndStockGreaterThanOrderByFavoriteDesc(String category, int stock);
     // =================================================================
 
     /** 판매등록한 상품 목록 조회 */
