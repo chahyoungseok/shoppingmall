@@ -4,7 +4,6 @@ import com.example.shoppingmall.data.dto.request.RequestChangePWD;
 import com.example.shoppingmall.data.dto.request.RequestJoin;
 import com.example.shoppingmall.data.dto.request.RequestModify;
 import com.example.shoppingmall.data.dto.response.ResponseUser;
-import com.example.shoppingmall.data.entity.Authority;
 import com.example.shoppingmall.data.entity.User;
 import com.example.shoppingmall.repository.user.UserRepository;
 import com.example.shoppingmall.service.UserService;
@@ -31,17 +30,7 @@ public class UserServiceImpl implements UserService {
             return false;
         }
 
-        // RequestJoin -> User Entity
-        User user = User.builder()
-                .id(null)
-                .username(requestJoin.getUsername())
-                .nickname(requestJoin.getNickname())
-                .password(bCryptPasswordEncoder.encode(requestJoin.getPassword()))
-                .telephone(requestJoin.getTelephone())
-                .e_mail(requestJoin.getE_mail())
-                .address(requestJoin.getAddress())
-                .authority(Authority.USER)
-                .build();
+        User user = requestJoin.toEntity(bCryptPasswordEncoder.encode(requestJoin.getPassword()));
 
         User created_user = userRepository.save(user);
 
@@ -50,7 +39,6 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public boolean findByUsername(String username) {
-        // Dto -> Entity
         User user = userRepository.findByUsername(username);
         return user == null;
     }
@@ -61,25 +49,11 @@ public class UserServiceImpl implements UserService {
             return null;
         }
 
-        // Dto -> Entity
-        user.updateUser(
-                requestModify.getNickname(),
-                requestModify.getTelephone(),
-                requestModify.getE_mail(),
-                requestModify.getAddress()
-        );
+        requestModify.toEntity(user);
 
         User modified_user = userRepository.save(user);
 
-        // Entity -> Dto
-        ResponseUser responseUser = new ResponseUser();
-        responseUser.setUsername(modified_user.getUsername());
-        responseUser.setNickname(modified_user.getNickname());
-        responseUser.setTelephone(modified_user.getTelephone());
-        responseUser.setAddress(modified_user.getAddress());
-        responseUser.setE_mail(modified_user.getE_mail());
-
-        return responseUser;
+        return ResponseUser.builder().user(modified_user).build();
     }
 
     @Override

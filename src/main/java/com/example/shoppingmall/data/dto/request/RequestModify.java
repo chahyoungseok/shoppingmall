@@ -1,5 +1,6 @@
 package com.example.shoppingmall.data.dto.request;
 
+import com.example.shoppingmall.data.entity.User;
 import lombok.*;
 
 import javax.validation.constraints.NotEmpty;
@@ -29,4 +30,8 @@ public class RequestModify {
 
     @NotEmpty(message = "주소 입력은 필수 입니다.")
     private String address;
+
+    public void toEntity(User user) {
+        user.updateUser(nickname, telephone, e_mail, address);
+    }
 }

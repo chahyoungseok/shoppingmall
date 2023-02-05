@@ -10,13 +10,12 @@ import com.example.shoppingmall.repository.order.OrderProductRepository;
 import com.example.shoppingmall.repository.order.OrderRepository;
 import com.example.shoppingmall.repository.product.ProductRepository;
 import com.example.shoppingmall.service.OrderService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.transaction.Transactional;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -33,6 +32,7 @@ public class OrderServiceImpl implements OrderService {
 
     private final ProductRepository productRepository;
 
+    @Autowired
     public OrderServiceImpl(OrderRepository orderRepository, OrderProductRepository orderProductRepository, ProductRepository productRepository) {
         this.orderRepository = orderRepository;
         this.orderProductRepository = orderProductRepository;
@@ -56,15 +56,11 @@ public class OrderServiceImpl implements OrderService {
             List<OrderProduct> orderProductList = order.getOrderProductList();
 
             result.addAll(orderProductRepository.findResponseOrder(orderProductList)
-                    .stream().map(readOrderQuery -> new ResponseOrder(
-                            order.getOrderDate(),
-                            order.getOrderStatus(),
-                            readOrderQuery.getCount(),
-                            readOrderQuery.getPrice(),
-                            readOrderQuery.getSize(),
-                            readOrderQuery.getImgKey(),
-                            readOrderQuery.isStock_zero()
-                    )).toList());
+                    .stream().map(readOrderQuery -> ResponseOrder
+                            .builder()
+                            .order(order)
+                            .readOrderQuery(readOrderQuery)
+                            .build()).toList());
         }
 
         return result;
@@ -74,18 +70,12 @@ public class OrderServiceImpl implements OrderService {
     @Transactional
     public List<ResponseOrder> create_order(User user, RequestOrder requestOrder) {
         User userPersisted = entityManager.find(User.class, user.getId());
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss");
 
         if (userPersisted == null || requestOrder.getQueryOrderProductList().isEmpty()) {
             return null;
         }
 
-        Order order = Order.builder()
-                .id(null)
-                .orderDate(LocalDateTime.parse(requestOrder.getOrder_date(), formatter))
-                .orderStatus(requestOrder.getOrder_status())
-                .user(null)
-                .build();
+        Order order = requestOrder.toEntity();
 
         Order savedOrder = orderRepository.save(order);
         userPersisted.addOrder(savedOrder);

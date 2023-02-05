@@ -37,8 +37,7 @@ public class UserApiController {
     public ResponseEntity<ResponseUser> my_page(HttpServletRequest request){
         User user = (User) request.getAttribute("user");
 
-        ResponseUser responseUser = new ResponseUser();
-        responseUser.patch(user);
+        ResponseUser responseUser = ResponseUser.builder().user(user).build();
 
         return ResponseEntity.status(HttpStatus.OK).body(responseUser);
     }
@@ -74,7 +73,7 @@ public class UserApiController {
     public ResponseEntity<Void> delete(HttpServletRequest request) {
         User user = (User) request.getAttribute("user");
 
-        /** 관리자는 일반적인 유저 삭제 Api로 삭제 불가능*/
+        // 관리자는 일반적인 유저 삭제 Api 로 삭제 불가능
         if(user.getAuthority().equals("ROLE_ADMIN")) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
         }

@@ -1,5 +1,7 @@
 package com.example.shoppingmall.data.dto.request;
 
+import com.example.shoppingmall.data.entity.Authority;
+import com.example.shoppingmall.data.entity.User;
 import lombok.*;
 
 import javax.validation.constraints.NotEmpty;
@@ -33,4 +35,18 @@ public class RequestJoin {
 
     @NotEmpty(message = "주소 입력은 필수 입니다.")
     private String address;
+
+    public User toEntity(String password) {
+
+        return User.builder()
+                .id(null)
+                .username(username)
+                .nickname(nickname)
+                .password(password)
+                .telephone(telephone)
+                .e_mail(e_mail)
+                .address(address)
+                .authority(Authority.USER)
+                .build();
+    }
 }

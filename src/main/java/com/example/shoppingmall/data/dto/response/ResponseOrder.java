@@ -1,5 +1,7 @@
 package com.example.shoppingmall.data.dto.response;
 
+import com.example.shoppingmall.data.dto.queryselect.ReadOrderQuery;
+import com.example.shoppingmall.data.entity.Order;
 import lombok.*;
 
 import java.time.LocalDateTime;
@@ -23,4 +25,15 @@ public class ResponseOrder {
     private String imgKey;
 
     private boolean stock_zero;
+
+    @Builder
+    public ResponseOrder(Order order, ReadOrderQuery readOrderQuery) {
+        this.order_date = order.getOrderDate();
+        this.order_status = order.getOrderStatus();
+        this.count = readOrderQuery.getCount();
+        this.price = readOrderQuery.getPrice();
+        this.size = readOrderQuery.getSize();
+        this.imgKey = readOrderQuery.getImgKey();
+        this.stock_zero = readOrderQuery.isStock_zero();
+    }
 }

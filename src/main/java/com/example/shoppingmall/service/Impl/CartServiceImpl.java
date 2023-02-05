@@ -7,6 +7,7 @@ import com.example.shoppingmall.data.entity.User;
 import com.example.shoppingmall.repository.cart.CartRepository;
 import com.example.shoppingmall.repository.product.ProductRepository;
 import com.example.shoppingmall.service.CartService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -21,6 +22,7 @@ public class CartServiceImpl implements CartService {
 
     private final ProductRepository productRepository;
 
+    @Autowired
     public CartServiceImpl(CartRepository cartRepository, ProductRepository productRepository) {
         this.cartRepository = cartRepository;
         this.productRepository = productRepository;

@@ -22,7 +22,8 @@ public class ResponseUser {
 
     private String authority;
 
-    public void patch(User user){
+    @Builder
+    public ResponseUser(User user){
         this.username = user.getUsername();
         this.nickname = user.getNickname();
         this.telephone = user.getTelephone();

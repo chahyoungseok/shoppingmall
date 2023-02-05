@@ -160,7 +160,7 @@ public class ProductServiceImpl implements ProductService {
         if(product == null) {
             return false;
         }
-        System.out.println(product.getUser());
+
         // product 를 등록한 유저아이디와 받은 jwt 의 유저 아이디가 같은지 확인
         if (product.getUser().getUsername().equals(user.getUsername())) {
             productRepository.deleteProductID(product.getId());
@@ -231,7 +231,7 @@ public class ProductServiceImpl implements ProductService {
             value = productMap.get(changeStockQuery.getId()) + changeStockQuery.getStock();
 
             if(value < 0) {
-                System.out.println("false2");
+
                 return false;
             }
 
