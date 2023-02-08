@@ -1,8 +1,7 @@
 package com.example.shoppingmall.api;
 
 import com.example.shoppingmall.config.auth.PrincipalDetails;
-import com.example.shoppingmall.data.dto.queryselect.ChangeStockQuery;
-import com.example.shoppingmall.data.dto.request.RequestChangeStock;
+import com.example.shoppingmall.data.dto.request.ChangeStockQuery;
 import com.example.shoppingmall.data.dto.request.RequestProduct;
 import com.example.shoppingmall.data.dto.request.RequestProductModify;
 import org.junit.jupiter.api.DisplayName;
@@ -17,7 +16,6 @@ import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 import java.time.LocalDateTime;
-import java.util.Arrays;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -232,7 +230,7 @@ class ProductApiControllerTest extends BaseControllerTest{
     @DisplayName("상품 재고 추가")
     public class add_stock{
         @Test
-        @WithUserDetails("jin")
+        @WithUserDetails("jinjin")
         @DisplayName("성공")
         void success() throws Exception{
             // given
@@ -240,11 +238,7 @@ class ProductApiControllerTest extends BaseControllerTest{
             Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
             PrincipalDetails principalDetails = (PrincipalDetails) authentication.getPrincipal();
 
-            String content = objectMapper.writeValueAsString(new RequestChangeStock(
-                    Arrays.asList(
-                            new ChangeStockQuery(2L, 3),
-                            new ChangeStockQuery(4L, 1)
-                    )));
+            String content = objectMapper.writeValueAsString(new ChangeStockQuery(2L, 3));
 
             // when
             RequestBuilder requestBuilder = MockMvcRequestBuilders
@@ -262,7 +256,7 @@ class ProductApiControllerTest extends BaseControllerTest{
         }
 
         @Test
-        @WithUserDetails("jin")
+        @WithUserDetails("jinjin")
         @DisplayName("실패")
         void fail() throws Exception{
             // given
@@ -271,11 +265,7 @@ class ProductApiControllerTest extends BaseControllerTest{
             PrincipalDetails principalDetails = (PrincipalDetails) authentication.getPrincipal();
 
             // 실패의 경우는 내가 등록하지 않은 상품의 재고를 채우려할 때 발생한다.
-            String content = objectMapper.writeValueAsString(new RequestChangeStock(
-                    Arrays.asList(
-                            new ChangeStockQuery(1L, 3),
-                            new ChangeStockQuery(4L, 1)
-                    )));
+            String content = objectMapper.writeValueAsString(new ChangeStockQuery(1L, 3));
 
             // when
             RequestBuilder requestBuilder = MockMvcRequestBuilders

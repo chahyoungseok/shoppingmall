@@ -1,6 +1,6 @@
 package com.example.shoppingmall.repository.product;
 
-import com.example.shoppingmall.data.dto.queryselect.ChangeStockQuery;
+import com.example.shoppingmall.data.dto.request.ChangeStockQuery;
 import com.example.shoppingmall.data.dto.queryselect.SelectIDQuery;
 import com.example.shoppingmall.data.dto.queryselect.SelectProductStockQuery;
 import com.example.shoppingmall.data.dto.response.ResponseProductPurchase;
@@ -39,5 +39,7 @@ public interface ProductRepositoryCustom {
 
     List<ChangeStockQuery> findRemoveByProductIDList(List<Long> IDList);
 
-    List<SelectProductStockQuery> findAddStockByProductIDList(List<Long> IDList);
+    SelectProductStockQuery findAddStockByProductID(Long product_id);
+
+    Integer updateProductStock(Long product_id, int after_stock);
 }

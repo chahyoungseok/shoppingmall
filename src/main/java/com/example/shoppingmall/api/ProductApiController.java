@@ -1,6 +1,6 @@
 package com.example.shoppingmall.api;
 
-import com.example.shoppingmall.data.dto.request.RequestChangeStock;
+import com.example.shoppingmall.data.dto.request.ChangeStockQuery;
 import com.example.shoppingmall.data.dto.request.RequestProduct;
 import com.example.shoppingmall.data.dto.request.RequestProductModify;
 import com.example.shoppingmall.data.dto.response.ResponseProduct;
@@ -119,8 +119,8 @@ public class ProductApiController {
 
     /** 상품 재고 추가 */
     @PutMapping("/register/product/add_stock")
-    public ResponseEntity<Void> add_stock(HttpServletRequest request, @RequestBody RequestChangeStock requestChangeStock){
-        boolean status = productService.stockUpProduct((User) request.getAttribute("user"), requestChangeStock.getChangeStockQueryList());
+    public ResponseEntity<Void> add_stock(HttpServletRequest request, @RequestBody ChangeStockQuery changeStockQuery){
+        boolean status = productService.stockUpProduct((User) request.getAttribute("user"), changeStockQuery);
         return (status) ?
                 ResponseEntity.status(HttpStatus.OK).body(null) :
                 ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);

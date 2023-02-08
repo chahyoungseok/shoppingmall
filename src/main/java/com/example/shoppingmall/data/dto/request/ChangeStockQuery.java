@@ -1,4 +1,4 @@
-package com.example.shoppingmall.data.dto.queryselect;
+package com.example.shoppingmall.data.dto.request;
 
 import lombok.*;
 
@@ -8,7 +8,7 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor
 public class ChangeStockQuery {
-    private Long id;
+    private Long product_id;
 
     private int stock;
 }

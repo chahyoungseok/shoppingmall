@@ -1,6 +1,6 @@
 package com.example.shoppingmall.service;
 
-import com.example.shoppingmall.data.dto.queryselect.ChangeStockQuery;
+import com.example.shoppingmall.data.dto.request.ChangeStockQuery;
 import com.example.shoppingmall.data.dto.request.RequestOrder;
 import com.example.shoppingmall.data.dto.request.RequestProduct;
 import com.example.shoppingmall.data.dto.request.RequestProductModify;
@@ -50,5 +50,5 @@ public interface ProductService {
 
     Boolean purchaseProduct(RequestOrder requestOrder);
 
-    Boolean stockUpProduct(User user, List<ChangeStockQuery> changeStockQueryList);
+    Boolean stockUpProduct(User user, ChangeStockQuery changeStockQuery);
 }

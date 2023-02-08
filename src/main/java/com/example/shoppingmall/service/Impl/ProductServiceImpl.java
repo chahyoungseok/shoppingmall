@@ -1,6 +1,6 @@
 package com.example.shoppingmall.service.Impl;
 
-import com.example.shoppingmall.data.dto.queryselect.ChangeStockQuery;
+import com.example.shoppingmall.data.dto.request.ChangeStockQuery;
 import com.example.shoppingmall.data.dto.queryselect.QueryOrderProduct;
 import com.example.shoppingmall.data.dto.queryselect.SelectProductStockQuery;
 import com.example.shoppingmall.data.dto.request.RequestOrder;
@@ -40,7 +40,7 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public List<List<?>>  mainPageProductList() {
+    public List<List<?>> mainPageProductList() {
         List<Product> productList = productRepository.findTop8ByOrderByIdDesc();
         List<Banner> bannerList = bannerRepository.findAll();
 
@@ -193,7 +193,7 @@ public class ProductServiceImpl implements ProductService {
 
         HashMap<Long, Integer> productMap = new HashMap<>();
         for(ChangeStockQuery changeStockQuery : changeStockList){
-            productMap.put(changeStockQuery.getId(), changeStockQuery.getStock());
+            productMap.put(changeStockQuery.getProduct_id(), changeStockQuery.getStock());
         }
 
         for(QueryOrderProduct queryOrderProduct : requestOrder.getQueryOrderProductList()){
@@ -206,39 +206,27 @@ public class ProductServiceImpl implements ProductService {
             productMap.put(queryOrderProduct.getProduct_id(), value);
         }
 
-
         return productRepository.updateProductListStock(productMap) != 0;
     }
 
     @Override
     @Transactional
-    public Boolean stockUpProduct(User user, List<ChangeStockQuery> changeStockQueryList) {
+    public Boolean stockUpProduct(User user, ChangeStockQuery changeStockQuery) {
         Long register_id = user.getId();
-        int value = 0;
 
-        List<SelectProductStockQuery> selectProductStockQueryList =
-                productRepository.findAddStockByProductIDList(changeStockQueryList.stream().map(ChangeStockQuery::getId).toList());
+        SelectProductStockQuery selectProductStockQuery =
+                productRepository.findAddStockByProductID(changeStockQuery.getProduct_id());
 
-        HashMap<Long, Integer> productMap = new HashMap<>();
-        for(SelectProductStockQuery selectProductStockQuery : selectProductStockQueryList) {
-            if(selectProductStockQuery.getUser_id() != register_id){
-                return false;
-            }
-            productMap.put(selectProductStockQuery.getProduct_id(), selectProductStockQuery.getStock());
+        if(selectProductStockQuery.getUser_id() != register_id){
+            return false;
         }
 
-        for(ChangeStockQuery changeStockQuery : changeStockQueryList){
-            value = productMap.get(changeStockQuery.getId()) + changeStockQuery.getStock();
-
-            if(value < 0) {
-
-                return false;
-            }
-
-            productMap.put(changeStockQuery.getId(), value);
+        int after_stock = selectProductStockQuery.getStock() + changeStockQuery.getStock();
+        if(after_stock < 0){
+            return false;
         }
 
-        return productRepository.updateProductListStock(productMap) != 0;
+        return productRepository.updateProductStock(changeStockQuery.getProduct_id(), after_stock) != 0;
     }
 
     public List<ResponseProductSummary> purchaseSort(List<ResponseProductPurchase> productPurchaseList) {

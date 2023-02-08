@@ -1,6 +1,6 @@
 package com.example.shoppingmall.repository.product;
 
-import com.example.shoppingmall.data.dto.queryselect.ChangeStockQuery;
+import com.example.shoppingmall.data.dto.request.ChangeStockQuery;
 import com.example.shoppingmall.data.dto.queryselect.SelectIDQuery;
 import com.example.shoppingmall.data.dto.queryselect.SelectProductStockQuery;
 import com.example.shoppingmall.data.dto.response.ResponseProductPurchase;
@@ -9,6 +9,7 @@ import com.example.shoppingmall.repository.OrderByNull;
 import com.querydsl.core.types.ExpressionUtils;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
+import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
@@ -167,21 +168,30 @@ public class ProductRepositoryImpl implements ProductRepositoryCustom{
     }
 
     @Override
-    public List<SelectProductStockQuery> findAddStockByProductIDList(List<Long> IDList) {
+    public SelectProductStockQuery findAddStockByProductID(Long product_id) {
         BooleanExpression status = null;
-        status = eqProductIDList(IDList);
+        status = eqProductID(product_id);
 
         if (status == null) {
             return null;
         }
 
         return  queryFactory.select(Projections.fields(SelectProductStockQuery.class,
-                        product.id.as("product_id"),
+                        Expressions.asNumber(product_id).as("product_id"),
                         product.stock.as("stock"),
                         product.user.id.as("user_id")))
                 .from(product)
                 .where(status)
-                .fetch();
+                .fetchOne();
+    }
+
+    @Override
+    public Integer updateProductStock(Long product_id, int after_stock) {
+
+        return (int) queryFactory.update(product)
+                .set(product.stock, after_stock)
+                .where(product.id.eq(product_id))
+                .execute();
     }
 
 
