@@ -6,6 +6,7 @@ import com.querydsl.core.types.dsl.BooleanExpression;
 public interface UserRepositoryCustom {
 
     void deleteByUser(String username);
+
     User findByUsername(String username);
 
     BooleanExpression eqUsername(String username);

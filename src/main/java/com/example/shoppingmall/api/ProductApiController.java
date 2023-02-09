@@ -76,9 +76,9 @@ public class ProductApiController {
 
     /** 판매등록한 상품 목록 조회 */
     @GetMapping("/register/product")
-    public ResponseEntity<List<ResponseProductSummary>> findByUsername(HttpServletRequest request){
+    public ResponseEntity<List<ResponseProductSummary>> findProductByUsername(HttpServletRequest request){
         User user = (User) request.getAttribute("user");
-        List<ResponseProductSummary> productList = productService.findByUsername(user.getId());
+        List<ResponseProductSummary> productList = productService.findProductByUsername(user.getId());
         return (!productList.isEmpty()) ?
                 ResponseEntity.status(HttpStatus.OK).body(productList) :
                 ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);

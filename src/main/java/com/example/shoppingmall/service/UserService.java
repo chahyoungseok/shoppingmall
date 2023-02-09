@@ -9,7 +9,7 @@ import com.example.shoppingmall.data.entity.User;
 public interface UserService {
     boolean create(RequestJoin requestJoin);
 
-    boolean findByUsername(String username);
+    boolean checkUsername(String username);
 
     ResponseUser updateUser(RequestModify requestModify, User user);
 
@@ -18,5 +18,4 @@ public interface UserService {
     boolean change_pwd(RequestChangePWD requestChangePWD, User user);
 
     boolean upgradeAuth(String username);
-
 }

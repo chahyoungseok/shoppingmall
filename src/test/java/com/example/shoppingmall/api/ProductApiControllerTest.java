@@ -122,7 +122,7 @@ class ProductApiControllerTest extends BaseControllerTest{
     @Test
     @DisplayName("판매등록한 상품 목록 조회")
     @WithUserDetails(value = "hwang")
-    void findByUsername() throws Exception{
+    void findProductByUsername() throws Exception{
         // given
         String url = "/register/product";
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();

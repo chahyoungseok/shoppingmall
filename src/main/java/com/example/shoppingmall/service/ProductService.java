@@ -28,7 +28,7 @@ public interface ProductService {
     ResponseProduct findById(Long id);
 
     /** 판매등록한 상품 목록 조회 */
-    List<ResponseProductSummary> findByUsername(Long userId);
+    List<ResponseProductSummary> findProductByUsername(Long userId);
 
     /** 상품 등록 */
     boolean CreateProduct(RequestProduct requestProduct, User user);

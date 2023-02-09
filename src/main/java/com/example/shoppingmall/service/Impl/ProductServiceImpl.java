@@ -103,7 +103,7 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public List<ResponseProductSummary> findByUsername(Long userId) {
+    public List<ResponseProductSummary> findProductByUsername(Long userId) {
         List<Product> productList = productRepository.findByUserId(userId);
 
         return entityToDtoResponseProductSummary(productList);

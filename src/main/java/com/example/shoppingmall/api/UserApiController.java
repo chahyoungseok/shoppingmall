@@ -52,9 +52,8 @@ public class UserApiController {
 
     @GetMapping("/check_id/{username}")
     public ResponseEntity<Void> check_id(@PathVariable String username){
-        boolean check = userService.findByUsername(username);
-
-        return (check) ?
+        boolean check = userService.checkUsername(username);
+        return (!check) ?
                 ResponseEntity.status(HttpStatus.OK).body(null) :
                 ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
     }

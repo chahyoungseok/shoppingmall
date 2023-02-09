@@ -25,8 +25,8 @@ public class UserServiceImpl implements UserService {
     @Override
     public boolean create(RequestJoin requestJoin) {
         // username 중복 확인
-        User check_username = userRepository.findByUsername(requestJoin.getUsername());
-        if(check_username != null) {
+        boolean check = checkUsername(requestJoin.getUsername());
+        if (check) {
             return false;
         }
 
@@ -38,9 +38,8 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public boolean findByUsername(String username) {
-        User user = userRepository.findByUsername(username);
-        return user == null;
+    public boolean checkUsername(String username) {
+        return userRepository.existsByUsername(username);
     }
 
     @Override
@@ -60,9 +59,8 @@ public class UserServiceImpl implements UserService {
     public boolean deleteUser(String username) {
         userRepository.deleteByUser(username);
 
-        User check_delete = userRepository.findByUsername(username);
-
-        return check_delete == null;
+        boolean check = checkUsername(username);
+        return !check;
     }
 
     @Override
