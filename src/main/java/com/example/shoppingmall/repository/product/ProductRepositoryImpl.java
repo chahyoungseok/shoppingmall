@@ -1,8 +1,8 @@
 package com.example.shoppingmall.repository.product;
 
-import com.example.shoppingmall.data.dto.request.ChangeStockQuery;
 import com.example.shoppingmall.data.dto.queryselect.SelectIDQuery;
 import com.example.shoppingmall.data.dto.queryselect.SelectProductStockQuery;
+import com.example.shoppingmall.data.dto.request.ChangeStockQuery;
 import com.example.shoppingmall.data.dto.response.ResponseProductPurchase;
 import com.example.shoppingmall.data.entity.Product;
 import com.example.shoppingmall.repository.OrderByNull;
@@ -38,8 +38,7 @@ public class ProductRepositoryImpl implements ProductRepositoryCustom{
 
     @Override
     public List<SelectIDQuery> selectIDFromUsername(String username){
-        BooleanExpression status = null;
-        status = eqUsername(username);
+        BooleanExpression status = eqUsername(username);
 
         // BooleanExpression 이 모두 null 이라면 모든 쿼리를 불러오므로 조건처리
         if (status == null) {
@@ -71,8 +70,7 @@ public class ProductRepositoryImpl implements ProductRepositoryCustom{
 
     @Override
     public void deleteProductIDList(List<Long> IDList){
-        BooleanExpression status = null;
-        status = eqProductIDList(IDList);
+        BooleanExpression status = eqProductIDList(IDList);
 
         if (status == null) {
             return;
@@ -88,8 +86,7 @@ public class ProductRepositoryImpl implements ProductRepositoryCustom{
 
     @Override
     public void deleteProductID(Long id){
-        BooleanExpression status = null;
-        status = eqProductID(id);
+        BooleanExpression status = eqProductID(id);
 
         if (status == null) {
             return;
@@ -105,8 +102,7 @@ public class ProductRepositoryImpl implements ProductRepositoryCustom{
 
     @Override
     public List<Product> findByIdList(List<Long> IDList) {
-        BooleanExpression status = null;
-        status = eqProductIDList(IDList);
+        BooleanExpression status = eqProductIDList(IDList);
 
         if (status == null) {
             return null;
@@ -122,6 +118,7 @@ public class ProductRepositoryImpl implements ProductRepositoryCustom{
         if (keyword == null) {
             return null;
         }
+
         return product.name.contains(keyword);
     }
 
@@ -152,8 +149,7 @@ public class ProductRepositoryImpl implements ProductRepositoryCustom{
 
     @Override
     public List<ChangeStockQuery> findRemoveByProductIDList(List<Long> IDList) {
-        BooleanExpression status = null;
-        status = eqProductIDList(IDList);
+        BooleanExpression status = eqProductIDList(IDList);
 
         if (status == null) {
             return null;
@@ -169,8 +165,7 @@ public class ProductRepositoryImpl implements ProductRepositoryCustom{
 
     @Override
     public SelectProductStockQuery findAddStockByProductID(Long product_id) {
-        BooleanExpression status = null;
-        status = eqProductID(product_id);
+        BooleanExpression status = eqProductID(product_id);
 
         if (status == null) {
             return null;
@@ -218,39 +213,27 @@ public class ProductRepositoryImpl implements ProductRepositoryCustom{
 
     @Override
     public List<ResponseProductPurchase> findSearchProductPurchase(String keyword) {
-        BooleanExpression status = null;
-        status = containKeyword(keyword);
+        BooleanExpression status = containKeyword(keyword);
 
         if (status == null) {
             return null;
         }
 
-        return queryFactory.select(Projections.fields(ResponseProductPurchase.class,
-                        product.id,
-                        product.name,
-                        product.price,
-                        product.favorite,
-                        product.imgKey,
-                        ExpressionUtils.as(
-                                JPAExpressions.select(orderProduct.count.sum())
-                                        .from(orderProduct)
-                                        .groupBy(orderProduct.product.id)
-                                        .orderBy(OrderByNull.DEFAULT)
-                                        .where(orderProduct.product.eq(product)), "count"
-                        )))
-                .from(product)
-                .where(status, product.stock.gt(0))
-                .fetch();
+        return findProductPurchaseQuery(status);
     }
 
     @Override
     public List<ResponseProductPurchase> findCategoryProductPurchase(String category) {
-        BooleanExpression status = null;
-        status = eqCategory(category);
+        BooleanExpression status = eqCategory(category);
 
         if (status == null) {
             return null;
         }
+
+        return findProductPurchaseQuery(status);
+    }
+
+    public List<ResponseProductPurchase> findProductPurchaseQuery(BooleanExpression status) {
 
         return queryFactory.select(Projections.fields(ResponseProductPurchase.class,
                         product.id,
@@ -269,5 +252,4 @@ public class ProductRepositoryImpl implements ProductRepositoryCustom{
                 .where(status, product.stock.gt(0))
                 .fetch();
     }
-
 }
