@@ -27,8 +27,7 @@ public class OrderRepositoryImpl implements OrderRepositoryCustom{
 
     @Override
     public List<SelectIDQuery> selectIDFromUsername(String username){
-        BooleanExpression status = null;
-        status = eqUsername(username);
+        BooleanExpression status = eqUsername(username);
 
         if (status == null) {
             return null;
@@ -50,8 +49,7 @@ public class OrderRepositoryImpl implements OrderRepositoryCustom{
 
     @Override
     public void deleteOrderIDList(List<Long> IDList){
-        BooleanExpression status = null;
-        status = eqOrderIDList(IDList);
+        BooleanExpression status = eqOrderIDList(IDList);
 
         if (status == null) {
             return;

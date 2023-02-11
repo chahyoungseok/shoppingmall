@@ -128,7 +128,7 @@ public class CartRepositoryImpl implements CartRepositoryCustom{
         BooleanExpression status_product = eqProductID(product_id);
         BooleanExpression status_size = eqSize(size);
 
-        if (status_user == null && status_product == null) {
+        if (status_user == null || status_product == null || status_size == null) {
             return null;
         }
 
@@ -145,8 +145,7 @@ public class CartRepositoryImpl implements CartRepositoryCustom{
 
     @Override
     public void updateCartID(Long id, int updated_value){
-        BooleanExpression status = null;
-        status = eqCartID(id);
+        BooleanExpression status = eqCartID(id);
 
         if (status == null) {
             return;
@@ -160,8 +159,7 @@ public class CartRepositoryImpl implements CartRepositoryCustom{
 
     @Override
     public void deleteProductIDList(List<Long> IDList){
-        BooleanExpression status = null;
-        status = eqProductIDList(IDList);
+        BooleanExpression status = eqProductIDList(IDList);
 
         if (status == null) {
             return;
@@ -174,8 +172,7 @@ public class CartRepositoryImpl implements CartRepositoryCustom{
 
     @Override
     public void deleteCartID(Long id){
-        BooleanExpression status = null;
-        status = eqCartID(id);
+        BooleanExpression status = eqCartID(id);
 
         if (status == null) {
             return;

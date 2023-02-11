@@ -51,8 +51,7 @@ public class UserRepositoryImpl implements UserRepositoryCustom{
 
     @Override
     public void deleteUsername(String username){
-        BooleanExpression status = null;
-        status = eqUsername(username);
+        BooleanExpression status = eqUsername(username);
 
         if (status == null) {
             return;
