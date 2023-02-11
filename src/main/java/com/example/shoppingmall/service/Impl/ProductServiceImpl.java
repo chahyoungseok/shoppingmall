@@ -190,6 +190,9 @@ public class ProductServiceImpl implements ProductService {
         int value = 0;
         List<ChangeStockQuery> changeStockList =
                 productRepository.findRemoveByProductIDList(requestOrder.getQueryOrderProductList().stream().map(QueryOrderProduct::getProduct_id).toList());
+        if(changeStockList == null){
+            return null;
+        }
 
         HashMap<Long, Integer> productMap = new HashMap<>();
         for(ChangeStockQuery changeStockQuery : changeStockList){
@@ -217,7 +220,7 @@ public class ProductServiceImpl implements ProductService {
         SelectProductStockQuery selectProductStockQuery =
                 productRepository.findAddStockByProductID(changeStockQuery.getProduct_id());
 
-        if(selectProductStockQuery.getUser_id() != register_id){
+        if(selectProductStockQuery == null || selectProductStockQuery.getUser_id() != register_id){
             return false;
         }
 

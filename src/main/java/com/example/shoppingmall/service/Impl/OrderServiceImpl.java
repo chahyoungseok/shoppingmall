@@ -1,6 +1,7 @@
 package com.example.shoppingmall.service.Impl;
 
 import com.example.shoppingmall.data.dto.queryselect.QueryOrderProduct;
+import com.example.shoppingmall.data.dto.queryselect.ReadOrderQuery;
 import com.example.shoppingmall.data.dto.request.RequestOrder;
 import com.example.shoppingmall.data.dto.response.ResponseOrder;
 import com.example.shoppingmall.data.entity.Order;
@@ -43,9 +44,11 @@ public class OrderServiceImpl implements OrderService {
     @Transactional
     public List<ResponseOrder> read_order(User user) {
         User userPersisted = entityManager.find(User.class, user.getId());
+        if(userPersisted == null){
+            return null;
+        }
 
         List<Order> orderList = userPersisted.getOrderList();
-
         if (orderList == null) {
             return null;
         }
@@ -55,7 +58,12 @@ public class OrderServiceImpl implements OrderService {
         for(Order order : orderList) {
             List<OrderProduct> orderProductList = order.getOrderProductList();
 
-            result.addAll(orderProductRepository.findResponseOrder(orderProductList)
+            List<ReadOrderQuery> readOrderQueryList = orderProductRepository.findResponseOrder(orderProductList);
+            if (readOrderQueryList == null){
+                continue;
+            }
+
+            result.addAll(readOrderQueryList
                     .stream().map(readOrderQuery -> ResponseOrder
                             .builder()
                             .order(order)
