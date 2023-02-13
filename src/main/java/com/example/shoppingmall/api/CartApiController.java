@@ -41,8 +41,8 @@ public class CartApiController {
 
     /** 장바구니 상품 삭제 */
     @DeleteMapping("/user/cart/{id}")
-    public ResponseEntity<List<ResponseCart>> deleteCart(HttpServletRequest request, @PathVariable Long id, @RequestBody RequestSize requestSize) {
-        List<ResponseCart> cartList = cartService.deleteCart((User) request.getAttribute("user"), id, requestSize.getSize());
+    public ResponseEntity<List<ResponseCart>> deleteCart(HttpServletRequest request, @PathVariable Long id, @RequestParam(value = "size") String size) {
+        List<ResponseCart> cartList = cartService.deleteCart((User) request.getAttribute("user"), id, size);
         return (cartList != null) ?
                 ResponseEntity.status(HttpStatus.OK).body(cartList) :
                 ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
