@@ -4,6 +4,7 @@ import com.example.shoppingmall.data.dto.request.ChangeStockQuery;
 import com.example.shoppingmall.data.dto.request.RequestProduct;
 import com.example.shoppingmall.data.dto.request.RequestProductModify;
 import com.example.shoppingmall.data.dto.response.ResponseProduct;
+import com.example.shoppingmall.data.dto.response.ResponseProductDetails;
 import com.example.shoppingmall.data.dto.response.ResponseProductSummary;
 import com.example.shoppingmall.data.entity.User;
 import com.example.shoppingmall.service.ProductService;
@@ -66,9 +67,11 @@ public class ProductApiController {
     /** 상품 상세 페이지 조회 */
     @Transactional
     @GetMapping("/shop/detail/{id}")
-    public ResponseEntity<ResponseProduct> findById(@PathVariable Long id){
+    public ResponseEntity<ResponseProductDetails> findById(HttpServletRequest request, @PathVariable Long id){
         productService.increaseHits(id);
-        ResponseProduct product = productService.findById(id);
+
+        User user = (User) request.getAttribute("user");
+        ResponseProductDetails product = productService.findById(user, id);
         return (product != null) ?
                 ResponseEntity.status(HttpStatus.OK).body(product) :
                 ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);

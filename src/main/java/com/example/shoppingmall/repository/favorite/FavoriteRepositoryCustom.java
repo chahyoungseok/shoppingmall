@@ -10,4 +10,10 @@ public interface FavoriteRepositoryCustom {
     List<ResponseProductSummary> findAllFavorite(String username);
 
     BooleanExpression eqUsername(String username);
+
+    BooleanExpression eqUserID(Long user_id);
+
+    BooleanExpression eqProductID(Long product_id);
+
+    Boolean existUserProductByFavorite(Long user_id, Long product_id);
 }

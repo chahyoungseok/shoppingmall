@@ -11,6 +11,7 @@ import com.example.shoppingmall.data.entity.Banner;
 import com.example.shoppingmall.data.entity.Product;
 import com.example.shoppingmall.data.entity.User;
 import com.example.shoppingmall.repository.banner.BannerRepository;
+import com.example.shoppingmall.repository.favorite.FavoriteRepository;
 import com.example.shoppingmall.repository.product.ProductRepository;
 import com.example.shoppingmall.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,10 +34,13 @@ public class ProductServiceImpl implements ProductService {
     private final ProductRepository productRepository;
     private final BannerRepository bannerRepository;
 
+    private final FavoriteRepository favoriteRepository;
+
     @Autowired
-    public ProductServiceImpl(ProductRepository productRepository, BannerRepository bannerRepository){
+    public ProductServiceImpl(ProductRepository productRepository, BannerRepository bannerRepository, FavoriteRepository favoriteRepository){
         this.productRepository = productRepository;
         this.bannerRepository = bannerRepository;
+        this.favoriteRepository = favoriteRepository;
     }
 
     @Override
@@ -93,13 +97,18 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public ResponseProduct findById(Long id) {
+    public ResponseProductDetails findById(User user, Long id) {
+        if(user == null) {
+            return null;
+        }
+
         Product product = productRepository.findById(id).orElse(null);
         if (product == null){
             return null;
         }
 
-        return ResponseProduct.builder().product(product).build();
+        Boolean status = favoriteRepository.existUserProductByFavorite(user.getId(), id);
+        return ResponseProductDetails.builder().product(product).status(status).build();
     }
 
     @Override

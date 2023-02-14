@@ -48,4 +48,35 @@ public class FavoriteRepositoryImpl implements FavoriteRepositoryCustom{
         }
         return favorite.user.username.eq(username);
     }
+
+    @Override
+    public BooleanExpression eqUserID(Long user_id){
+        if (user_id == null) {
+            return null;
+        }
+        return favorite.user.id.eq(user_id);
+    }
+
+    @Override
+    public BooleanExpression eqProductID(Long product_id){
+        if (product_id == null) {
+            return null;
+        }
+        return favorite.product.id.eq(product_id);
+    }
+
+    @Override
+    public Boolean existUserProductByFavorite(Long user_id, Long product_id) {
+        BooleanExpression status_user = eqUserID(user_id);
+        BooleanExpression status_product = eqProductID(product_id);
+
+        if (status_user == null || status_product == null) {
+            return null;
+        }
+
+        // querydsl에서의 exists 함수는 subQuery에서만 사용가능한 함수이므로 해당 함수로 대체한다.
+        return queryFactory.from(favorite)
+                .where(status_user, status_product)
+                .fetchFirst() != null;
+    }
 }

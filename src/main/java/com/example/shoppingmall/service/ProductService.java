@@ -5,6 +5,7 @@ import com.example.shoppingmall.data.dto.request.RequestOrder;
 import com.example.shoppingmall.data.dto.request.RequestProduct;
 import com.example.shoppingmall.data.dto.request.RequestProductModify;
 import com.example.shoppingmall.data.dto.response.ResponseProduct;
+import com.example.shoppingmall.data.dto.response.ResponseProductDetails;
 import com.example.shoppingmall.data.dto.response.ResponseProductSummary;
 import com.example.shoppingmall.data.entity.User;
 
@@ -25,7 +26,7 @@ public interface ProductService {
     List<ResponseProductSummary> findByCategory(String category, String sort);
 
     /** 상품 상세 페이지 조회 */
-    ResponseProduct findById(Long id);
+    ResponseProductDetails findById(User user, Long id);
 
     /** 판매등록한 상품 목록 조회 */
     List<ResponseProductSummary> findProductByUsername(Long userId);
