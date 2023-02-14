@@ -98,16 +98,16 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public ResponseProductDetails findById(User user, Long id) {
-        if(user == null) {
-            return null;
-        }
-
         Product product = productRepository.findById(id).orElse(null);
         if (product == null){
             return null;
         }
 
-        Boolean status = favoriteRepository.existUserProductByFavorite(user.getId(), id);
+        Boolean status = false;
+        if(user != null) {
+            status = favoriteRepository.existUserProductByFavorite(user.getId(), id);
+        }
+
         return ResponseProductDetails.builder().product(product).status(status).build();
     }
 
