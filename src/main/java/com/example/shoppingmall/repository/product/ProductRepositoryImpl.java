@@ -156,7 +156,7 @@ public class ProductRepositoryImpl implements ProductRepositoryCustom{
         }
 
         return  queryFactory.select(Projections.fields(ChangeStockQuery.class,
-                        product.id,
+                        product.id.as("product_id"),
                         product.stock))
                 .from(product)
                 .where(status)
