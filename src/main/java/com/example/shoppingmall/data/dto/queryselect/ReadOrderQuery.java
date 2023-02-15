@@ -8,9 +8,13 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor
 public class ReadOrderQuery {
+    private Long product_id;
+
     private int count;
 
     private int price;
+
+    private String name;
 
     private String size;
 

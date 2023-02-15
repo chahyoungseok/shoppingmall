@@ -12,6 +12,7 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 import static com.example.shoppingmall.data.entity.QOrderProduct.orderProduct;
+import static com.example.shoppingmall.data.entity.QProduct.product;
 
 @Repository
 @RequiredArgsConstructor
@@ -50,8 +51,10 @@ public class OrderProductRepositoryImpl implements OrderProductRepositoryCustom{
 
         return queryFactory.select(
                 Projections.fields(ReadOrderQuery.class,
+                        orderProduct.product.id.as("product_id"),
                         orderProduct.count,
                         orderProduct.product.price,
+                        orderProduct.product.name,
                         orderProduct.size,
                         orderProduct.product.imgKey,
                         new CaseBuilder()
@@ -60,6 +63,7 @@ public class OrderProductRepositoryImpl implements OrderProductRepositoryCustom{
                                 .otherwise(false).as("stock_zero")
                 ))
                 .from(orderProduct)
+                .innerJoin(orderProduct.product, product)
                 .where(status)
                 .fetch();
     }
