@@ -49,7 +49,7 @@ tasks.named('test') {
 }
 
 
-def querydslDir = "/src/main/generated/querydsl"
+def querydslDir = "$buildDir/generated/querydsl"
 
 querydsl {
 	jpa = true
