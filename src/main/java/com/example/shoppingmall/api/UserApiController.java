@@ -24,6 +24,7 @@ public class UserApiController {
         this.userService = userService;
     }
 
+    /** 회원가입 */
     @PostMapping("/join")
     public ResponseEntity<Void> join(@Valid @RequestBody RequestJoin requestJoin){
         boolean check = userService.create(requestJoin);
@@ -33,6 +34,7 @@ public class UserApiController {
                 ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
     }
 
+    /** 회원 정보 페이지 */
     @GetMapping("/user")
     public ResponseEntity<ResponseUser> my_page(HttpServletRequest request){
         User user = (User) request.getAttribute("user");
@@ -42,6 +44,7 @@ public class UserApiController {
         return ResponseEntity.status(HttpStatus.OK).body(responseUser);
     }
 
+    /** 회원 정보 수정 */
     @PutMapping("/user")
     public ResponseEntity<ResponseUser> update(HttpServletRequest request, @Valid @RequestBody RequestModify requestModify) {
         ResponseUser responseUser = userService.updateUser(requestModify, (User) request.getAttribute("user"));
@@ -50,6 +53,7 @@ public class UserApiController {
                 ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
     }
 
+    /** 아이디 중복확인 */
     @GetMapping("/check_id/{username}")
     public ResponseEntity<Void> check_id(@PathVariable String username){
         boolean check = userService.checkUsername(username);
@@ -58,6 +62,7 @@ public class UserApiController {
                 ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
     }
 
+    /** 비밀번호 변경 */
     @PostMapping("/user/pwd_change")
     public ResponseEntity<Void> change_pwd(HttpServletRequest request, @Valid @RequestBody RequestChangePWD requestChangePWD){
         boolean check_pwd = userService.change_pwd(requestChangePWD, (User) request.getAttribute("user"));
@@ -67,7 +72,7 @@ public class UserApiController {
                 ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
     }
 
-    // 삭제 후 제대로 삭제되었는지 확인 후에 여부에따라 200, 400
+    /** 회원 탈퇴 */
     @DeleteMapping("/user")
     public ResponseEntity<Void> delete(HttpServletRequest request) {
         User user = (User) request.getAttribute("user");
@@ -84,6 +89,7 @@ public class UserApiController {
                 ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
     }
 
+    /** 권한 업그레이드 */
     @PatchMapping("/admin/upgradeAuth/{username}")
     public ResponseEntity<Void> upgradeAuth(@PathVariable String username){
         // 한번에 많은 유저의 업그레이드를 할 수 있게 할것인가.
