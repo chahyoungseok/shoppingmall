@@ -25,6 +25,7 @@ public class FavoriteApiController {
         this.productService = productService;
     }
 
+    /** 좋아요 목록 가져오기 */
     @GetMapping("/user/favorite")
     public ResponseEntity<List<ResponseProductSummary>> myFavorite(HttpServletRequest request){
         User user = (User) request.getAttribute("user");
@@ -34,6 +35,8 @@ public class FavoriteApiController {
                 ResponseEntity.status(HttpStatus.OK).body(productList) :
                 ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
     }
+
+    /** 상품 좋아요 등록 */
     @Transactional
     @PostMapping("/user/favorite/{id}")
     public ResponseEntity<Void> addFavorite(@PathVariable Long id, HttpServletRequest request) {
@@ -44,6 +47,8 @@ public class FavoriteApiController {
                 ResponseEntity.status(HttpStatus.OK).body(null) :
                 ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
     }
+
+    /** 상품 좋아요 해제 */
     @Transactional
     @DeleteMapping("/user/favorite/{id}")
     public ResponseEntity<Void> deleteFavorite(@PathVariable Long id, HttpServletRequest request) {
