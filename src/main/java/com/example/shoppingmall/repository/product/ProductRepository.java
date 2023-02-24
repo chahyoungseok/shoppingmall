@@ -45,7 +45,7 @@ public interface ProductRepository extends JpaRepository<Product, Long>, Product
     // =================================================================
 
     /** 판매등록한 상품 목록 조회 */
-    List<Product> findByUserId(Long userId);
+    List<Product> findByUserIdAndStockGreaterThan(Long userId, int stock);
 
     @Transactional
     @Modifying(clearAutomatically = true)
