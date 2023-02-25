@@ -62,6 +62,24 @@ public class UserApiController {
                 ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
     }
 
+    /** 전화번호 중복확인 */
+    @GetMapping("/check_telephone/{telephone}")
+    public ResponseEntity<Void> check_telephone(@PathVariable String telephone){
+        boolean check = userService.checkTelephone(telephone);
+        return (!check) ?
+                ResponseEntity.status(HttpStatus.OK).body(null) :
+                ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+    }
+
+    /** 이메일 중복확인 */
+    @GetMapping("/check_email/{email}")
+    public ResponseEntity<Void> check_email(@PathVariable String email){
+        boolean check = userService.checkEmail(email);
+        return (!check) ?
+                ResponseEntity.status(HttpStatus.OK).body(null) :
+                ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+    }
+
     /** 비밀번호 변경 */
     @PostMapping("/user/pwd_change")
     public ResponseEntity<Void> change_pwd(HttpServletRequest request, @Valid @RequestBody RequestChangePWD requestChangePWD){

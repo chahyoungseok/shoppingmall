@@ -30,7 +30,7 @@ public class User {
     private String telephone;
 
     @Column(nullable = false, unique = true)
-    private String e_mail;
+    private String email;
 
     @Column(nullable = false)
     private String address;
@@ -44,21 +44,21 @@ public class User {
     private List<Order> orderList = new ArrayList<>();
 
     @Builder
-    public User(Long id, String username, String nickname, String password, String telephone, String e_mail, String address, String authority) {
+    public User(Long id, String username, String nickname, String password, String telephone, String email, String address, String authority) {
         this.id = id;
         this.username = username;
         this.nickname = nickname;
         this.password = password;
         this.telephone = telephone;
-        this.e_mail = e_mail;
+        this.email = email;
         this.address = address;
         this.authority = authority;
     }
 
-    public void updateUser(String nickname, String telephone, String e_mail, String address) {
+    public void updateUser(String nickname, String telephone, String email, String address) {
         this.nickname = nickname;
         this.telephone = telephone;
-        this.e_mail = e_mail;
+        this.email = email;
         this.address = address;
     }
 

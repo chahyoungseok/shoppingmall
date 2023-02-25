@@ -16,7 +16,7 @@ public class ResponseUser {
 
     private String telephone;
 
-    private String e_mail;
+    private String email;
 
     private String address;
 
@@ -27,7 +27,7 @@ public class ResponseUser {
         this.username = user.getUsername();
         this.nickname = user.getNickname();
         this.telephone = user.getTelephone();
-        this.e_mail = user.getE_mail();
+        this.email = user.getEmail();
         this.address = user.getAddress();
         this.authority = user.getAuthority();
     }

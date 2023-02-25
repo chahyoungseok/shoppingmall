@@ -31,7 +31,7 @@ public class RequestJoin {
 
     @NotEmpty(message = "이메일 입력은 필수 입니다.")
     @Pattern(regexp = "^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+.[A-Za-z]{2,6}$", message = "이메일 형식에 맞지 않습니다.")
-    private String e_mail;
+    private String email;
 
     @NotEmpty(message = "주소 입력은 필수 입니다.")
     private String address;
@@ -44,7 +44,7 @@ public class RequestJoin {
                 .nickname(nickname)
                 .password(password)
                 .telephone(telephone)
-                .e_mail(e_mail)
+                .email(email)
                 .address(address)
                 .authority(Authority.USER)
                 .build();

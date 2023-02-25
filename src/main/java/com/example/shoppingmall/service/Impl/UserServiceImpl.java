@@ -4,6 +4,7 @@ import com.example.shoppingmall.data.dto.request.RequestChangePWD;
 import com.example.shoppingmall.data.dto.request.RequestJoin;
 import com.example.shoppingmall.data.dto.request.RequestModify;
 import com.example.shoppingmall.data.dto.response.ResponseUser;
+import com.example.shoppingmall.data.entity.Authority;
 import com.example.shoppingmall.data.entity.User;
 import com.example.shoppingmall.repository.user.UserRepository;
 import com.example.shoppingmall.service.UserService;
@@ -25,8 +26,11 @@ public class UserServiceImpl implements UserService {
     @Override
     public boolean create(RequestJoin requestJoin) {
         // username 중복 확인
-        boolean check = checkUsername(requestJoin.getUsername());
-        if (check) {
+        boolean check_user = checkUsername(requestJoin.getUsername());
+        boolean check_telephone = checkTelephone(requestJoin.getTelephone());
+        boolean check_email = checkEmail(requestJoin.getEmail());
+
+        if (check_user || check_telephone || check_email) {
             return false;
         }
 
@@ -43,8 +47,21 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public boolean checkTelephone(String telephone) {
+        return userRepository.existsByTelephone(telephone);
+    }
+
+    @Override
+    public boolean checkEmail(String email) {
+        return userRepository.existsByEmail(email);
+    }
+
+    @Override
     public ResponseUser updateUser(RequestModify requestModify, User user) {
-        if (!requestModify.getUsername().equals(user.getUsername())) {
+        boolean check_telephone = checkTelephone(requestModify.getTelephone());
+        boolean check_email = checkEmail(requestModify.getEmail());
+
+        if (check_telephone || check_email || !requestModify.getUsername().equals(user.getUsername())) {
             return null;
         }
 
@@ -79,7 +96,7 @@ public class UserServiceImpl implements UserService {
         User user = userRepository.findByUsername(username);
         if(user == null) {return false;}
 
-        user.upgradeAuth("ROLE_REGISTER");
+        user.upgradeAuth(Authority.REGISTER);
 
         User modified_user = userRepository.save(user);
 

@@ -11,6 +11,10 @@ public interface UserService {
 
     boolean checkUsername(String username);
 
+    boolean checkTelephone(String telephone);
+
+    boolean checkEmail(String email);
+
     ResponseUser updateUser(RequestModify requestModify, User user);
 
     boolean deleteUser(String username);

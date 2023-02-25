@@ -1,7 +1,7 @@
 --------------- 유저 데이터 ---------------
-INSERT INTO user(id, username, nickname, password, telephone, authority, e_mail, address) values (null, 'hwang', 'admin', '$2a$10$vG6NvQImCGrMOq78yQiLxuvBt/O7qF7LAH./w9h20WoXoau7EfDgq', '01042338110', 'ROLE_ADMIN', 'weihyuk39@naver.com', 'sangmyung university')
-INSERT INTO user(id, username, nickname, password, telephone, authority, e_mail, address) values (null, 'annann', 'user', '$2a$10$vG6NvQImCGrMOq78yQiLxuvBt/O7qF7LAH./w9h20WoXoau7EfDgq', '01051235871', 'ROLE_USER', 'annlab98@naver.com', 'sangmyung')
-INSERT INTO user(id, username, nickname, password, telephone, authority, e_mail, address) values (null, 'jinjin', 'user', '$2a$10$vG6NvQImCGrMOq78yQiLxuvBt/O7qF7LAH./w9h20WoXoau7EfDgq', '01026223326', 'ROLE_REGISTER', 'pool5468@naver.com', 'sangmyung go')
+INSERT INTO user(id, username, nickname, password, telephone, authority, email, address) values (null, 'hwang', 'admin', '$2a$10$vG6NvQImCGrMOq78yQiLxuvBt/O7qF7LAH./w9h20WoXoau7EfDgq', '01042338110', 'ROLE_ADMIN', 'weihyuk39@naver.com', 'sangmyung university')
+INSERT INTO user(id, username, nickname, password, telephone, authority, email, address) values (null, 'annann', 'user', '$2a$10$vG6NvQImCGrMOq78yQiLxuvBt/O7qF7LAH./w9h20WoXoau7EfDgq', '01051235871', 'ROLE_USER', 'annlab98@naver.com', 'sangmyung')
+INSERT INTO user(id, username, nickname, password, telephone, authority, email, address) values (null, 'jinjin', 'user', '$2a$10$vG6NvQImCGrMOq78yQiLxuvBt/O7qF7LAH./w9h20WoXoau7EfDgq', '01026223326', 'ROLE_REGISTER', 'pool5468@naver.com', 'sangmyung go')
 
 --------------- 상품 데이터 ---------------
 INSERT INTO product(id, name, price, category, description, size, imgKey, date, hits, favorite, user_id, stock) values (null,'OUTER 1',139000,'outer','스타디움 자켓식의 가죽 점퍼','S,M,L','https://mallimageupload.s3.ap-northeast-2.amazonaws.com/image/ba77a690a2b4-11ed-96f9-4f762f37fb59.jpeg','2023-02-01T09:32',100,10,1, 3)
