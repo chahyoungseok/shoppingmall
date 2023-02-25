@@ -39,6 +39,6 @@ public class ResponseProductDetails {
         this.favorite = product.getFavorite();
         this.imgKey = product.getImgKey();
         this.check_favorite = status;
-        this.stock = (product.getStock() >= 10) ? -1 : product.getStock();
+        this.stock = product.getStock();
     }
 }

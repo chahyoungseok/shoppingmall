@@ -36,6 +36,6 @@ public class ResponseProduct {
         this.size = product.getSize();
         this.favorite = product.getFavorite();
         this.imgKey = product.getImgKey();
-        this.stock = (product.getStock() >= 10) ? -1 : product.getStock();
+        this.stock = product.getStock();
     }
 }
