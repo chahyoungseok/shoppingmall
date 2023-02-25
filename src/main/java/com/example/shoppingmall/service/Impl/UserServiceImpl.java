@@ -61,7 +61,9 @@ public class UserServiceImpl implements UserService {
         boolean check_telephone = checkTelephone(requestModify.getTelephone());
         boolean check_email = checkEmail(requestModify.getEmail());
 
-        if (check_telephone || check_email || !requestModify.getUsername().equals(user.getUsername())) {
+        if ((check_telephone && !user.getTelephone().equals(requestModify.getTelephone()))
+                || (check_email && !user.getEmail().equals(requestModify.getEmail()))
+                || !requestModify.getUsername().equals(user.getUsername())) {
             return null;
         }
 
