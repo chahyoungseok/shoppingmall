@@ -45,7 +45,7 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public List<List<?>> mainPageProductList() {
-        List<Product> productList = productRepository.findTop8ByOrderByIdDesc();
+        List<Product> productList = productRepository.findTop8ByStockGreaterThanOrderByFavoriteDesc(0);
         List<Banner> bannerList = bannerRepository.findAll();
 
         return entityToDtoMainPageList(productList, bannerList);
@@ -113,7 +113,7 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public List<ResponseProductSummary> findProductByUsername(Long userId) {
-        List<Product> productList = productRepository.findByUserIdAndStockGreaterThan(userId, 0);
+        List<Product> productList = productRepository.findByUserId(userId);
 
         return entityToDtoResponseProductSummary(productList);
     }

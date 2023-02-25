@@ -12,7 +12,7 @@ import java.util.List;
 public interface ProductRepository extends JpaRepository<Product, Long>, ProductRepositoryCustom {
 
     /** 메인 페이지 상품 조회 */
-    List<Product> findTop8ByOrderByIdDesc();
+    List<Product> findTop8ByStockGreaterThanOrderByFavoriteDesc(int stock);
 
     // =================================================================
     // Containing 으로 포함 결과 검색
@@ -45,7 +45,7 @@ public interface ProductRepository extends JpaRepository<Product, Long>, Product
     // =================================================================
 
     /** 판매등록한 상품 목록 조회 */
-    List<Product> findByUserIdAndStockGreaterThan(Long userId, int stock);
+    List<Product> findByUserId(Long userId);
 
     @Transactional
     @Modifying(clearAutomatically = true)
