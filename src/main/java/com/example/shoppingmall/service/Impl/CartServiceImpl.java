@@ -71,4 +71,20 @@ public class CartServiceImpl implements CartService {
 
         return readCart(user);
     }
+
+    @Override
+    public List<ResponseCart> deleteAllCart(User user, Long product_id, String size) {
+        Product product = productRepository.findById(product_id).orElse(null);
+
+        if(user == null || product == null) {
+            return null;
+        }
+
+        Boolean result = cartRepository.deleteAllCart(user.getId(), product_id, size);
+        if(!result) {
+            return null;
+        }
+
+        return readCart(user);
+    }
 }

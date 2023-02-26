@@ -22,11 +22,9 @@ public interface CartRepositoryCustom {
 
     BooleanExpression eqCartID(Long id);
 
-    BooleanExpression eqProductIDList(List<Long> IDList);
-
-    void deleteProductIDList(List<Long> IDList);
-
     void deleteCartID(Long id);
+
+    Boolean deleteAllCart(Long user_id, Long product_id, String size);
 
     SelectCart selectFromUserID_N_ProductID(Long user_id, Long product_id, String size);
 

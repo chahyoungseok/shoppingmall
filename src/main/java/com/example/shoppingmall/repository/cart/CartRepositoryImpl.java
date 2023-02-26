@@ -91,13 +91,6 @@ public class CartRepositoryImpl implements CartRepositoryCustom{
         return cart.user.username.eq(username);
     }
 
-    public BooleanExpression eqProductIDList(List<Long> IDList){
-        if (IDList == null) {
-            return null;
-        }
-        return cart.product.id.in(IDList);
-    }
-
     @Override
     public BooleanExpression eqProductID(Long id){
         if (id == null) {
@@ -158,8 +151,8 @@ public class CartRepositoryImpl implements CartRepositoryCustom{
     }
 
     @Override
-    public void deleteProductIDList(List<Long> IDList){
-        BooleanExpression status = eqProductIDList(IDList);
+    public void deleteCartID(Long id){
+        BooleanExpression status = eqCartID(id);
 
         if (status == null) {
             return;
@@ -171,15 +164,15 @@ public class CartRepositoryImpl implements CartRepositoryCustom{
     }
 
     @Override
-    public void deleteCartID(Long id){
-        BooleanExpression status = eqCartID(id);
+    @Transactional
+    public Boolean deleteAllCart(Long user_id, Long product_id, String size) {
+        SelectCart selectCart = selectFromUserID_N_ProductID(user_id, product_id, size);
 
-        if (status == null) {
-            return;
+        if(selectCart == null) {
+            return false;
         }
 
-        queryFactory.delete(cart)
-                .where(status)
-                .execute();
+        deleteCartID(selectCart.getId());
+        return true;
     }
 }
