@@ -1,6 +1,6 @@
 package com.example.shoppingmall.api;
 
-import com.example.shoppingmall.data.dto.response.ResponseProductSummary;
+import com.example.shoppingmall.data.dto.response.ResponseFavorite;
 import com.example.shoppingmall.data.entity.User;
 import com.example.shoppingmall.service.FavoriteService;
 import com.example.shoppingmall.service.ProductService;
@@ -27,9 +27,9 @@ public class FavoriteApiController {
 
     /** 좋아요 목록 가져오기 */
     @GetMapping("/user/favorite")
-    public ResponseEntity<List<ResponseProductSummary>> myFavorite(HttpServletRequest request){
+    public ResponseEntity<List<ResponseFavorite>> myFavorite(HttpServletRequest request){
         User user = (User) request.getAttribute("user");
-        List<ResponseProductSummary> productList = favoriteService.myFavorite(user);
+        List<ResponseFavorite> productList = favoriteService.myFavorite(user);
 
         return (!productList.isEmpty()) ?
                 ResponseEntity.status(HttpStatus.OK).body(productList) :

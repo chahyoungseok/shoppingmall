@@ -1,8 +1,9 @@
 package com.example.shoppingmall.repository.favorite;
 
-import com.example.shoppingmall.data.dto.response.ResponseProductSummary;
+import com.example.shoppingmall.data.dto.response.ResponseFavorite;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
+import com.querydsl.core.types.dsl.CaseBuilder;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
@@ -20,24 +21,28 @@ public class FavoriteRepositoryImpl implements FavoriteRepositoryCustom{
     private final JPAQueryFactory queryFactory;
 
     @Override
-    public List<ResponseProductSummary> findAllFavorite(String username) {
+    public List<ResponseFavorite> findAllFavorite(String username) {
         BooleanExpression status_user = eqUsername(username);
 
         if (status_user == null) {
             return null;
         }
 
-        return queryFactory.select(Projections.fields(ResponseProductSummary.class,
+        return queryFactory.select(Projections.fields(ResponseFavorite.class,
                         favorite.product.id,
                         favorite.product.name,
                         favorite.product.price,
                         favorite.product.favorite,
-                        favorite.product.imgKey
+                        favorite.product.imgKey,
+                        new CaseBuilder()
+                                .when(product.stock.gt(0))
+                                .then(true)
+                                .otherwise(false).as("stock_zero")
                 ))
                 .from(favorite)
                 .innerJoin(favorite.product, product)
                 .innerJoin(favorite.user, user)
-                .where(status_user, favorite.product.stock.gt(0))
+                .where(status_user)
                 .fetch();
     }
 

@@ -1,6 +1,6 @@
 package com.example.shoppingmall.service.Impl;
 
-import com.example.shoppingmall.data.dto.response.ResponseProductSummary;
+import com.example.shoppingmall.data.dto.response.ResponseFavorite;
 import com.example.shoppingmall.data.entity.Favorite;
 import com.example.shoppingmall.data.entity.Product;
 import com.example.shoppingmall.data.entity.User;
@@ -27,7 +27,7 @@ public class FavoriteServiceImpl implements FavoriteService {
 
     @Override
     @Transactional(readOnly = true)
-    public List<ResponseProductSummary> myFavorite(User user) {
+    public List<ResponseFavorite> myFavorite(User user) {
 
         return favoriteRepository.findAllFavorite(user.getUsername());
     }
