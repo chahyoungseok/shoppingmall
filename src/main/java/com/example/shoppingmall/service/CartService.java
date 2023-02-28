@@ -11,4 +11,6 @@ public interface CartService {
     List<ResponseCart> createCart(User user, Long product_id, String size);
 
     List<ResponseCart> deleteCart(User user, Long product_id, String size);
+
+    List<ResponseCart> deleteAllCart(User user, Long product_id, String size);
 }
