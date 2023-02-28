@@ -264,13 +264,13 @@ public class ProductServiceImpl implements ProductService {
 
     /** Entity to Dto */
     public List<List<?>> entityToDtoMainPageList(List<Product> productList, List<Banner> bannerList) {
-        List<ResponseProductMain> responseProductList = new ArrayList<>();
+        List<ResponseProductSummary> responseProductList = new ArrayList<>();
         List<ResponseBanner> responseBannerList = new ArrayList<>();
         List<List<?>> returnList = new ArrayList<>();
 
         if (!productList.isEmpty() && !bannerList.isEmpty()) {
             for(Product product : productList){
-                responseProductList.add(ResponseProductMain.builder().product(product).build());
+                responseProductList.add(ResponseProductSummary.builder().product(product).build());
             }
             for (Banner banner : bannerList) {
                 responseBannerList.add(ResponseBanner.builder().banner(banner).build());
