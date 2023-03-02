@@ -94,9 +94,9 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public boolean upgradeAuth(String username) {
-        // Dto -> Entity
         User user = userRepository.findByUsername(username);
-        if(user == null) {return false;}
+
+        if(user == null || !user.getAuthority().equals("ROLE_USER")) {return false;}
 
         user.upgradeAuth(Authority.REGISTER);
 
