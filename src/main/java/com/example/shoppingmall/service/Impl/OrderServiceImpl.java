@@ -105,7 +105,7 @@ public class OrderServiceImpl implements OrderService {
                 }
             }
 
-            orderProductList.add(new OrderProduct(null, queryOrderProduct.getCount(), null, equal_product, queryOrderProduct.getSize()));
+            orderProductList.add(new OrderProduct(null, queryOrderProduct.getCount(), order, equal_product, queryOrderProduct.getSize()));
         }
 
         List<OrderProduct> savedOrderProductList = orderProductRepository.saveAll(orderProductList);
