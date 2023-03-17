@@ -96,7 +96,7 @@ public class UserServiceImpl implements UserService {
     public boolean upgradeAuth(String username) {
         User user = userRepository.findByUsername(username);
 
-        if(user == null || !user.getAuthority().equals("ROLE_USER")) {return false;}
+        if(user == null || !user.getAuthority().equals(Authority.USER)) {return false;}
 
         user.upgradeAuth(Authority.REGISTER);
 

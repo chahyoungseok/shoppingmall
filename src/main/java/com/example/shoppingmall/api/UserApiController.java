@@ -5,6 +5,7 @@ import com.example.shoppingmall.data.dto.request.RequestChangePWD;
 import com.example.shoppingmall.data.dto.request.RequestJoin;
 import com.example.shoppingmall.data.dto.request.RequestModify;
 import com.example.shoppingmall.data.dto.response.ResponseUser;
+import com.example.shoppingmall.data.entity.Authority;
 import com.example.shoppingmall.data.entity.User;
 import com.example.shoppingmall.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -92,7 +93,7 @@ public class UserApiController {
     @DeleteMapping("/user")
     public ResponseEntity<Void> delete(@UserAnnotation User user) {
         // 관리자는 일반적인 유저 삭제 Api 로 삭제 불가능
-        if(user.getAuthority().equals("ROLE_ADMIN")) {
+        if(user.getAuthority().equals(Authority.ADMIN)) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
         }
 
