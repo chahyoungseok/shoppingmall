@@ -1,5 +1,6 @@
 package com.example.shoppingmall.api;
 
+import com.example.shoppingmall.aop.annotation.UserAnnotation;
 import com.example.shoppingmall.data.dto.request.ChangeStockQuery;
 import com.example.shoppingmall.data.dto.request.RequestProduct;
 import com.example.shoppingmall.data.dto.request.RequestProductModify;
@@ -14,7 +15,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.transaction.Transactional;
 import java.util.List;
 
@@ -67,10 +67,9 @@ public class ProductApiController {
     /** 상품 상세 페이지 조회 */
     @Transactional
     @GetMapping("/shop/detail/{id}")
-    public ResponseEntity<ResponseProductDetails> findById(HttpServletRequest request, @PathVariable Long id){
+    public ResponseEntity<ResponseProductDetails> findById(@UserAnnotation User user, @PathVariable Long id){
         productService.increaseHits(id);
 
-        User user = (User) request.getAttribute("user");
         ResponseProductDetails product = productService.findById(user, id);
         return (product != null) ?
                 ResponseEntity.status(HttpStatus.OK).body(product) :
@@ -79,8 +78,7 @@ public class ProductApiController {
 
     /** 판매등록한 상품 목록 조회 */
     @GetMapping("/register/product")
-    public ResponseEntity<List<ResponseProductSummary>> findProductByUsername(HttpServletRequest request){
-        User user = (User) request.getAttribute("user");
+    public ResponseEntity<List<ResponseProductSummary>> findProductByUsername(@UserAnnotation User user){
         List<ResponseProductSummary> productList = productService.findProductByUsername(user.getId());
         return (!productList.isEmpty()) ?
                 ResponseEntity.status(HttpStatus.OK).body(productList) :
@@ -89,8 +87,7 @@ public class ProductApiController {
 
     /** 상품 등록 */
     @PostMapping("/register/product")
-    public ResponseEntity<Void> createProduct(@RequestBody RequestProduct requestProduct, HttpServletRequest request){
-        User user = (User) request.getAttribute("user");
+    public ResponseEntity<Void> createProduct(@RequestBody RequestProduct requestProduct, @UserAnnotation User user){
         boolean check = productService.CreateProduct(requestProduct, user);
         return (check) ?
                 ResponseEntity.status(HttpStatus.OK).body(null) :
@@ -99,8 +96,7 @@ public class ProductApiController {
 
     /** 상품 정보 수정 페이지 */
     @GetMapping("/register/product/{id}")
-    public ResponseEntity<ResponseProduct> editProduct(@PathVariable Long id, HttpServletRequest request){
-        User user = (User) request.getAttribute("user");
+    public ResponseEntity<ResponseProduct> editProduct(@PathVariable Long id, @UserAnnotation User user){
         ResponseProduct product = productService.editProduct(id, user);
         return (product != null) ?
                 ResponseEntity.status(HttpStatus.OK).body(product) :
@@ -109,9 +105,7 @@ public class ProductApiController {
 
     /** 상품 정보 수정 */
     @PutMapping("/register/product/{id}")
-    public ResponseEntity<ResponseProduct> updateProduct(@PathVariable Long id, @RequestBody RequestProductModify requestProductModify, HttpServletRequest request) {
-        User user = (User) request.getAttribute("user");
-
+    public ResponseEntity<ResponseProduct> updateProduct(@PathVariable Long id, @RequestBody RequestProductModify requestProductModify, @UserAnnotation User user) {
         requestProductModify.setId(id);
         requestProductModify.setUsername(user.getUsername());
         ResponseProduct product = productService.updateProduct(requestProductModify);
@@ -122,8 +116,8 @@ public class ProductApiController {
 
     /** 상품 재고 추가 */
     @PutMapping("/register/product/add_stock")
-    public ResponseEntity<Void> add_stock(HttpServletRequest request, @RequestBody ChangeStockQuery changeStockQuery){
-        boolean status = productService.stockUpProduct((User) request.getAttribute("user"), changeStockQuery);
+    public ResponseEntity<Void> add_stock(@UserAnnotation User user, @RequestBody ChangeStockQuery changeStockQuery){
+        boolean status = productService.stockUpProduct(user, changeStockQuery);
         return (status) ?
                 ResponseEntity.status(HttpStatus.OK).body(null) :
                 ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
@@ -131,9 +125,7 @@ public class ProductApiController {
 
     /** 상품 삭제 */
     @DeleteMapping("/register/product/{id}")
-    public ResponseEntity<Void> deleteProduct(@PathVariable Long id, HttpServletRequest request) {
-        User user = (User) request.getAttribute("user");
-
+    public ResponseEntity<Void> deleteProduct(@PathVariable Long id, @UserAnnotation User user) {
         boolean check = productService.deleteProduct(id, user);
         return (check) ?
                 ResponseEntity.status(HttpStatus.OK).body(null) :

@@ -1,5 +1,6 @@
 package com.example.shoppingmall.api;
 
+import com.example.shoppingmall.aop.annotation.UserAnnotation;
 import com.example.shoppingmall.data.dto.request.RequestChangePWD;
 import com.example.shoppingmall.data.dto.request.RequestJoin;
 import com.example.shoppingmall.data.dto.request.RequestModify;
@@ -11,7 +12,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
 @RestController
@@ -36,9 +36,7 @@ public class UserApiController {
 
     /** 회원 정보 페이지 */
     @GetMapping("/user")
-    public ResponseEntity<ResponseUser> my_page(HttpServletRequest request){
-        User user = (User) request.getAttribute("user");
-
+    public ResponseEntity<ResponseUser> my_page(@UserAnnotation User user){
         ResponseUser responseUser = ResponseUser.builder().user(user).build();
 
         return ResponseEntity.status(HttpStatus.OK).body(responseUser);
@@ -46,8 +44,8 @@ public class UserApiController {
 
     /** 회원 정보 수정 */
     @PutMapping("/user")
-    public ResponseEntity<ResponseUser> update(HttpServletRequest request, @Valid @RequestBody RequestModify requestModify) {
-        ResponseUser responseUser = userService.updateUser(requestModify, (User) request.getAttribute("user"));
+    public ResponseEntity<ResponseUser> update(@UserAnnotation User user, @Valid @RequestBody RequestModify requestModify) {
+        ResponseUser responseUser = userService.updateUser(requestModify, user);
         return (responseUser != null) ?
                 ResponseEntity.status(HttpStatus.OK).body(responseUser) :
                 ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
@@ -82,8 +80,8 @@ public class UserApiController {
 
     /** 비밀번호 변경 */
     @PostMapping("/user/pwd_change")
-    public ResponseEntity<Void> change_pwd(HttpServletRequest request, @Valid @RequestBody RequestChangePWD requestChangePWD){
-        boolean check_pwd = userService.change_pwd(requestChangePWD, (User) request.getAttribute("user"));
+    public ResponseEntity<Void> change_pwd(@UserAnnotation User user, @Valid @RequestBody RequestChangePWD requestChangePWD){
+        boolean check_pwd = userService.change_pwd(requestChangePWD, user);
 
         return (check_pwd) ?
                 ResponseEntity.status(HttpStatus.OK).body(null) :
@@ -92,9 +90,7 @@ public class UserApiController {
 
     /** 회원 탈퇴 */
     @DeleteMapping("/user")
-    public ResponseEntity<Void> delete(HttpServletRequest request) {
-        User user = (User) request.getAttribute("user");
-
+    public ResponseEntity<Void> delete(@UserAnnotation User user) {
         // 관리자는 일반적인 유저 삭제 Api 로 삭제 불가능
         if(user.getAuthority().equals("ROLE_ADMIN")) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);

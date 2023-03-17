@@ -1,5 +1,6 @@
 package com.example.shoppingmall.api;
 
+import com.example.shoppingmall.aop.annotation.UserAnnotation;
 import com.example.shoppingmall.data.dto.response.ResponseFavorite;
 import com.example.shoppingmall.data.entity.User;
 import com.example.shoppingmall.service.FavoriteService;
@@ -9,7 +10,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.transaction.Transactional;
 import java.util.List;
 
@@ -27,8 +27,7 @@ public class FavoriteApiController {
 
     /** 좋아요 목록 가져오기 */
     @GetMapping("/user/favorite")
-    public ResponseEntity<List<ResponseFavorite>> myFavorite(HttpServletRequest request){
-        User user = (User) request.getAttribute("user");
+    public ResponseEntity<List<ResponseFavorite>> myFavorite(@UserAnnotation User user){
         List<ResponseFavorite> productList = favoriteService.myFavorite(user);
 
         return (!productList.isEmpty()) ?
@@ -39,9 +38,9 @@ public class FavoriteApiController {
     /** 상품 좋아요 등록 */
     @Transactional
     @PostMapping("/user/favorite/{id}")
-    public ResponseEntity<Void> addFavorite(@PathVariable Long id, HttpServletRequest request) {
+    public ResponseEntity<Void> addFavorite(@PathVariable Long id, @UserAnnotation User user) {
         productService.increaseFavorite(id);
-        boolean check = favoriteService.addFavorite((User) request.getAttribute("user"), id);
+        boolean check = favoriteService.addFavorite(user, id);
 
         return (check) ?
                 ResponseEntity.status(HttpStatus.OK).body(null) :
@@ -51,9 +50,9 @@ public class FavoriteApiController {
     /** 상품 좋아요 해제 */
     @Transactional
     @DeleteMapping("/user/favorite/{id}")
-    public ResponseEntity<Void> deleteFavorite(@PathVariable Long id, HttpServletRequest request) {
+    public ResponseEntity<Void> deleteFavorite(@PathVariable Long id, @UserAnnotation User user) {
         productService.decreaseFavorite(id);
-        boolean check = favoriteService.deleteFavorite((User) request.getAttribute("user"), id);
+        boolean check = favoriteService.deleteFavorite(user, id);
 
         return (check) ?
                 ResponseEntity.status(HttpStatus.OK).body(null) :

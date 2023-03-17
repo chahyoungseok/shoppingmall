@@ -1,5 +1,6 @@
 package com.example.shoppingmall.api;
 
+import com.example.shoppingmall.aop.annotation.UserAnnotation;
 import com.example.shoppingmall.data.dto.request.RequestOrder;
 import com.example.shoppingmall.data.dto.response.ResponseOrder;
 import com.example.shoppingmall.data.entity.User;
@@ -13,7 +14,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.transaction.Transactional;
 import java.util.List;
 
@@ -32,8 +32,8 @@ public class OrderApiController {
 
     /** 주문목록 조회 */
     @GetMapping("/user/order")
-    public ResponseEntity<List<ResponseOrder>> read_order(HttpServletRequest request){
-        List<ResponseOrder> responseOrderList = orderService.read_order((User) request.getAttribute("user"));
+    public ResponseEntity<List<ResponseOrder>> read_order(@UserAnnotation User user){
+        List<ResponseOrder> responseOrderList = orderService.read_order(user);
 
         return (responseOrderList != null) ?
                 ResponseEntity.status(HttpStatus.OK).body(responseOrderList) :
@@ -43,8 +43,8 @@ public class OrderApiController {
     /** 주문목록 추가 */
     @Transactional
     @PostMapping("/user/order")
-    public ResponseEntity<List<ResponseOrder>> create_order(HttpServletRequest request, @RequestBody RequestOrder requestOrder){
-        List<ResponseOrder> responseOrderList = orderService.create_order((User) request.getAttribute("user"), requestOrder);
+    public ResponseEntity<List<ResponseOrder>> create_order(@UserAnnotation User user, @RequestBody RequestOrder requestOrder){
+        List<ResponseOrder> responseOrderList = orderService.create_order(user, requestOrder);
         if (responseOrderList == null) { return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null); }
 
         Boolean state = productService.purchaseProduct(requestOrder);
