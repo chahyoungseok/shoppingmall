@@ -32,8 +32,8 @@ public class OrderApiController {
 
     /** 주문목록 조회 */
     @GetMapping("/user/order")
-    public ResponseEntity<List<ResponseOrder>> read_order(@UserAnnotation User user){
-        List<ResponseOrder> responseOrderList = orderService.read_order(user);
+    public ResponseEntity<List<List<ResponseOrder>>> read_order(@UserAnnotation User user){
+        List<List<ResponseOrder>> responseOrderList = orderService.read_order(user);
 
         return (responseOrderList != null) ?
                 ResponseEntity.status(HttpStatus.OK).body(responseOrderList) :
@@ -43,8 +43,8 @@ public class OrderApiController {
     /** 주문목록 추가 */
     @Transactional
     @PostMapping("/user/order")
-    public ResponseEntity<List<ResponseOrder>> create_order(@UserAnnotation User user, @RequestBody RequestOrder requestOrder){
-        List<ResponseOrder> responseOrderList = orderService.create_order(user, requestOrder);
+    public ResponseEntity<List<List<ResponseOrder>>> create_order(@UserAnnotation User user, @RequestBody RequestOrder requestOrder){
+        List<List<ResponseOrder>> responseOrderList = orderService.create_order(user, requestOrder);
         if (responseOrderList == null) { return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null); }
 
         Boolean state = productService.purchaseProduct(requestOrder);

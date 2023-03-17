@@ -7,7 +7,7 @@ import com.example.shoppingmall.data.entity.User;
 import java.util.List;
 
 public interface OrderService {
-    List<ResponseOrder> read_order(User user);
+    List<List<ResponseOrder>> read_order(User user);
 
-    List<ResponseOrder> create_order(User user, RequestOrder requestOrder);
+    List<List<ResponseOrder>> create_order(User user, RequestOrder requestOrder);
 }

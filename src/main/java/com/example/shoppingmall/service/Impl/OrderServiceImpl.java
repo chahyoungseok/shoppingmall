@@ -6,6 +6,7 @@ import com.example.shoppingmall.data.dto.request.RequestOrder;
 import com.example.shoppingmall.data.dto.response.ResponseOrder;
 import com.example.shoppingmall.data.entity.Order;
 import com.example.shoppingmall.data.entity.OrderProduct;
+import com.example.shoppingmall.data.entity.Product;
 import com.example.shoppingmall.data.entity.User;
 import com.example.shoppingmall.repository.order.OrderProductRepository;
 import com.example.shoppingmall.repository.order.OrderRepository;
@@ -42,7 +43,7 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     @Transactional
-    public List<ResponseOrder> read_order(User user) {
+    public List<List<ResponseOrder>> read_order(User user) {
         User userPersisted = entityManager.find(User.class, user.getId());
         if(userPersisted == null){
             return null;
@@ -53,9 +54,11 @@ public class OrderServiceImpl implements OrderService {
             return null;
         }
 
-        List<ResponseOrder> result = new ArrayList<>();
+        List<List<ResponseOrder>> result = new ArrayList<>();
 
-        for(Order order : orderList) {
+        int orderList_size = orderList.size();
+        for(int i=orderList_size - 1; i>=0; i--) {
+            Order order = orderList.get(i);
             List<OrderProduct> orderProductList = order.getOrderProductList();
 
             List<ReadOrderQuery> readOrderQueryList = orderProductRepository.findResponseOrder(orderProductList);
@@ -63,12 +66,12 @@ public class OrderServiceImpl implements OrderService {
                 continue;
             }
 
-            result.addAll(readOrderQueryList
+            result.add(new ArrayList<>(readOrderQueryList
                     .stream().map(readOrderQuery -> ResponseOrder
                             .builder()
                             .order(order)
                             .readOrderQuery(readOrderQuery)
-                            .build()).toList());
+                            .build()).toList()));
         }
 
         return result;
@@ -76,7 +79,7 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     @Transactional
-    public List<ResponseOrder> create_order(User user, RequestOrder requestOrder) {
+    public List<List<ResponseOrder>> create_order(User user, RequestOrder requestOrder) {
         User userPersisted = entityManager.find(User.class, user.getId());
 
         if (userPersisted == null || requestOrder.getQueryOrderProductList().isEmpty()) {
@@ -88,25 +91,21 @@ public class OrderServiceImpl implements OrderService {
         Order savedOrder = orderRepository.save(order);
         userPersisted.addOrder(savedOrder);
 
-        List<OrderProduct> orderProductList = productRepository.findByIdList(requestOrder.getQueryOrderProductList()
-                .stream().map(QueryOrderProduct::getProduct_id).toList())
-                .stream().map(product -> OrderProduct.builder()
-                        .id(null)
-                        .count(1)
-                        .order(null)
-                        .product(product)
-                        .size("M")
-                        .build()
-                ).toList();
+        List<Product> productList = productRepository.findByIdList(requestOrder.getQueryOrderProductList()
+                .stream().map(QueryOrderProduct::getProduct_id).toList());
 
-        // 추후 로직 개선
-        for(OrderProduct orderProduct : orderProductList) {
-            for(QueryOrderProduct queryOrderProduct : requestOrder.getQueryOrderProductList()){
-                if(Objects.equals(orderProduct.getProduct().getId(), queryOrderProduct.getProduct_id())) {
-                    orderProduct.setOption(queryOrderProduct.getCount(), queryOrderProduct.getSize());
+        List<OrderProduct> orderProductList = new ArrayList<>();
+
+        for(QueryOrderProduct queryOrderProduct : requestOrder.getQueryOrderProductList()){
+            Product equal_product = null;
+            for(Product product : productList) {
+                if(Objects.equals(product.getId(), queryOrderProduct.getProduct_id())){
+                    equal_product = product;
                     break;
                 }
             }
+
+            orderProductList.add(new OrderProduct(null, queryOrderProduct.getCount(), null, equal_product, queryOrderProduct.getSize()));
         }
 
         List<OrderProduct> savedOrderProductList = orderProductRepository.saveAll(orderProductList);
