@@ -11,12 +11,11 @@ import com.example.shoppingmall.data.entity.User;
 import com.example.shoppingmall.repository.order.OrderProductRepository;
 import com.example.shoppingmall.repository.order.OrderRepository;
 import com.example.shoppingmall.repository.product.ProductRepository;
+import com.example.shoppingmall.repository.user.UserRepository;
 import com.example.shoppingmall.service.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
 import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
@@ -25,8 +24,7 @@ import java.util.Objects;
 @Service
 public class OrderServiceImpl implements OrderService {
 
-    @PersistenceContext
-    private EntityManager entityManager;
+    private final UserRepository userRepository;
 
     private final OrderRepository orderRepository;
 
@@ -35,7 +33,8 @@ public class OrderServiceImpl implements OrderService {
     private final ProductRepository productRepository;
 
     @Autowired
-    public OrderServiceImpl(OrderRepository orderRepository, OrderProductRepository orderProductRepository, ProductRepository productRepository) {
+    public OrderServiceImpl(UserRepository userRepository, OrderRepository orderRepository, OrderProductRepository orderProductRepository, ProductRepository productRepository) {
+        this.userRepository = userRepository;
         this.orderRepository = orderRepository;
         this.orderProductRepository = orderProductRepository;
         this.productRepository = productRepository;
@@ -44,7 +43,7 @@ public class OrderServiceImpl implements OrderService {
     @Override
     @Transactional
     public List<List<ResponseOrder>> read_order(User user) {
-        User userPersisted = entityManager.find(User.class, user.getId());
+        User userPersisted = userRepository.findByUsername(user.getUsername());
         if(userPersisted == null){
             return null;
         }
@@ -80,7 +79,7 @@ public class OrderServiceImpl implements OrderService {
     @Override
     @Transactional
     public List<List<ResponseOrder>> create_order(User user, RequestOrder requestOrder) {
-        User userPersisted = entityManager.find(User.class, user.getId());
+        User userPersisted = userRepository.findByUsername(user.getUsername());
 
         if (userPersisted == null || requestOrder.getQueryOrderProductList().isEmpty()) {
             return null;

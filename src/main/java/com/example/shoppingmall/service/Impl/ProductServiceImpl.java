@@ -119,7 +119,7 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public boolean CreateProduct(RequestProduct requestProduct, User user){
+    public boolean createProduct(RequestProduct requestProduct, User user){
         Product product = requestProduct.toEntity(user);
 
         Product createdProduct = productRepository.save(product);

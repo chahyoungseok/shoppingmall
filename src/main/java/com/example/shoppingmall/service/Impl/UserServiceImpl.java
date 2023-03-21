@@ -37,7 +37,6 @@ public class UserServiceImpl implements UserService {
         User user = requestJoin.toEntity(bCryptPasswordEncoder.encode(requestJoin.getPassword()));
 
         User created_user = userRepository.save(user);
-
         return !created_user.getUsername().isEmpty();
     }
 

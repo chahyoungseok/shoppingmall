@@ -32,7 +32,7 @@ public interface ProductService {
     List<ResponseProductSummary> findProductByUsername(Long userId);
 
     /** 상품 등록 */
-    boolean CreateProduct(RequestProduct requestProduct, User user);
+    boolean createProduct(RequestProduct requestProduct, User user);
 
     /** 상품 정보 수정 페이지 */
     ResponseProduct editProduct(Long id, User user);

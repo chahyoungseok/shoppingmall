@@ -88,7 +88,7 @@ public class ProductApiController {
     /** 상품 등록 */
     @PostMapping("/register/product")
     public ResponseEntity<Void> createProduct(@RequestBody RequestProduct requestProduct, @UserAnnotation User user){
-        boolean check = productService.CreateProduct(requestProduct, user);
+        boolean check = productService.createProduct(requestProduct, user);
         return (check) ?
                 ResponseEntity.status(HttpStatus.OK).body(null) :
                 ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
