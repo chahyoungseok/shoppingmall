@@ -12,6 +12,8 @@ public interface CartRepositoryCustom {
 
     Boolean findSameCart(Long user_id, Long product_id, String size, int state);
 
+    Long deleteCartList(Long user_id);
+
     BooleanExpression eqUserID(Long id);
 
     BooleanExpression eqUsername(String username);

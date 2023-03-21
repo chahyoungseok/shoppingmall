@@ -4,6 +4,7 @@ import com.example.shoppingmall.aop.annotation.UserAnnotation;
 import com.example.shoppingmall.data.dto.request.RequestOrder;
 import com.example.shoppingmall.data.dto.response.ResponseOrder;
 import com.example.shoppingmall.data.entity.User;
+import com.example.shoppingmall.service.CartService;
 import com.example.shoppingmall.service.OrderService;
 import com.example.shoppingmall.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,10 +25,13 @@ public class OrderApiController {
 
     private final ProductService productService;
 
+    private final CartService cartService;
+
     @Autowired
-    public OrderApiController(OrderService orderService, ProductService productService) {
+    public OrderApiController(OrderService orderService, ProductService productService, CartService cartService) {
         this.orderService = orderService;
         this.productService = productService;
+        this.cartService = cartService;
     }
 
     /** 주문목록 조회 */
@@ -47,8 +51,11 @@ public class OrderApiController {
         List<List<ResponseOrder>> responseOrderList = orderService.create_order(user, requestOrder);
         if (responseOrderList == null) { return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null); }
 
-        Boolean state = productService.purchaseProduct(requestOrder);
-        return (state) ?
+        Boolean state_cart = cartService.deleteCartList(user.getId());
+        if (!state_cart) { return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null); }
+
+        Boolean state_product = productService.purchaseProduct(requestOrder);
+        return (state_product) ?
                 ResponseEntity.status(HttpStatus.OK).body(responseOrderList) :
                 ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
     }

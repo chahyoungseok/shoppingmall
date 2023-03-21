@@ -14,9 +14,9 @@ import org.springframework.stereotype.Repository;
 import javax.transaction.Transactional;
 import java.util.List;
 
-import static com.example.shoppingmall.data.entity.QUser.user;
 import static com.example.shoppingmall.data.entity.QCart.cart;
 import static com.example.shoppingmall.data.entity.QProduct.product;
+import static com.example.shoppingmall.data.entity.QUser.user;
 
 @Repository
 @RequiredArgsConstructor
@@ -73,6 +73,19 @@ public class CartRepositoryImpl implements CartRepositoryCustom{
 
         updateCartID(selectCart.getId(), selectCart.getCount() + state_value);
         return true;
+    }
+
+    @Override
+    public Long deleteCartList(Long user_id) {
+        BooleanExpression status_user = eqUserID(user_id);
+
+        if (status_user == null) {
+            return null;
+        }
+
+        return queryFactory.delete(cart)
+                .where(status_user)
+                .execute();
     }
 
     @Override

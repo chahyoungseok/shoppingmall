@@ -12,5 +12,7 @@ public interface CartService {
 
     List<ResponseCart> deleteCart(User user, Long product_id, String size);
 
+    Boolean deleteCartList(Long user_id);
+
     List<ResponseCart> deleteAllCart(User user, Long product_id, String size);
 }
