@@ -28,19 +28,6 @@ public class OrderProductRepositoryImpl implements OrderProductRepositoryCustom{
     }
 
     @Override
-    public void deleteOrderIDList(List<Long> orderIDList){
-        BooleanExpression status = eqOrderIDList(orderIDList);
-
-        if (status == null) {
-            return;
-        }
-
-        queryFactory.delete(orderProduct)
-                .where(status)
-                .execute();
-    }
-
-    @Override
     public List<ReadOrderQuery> findResponseOrder(List<OrderProduct> orderProductList) {
         // DTO 로 조회 && IN 으로 다수의 엔티티를 한번에 조회
         BooleanExpression status = eqOrderIDList(orderProductList.stream().map(OrderProduct::getId).toList());

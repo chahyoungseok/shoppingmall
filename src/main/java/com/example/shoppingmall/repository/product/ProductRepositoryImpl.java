@@ -189,6 +189,11 @@ public class ProductRepositoryImpl implements ProductRepositoryCustom{
                 .execute();
     }
 
+    @Override
+    public Product findByFirstProduct() {
+        return queryFactory.selectFrom(product).fetchFirst();
+    }
+
 
     @Override
     public List<ResponseProductPurchase> findAllProductPurchase() {

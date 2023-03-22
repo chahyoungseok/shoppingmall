@@ -42,4 +42,6 @@ public interface ProductRepositoryCustom {
     SelectProductStockQuery findAddStockByProductID(Long product_id);
 
     Integer updateProductStock(Long product_id, int after_stock);
+
+    Product findByFirstProduct();
 }
