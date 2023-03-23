@@ -1,27 +1,26 @@
 package com.example.shoppingmall.repository.cart;
 
-import com.example.shoppingmall.config.TestConfig;
 import com.example.shoppingmall.data.dto.response.ResponseCart;
 import com.example.shoppingmall.data.entity.Authority;
 import com.example.shoppingmall.data.entity.Cart;
 import com.example.shoppingmall.data.entity.Product;
 import com.example.shoppingmall.data.entity.User;
+import com.example.shoppingmall.repository.base.BaseRepositoryUnitTest;
 import com.example.shoppingmall.repository.product.ProductRepository;
 import com.example.shoppingmall.repository.user.UserRepository;
 import com.example.shoppingmall.service.Impl.CartServiceImpl;
-import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Nested;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-import org.springframework.context.annotation.Import;
 
 import javax.transaction.Transactional;
 import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
 
-@DataJpaTest
-@Import(TestConfig.class)
-class CartRepositoryTest {
+class CartRepositoryUnitTest extends BaseRepositoryUnitTest {
 
     @Autowired
     private CartRepository cartRepository;

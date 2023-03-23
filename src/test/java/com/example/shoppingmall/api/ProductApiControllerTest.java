@@ -46,7 +46,7 @@ class ProductApiControllerTest extends BaseControllerTest{
         @DisplayName("검색결과 O")
         void success() throws Exception {
             // given
-            String url = "/shop/search/coat";
+            String url = "/shop/search/플랫";
             // when
             ResultActions resultActions = mockMvc
                     .perform(get(url));
@@ -121,7 +121,7 @@ class ProductApiControllerTest extends BaseControllerTest{
 
     @Test
     @DisplayName("판매등록한 상품 목록 조회")
-    @WithUserDetails(value = "hwang")
+    @WithUserDetails(value = "jinjin")
     void findProductByUsername() throws Exception{
         // given
         String url = "/register/product";
@@ -174,7 +174,7 @@ class ProductApiControllerTest extends BaseControllerTest{
 
     @Test
     @DisplayName("상품 정보 수정 페이지")
-    @WithUserDetails(value = "hwang")
+    @WithUserDetails(value = "jinjin")
     void editProduct() throws Exception{
         // given
         String url = "/register/product/1";
@@ -195,7 +195,7 @@ class ProductApiControllerTest extends BaseControllerTest{
 
     @Test
     @DisplayName("상품 정보 수정")
-    @WithUserDetails(value = "hwang")
+    @WithUserDetails(value = "jinjin")
     void updateProduct() throws Exception{
         // given
         String url = "/register/product/1";
@@ -256,7 +256,7 @@ class ProductApiControllerTest extends BaseControllerTest{
         }
 
         @Test
-        @WithUserDetails("jinjin")
+        @WithUserDetails("hwang")
         @DisplayName("실패")
         void fail() throws Exception{
             // given
@@ -286,7 +286,7 @@ class ProductApiControllerTest extends BaseControllerTest{
 
     @Test
     @DisplayName("상품 삭제")
-    @WithUserDetails(value = "hwang")
+    @WithUserDetails(value = "jinjin")
     void deleteProduct() throws Exception{
         // given
         String url = "/register/product/1";

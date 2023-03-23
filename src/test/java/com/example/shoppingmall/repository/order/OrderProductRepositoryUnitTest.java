@@ -1,8 +1,8 @@
 package com.example.shoppingmall.repository.order;
 
-import com.example.shoppingmall.config.TestConfig;
 import com.example.shoppingmall.data.dto.queryselect.ReadOrderQuery;
 import com.example.shoppingmall.data.entity.*;
+import com.example.shoppingmall.repository.base.BaseRepositoryUnitTest;
 import com.example.shoppingmall.repository.product.ProductRepository;
 import com.example.shoppingmall.repository.user.UserRepository;
 import org.junit.jupiter.api.Assertions;
@@ -10,8 +10,6 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-import org.springframework.context.annotation.Import;
 
 import javax.transaction.Transactional;
 import java.time.LocalDateTime;
@@ -19,9 +17,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-@DataJpaTest
-@Import(TestConfig.class)
-class OrderProductRepositoryTest {
+class OrderProductRepositoryUnitTest extends BaseRepositoryUnitTest {
 
     @Autowired
     private UserRepository userRepository;

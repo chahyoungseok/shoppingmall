@@ -21,11 +21,9 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.BDDMockito;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.test.util.ReflectionTestUtils;
 
 import javax.transaction.Transactional;
@@ -38,9 +36,7 @@ import java.util.Optional;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyInt;
 
-@ExtendWith(MockitoExtension.class)
-class ProductServiceImplTest {
-    // findByProductName, findAllProduct, findByCategory, increaseHits, increaseFavorite, decreaseFavorite 는 로직이 너무 단순해서 일단 생략
+class ProductServiceImplUnitTest extends BaseServiceImplUnitTest {
 
     @InjectMocks
     private ProductServiceImpl productService;

@@ -55,15 +55,14 @@ class CartApiControllerTest extends BaseControllerTest{
 
     @Nested
     @DisplayName("카트 추가")
-    @WithUserDetails(value = "ann")
+    @WithUserDetails(value = "annann")
     class createCart {
 
         @DisplayName("성공")
         @Transactional
         @Test
         void success() throws Exception{
-            String content = objectMapper.writeValueAsString(new RequestSize(
-                    "M"));
+            String content = objectMapper.writeValueAsString(new RequestSize("M"));
 
             String url = "/user/cart/1";
             Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -94,7 +93,7 @@ class CartApiControllerTest extends BaseControllerTest{
         @Transactional
         @Test
         void success() throws Exception{
-            String url = "/user/cart/2";
+            String url = "/user/cart/2?size=" + "M";
             Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
             PrincipalDetails principalDetails = (PrincipalDetails) authentication.getPrincipal();
 

@@ -233,9 +233,9 @@ class UserApiControllerTest extends BaseControllerTest{
 
     @Nested
     @DisplayName("유저 삭제")
-    @WithUserDetails(value = "hwang")
     class delete_user {
         @DisplayName("성공")
+        @WithUserDetails(value = "jinjin")
         @Test
         void success() throws Exception{
             String url = "/user";
@@ -253,6 +253,27 @@ class UserApiControllerTest extends BaseControllerTest{
                     .andExpect(status().isOk())
                     .andDo(print());
         }
+
+        /** 관리자는 삭제 api로 삭제가되지않음 */
+        @DisplayName("실패")
+        @WithUserDetails(value = "hwang")
+        @Test
+        void fail() throws Exception{
+            String url = "/user";
+
+            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+            PrincipalDetails principalDetails = (PrincipalDetails) authentication.getPrincipal();
+
+            RequestBuilder requestBuilder = MockMvcRequestBuilders
+                    .delete(url)
+                    .requestAttr("user", principalDetails.getUser());
+            ResultActions resultActions = mockMvc
+                    .perform(requestBuilder);
+
+            resultActions
+                    .andExpect(status().isBadRequest())
+                    .andDo(print());
+        }
     }
 
     @Nested
@@ -262,7 +283,7 @@ class UserApiControllerTest extends BaseControllerTest{
         @DisplayName("성공")
         @Test
         void success() throws Exception{
-            String url = "/admin/upgradeAuth/ann";
+            String url = "/admin/upgradeAuth/annann";
 
             RequestBuilder requestBuilder = MockMvcRequestBuilders
                     .patch(url);

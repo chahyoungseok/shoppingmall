@@ -11,11 +11,9 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.BDDMockito;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
 
 import javax.transaction.Transactional;
 import java.time.LocalDateTime;
@@ -25,8 +23,7 @@ import java.util.Optional;
 
 import static org.mockito.ArgumentMatchers.any;
 
-@ExtendWith(MockitoExtension.class)
-class FavoriteServiceImplTest {
+class FavoriteServiceImplUnitTest extends BaseServiceImplUnitTest {
 
     @InjectMocks
     private FavoriteServiceImpl favoriteService;

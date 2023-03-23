@@ -1,21 +1,17 @@
 package com.example.shoppingmall.repository.user;
 
-import com.example.shoppingmall.config.TestConfig;
 import com.example.shoppingmall.data.entity.Authority;
 import com.example.shoppingmall.data.entity.User;
+import com.example.shoppingmall.repository.base.BaseRepositoryUnitTest;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-import org.springframework.context.annotation.Import;
 
 import javax.transaction.Transactional;
 
-@DataJpaTest
-@Import(TestConfig.class)
-class UserRepositoryTest {
+class UserRepositoryUnitTest extends BaseRepositoryUnitTest {
 
     @Autowired
     private UserRepository userRepository;

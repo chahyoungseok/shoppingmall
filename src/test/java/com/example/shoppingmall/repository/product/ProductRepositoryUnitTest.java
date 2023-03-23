@@ -1,11 +1,11 @@
 package com.example.shoppingmall.repository.product;
 
-import com.example.shoppingmall.config.TestConfig;
 import com.example.shoppingmall.data.dto.queryselect.SelectIDQuery;
 import com.example.shoppingmall.data.dto.queryselect.SelectProductStockQuery;
 import com.example.shoppingmall.data.dto.request.ChangeStockQuery;
 import com.example.shoppingmall.data.dto.response.ResponseProductPurchase;
 import com.example.shoppingmall.data.entity.*;
+import com.example.shoppingmall.repository.base.BaseRepositoryUnitTest;
 import com.example.shoppingmall.repository.order.OrderProductRepository;
 import com.example.shoppingmall.repository.order.OrderRepository;
 import com.example.shoppingmall.repository.user.UserRepository;
@@ -14,8 +14,6 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-import org.springframework.context.annotation.Import;
 
 import javax.transaction.Transactional;
 import java.time.LocalDateTime;
@@ -23,9 +21,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
-@DataJpaTest
-@Import(TestConfig.class)
-class ProductRepositoryTest {
+class ProductRepositoryUnitTest extends BaseRepositoryUnitTest {
 
     @Autowired
     private UserRepository userRepository;
