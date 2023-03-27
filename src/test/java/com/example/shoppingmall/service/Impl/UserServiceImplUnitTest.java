@@ -141,7 +141,6 @@ class UserServiceImplUnitTest extends BaseServiceImplUnitTest {
         update(){
             // given
             param = new RequestModify(
-                    "seokseok",
                     "hs_good",
                     "010-5161-6611",
                     "hs1@gmail.com",

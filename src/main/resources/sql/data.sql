@@ -39,6 +39,8 @@ INSERT INTO product(id, name, price, category, description, size, imgKey, date, 
 INSERT INTO cart(id, user_id, product_id, count, size) values (null, 1, 2, 1, 'S')
 INSERT INTO cart(id, user_id, product_id, count, size) values (null, 1, 2, 2, 'M')
 INSERT INTO cart(id, user_id, product_id, count, size) values (null, 2, 2, 1, 'M')
+INSERT INTO cart(id, user_id, product_id, count, size) values (null, 3, 1, 2, 'M')
+INSERT INTO cart(id, user_id, product_id, count, size) values (null, 3, 3, 1, 'M')
 
 --------------- 주문 데이터 ---------------
 INSERT INTO orders(id, user_id, orderdate, orderstatus) values (null, 1, '2021-11-08T11:44:30', '배송완료')

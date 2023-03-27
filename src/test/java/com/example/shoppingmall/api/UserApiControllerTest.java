@@ -153,7 +153,6 @@ class UserApiControllerTest extends BaseControllerTest{
         void success() throws Exception{
             String url = "/user";
             String content = objectMapper.writeValueAsString(new RequestModify(
-                    "hwang",
                     "hs_good",
                     "010-1234-5678",
                     "hs@naver.com",

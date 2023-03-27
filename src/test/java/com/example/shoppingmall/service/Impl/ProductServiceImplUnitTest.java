@@ -281,8 +281,6 @@ class ProductServiceImplUnitTest extends BaseServiceImplUnitTest {
             // then
             Assertions.assertEquals(true, result);
         }
-
-        // ProductService 의 createProduct의 Return 값에 대해 생각해 볼 필요가 있음
     }
 
     @Nested

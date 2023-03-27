@@ -5,7 +5,6 @@ import lombok.*;
 
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Pattern;
-import javax.validation.constraints.Size;
 
 @Getter
 @Setter
@@ -13,10 +12,6 @@ import javax.validation.constraints.Size;
 @AllArgsConstructor
 @NoArgsConstructor
 public class RequestModify {
-
-    @NotEmpty(message = "아이디 입력은 필수 입니다.")
-    @Size(min =  4, max = 12, message = "아이디는 최소 4자이상 12자 이하입니다.")
-    private String username;
 
     @NotEmpty(message = "닉네임 입력은 필수 입니다.")
     private String nickname;
